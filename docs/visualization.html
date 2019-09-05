@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Visualization &mdash; ML Navigator 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ML Navigator 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Reference" href="reference.html"/>
+        <link rel="next" title="Feature Engineering" href="feature_engineering.html"/>
+        <link rel="prev" title="Preprocessing" href="preprocessing.html"/> 
+
+  
+  <script src="static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ML Navigator
+          
+
+          
+            
+            <img src="static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install / Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How-to Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Visualization</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feature_engineering.html">Feature Engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prediction.html">Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flows.html">Flows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">LICENSE</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ML Navigator</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+      <li>Visualization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/visualization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="visualization">
+<h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-visualization.visualization"></span><dl class="class">
+<dt id="visualization.visualization.CompareStatistics">
+<em class="property">class </em><code class="descclassname">visualization.visualization.</code><code class="descname">CompareStatistics</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.CompareStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistic explorer</p>
+<p>The class contains methods for exploring the statistics of a given feature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – a dictionary of pandas dataframes e.g. {“train”: train_dataframe,
+“test”: test_dataframe}</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="visualization.visualization.CompareStatistics.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.CompareStatistics.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> – A dictionary of pandas dataframes e.g. {“train”: train_dataframe,
+“test”: test_dataframe}</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visualization.visualization.CompareStatistics.check_feature_valid">
+<code class="descname">check_feature_valid</code><span class="sig-paren">(</span><em>feature_nr: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#visualization.visualization.CompareStatistics.check_feature_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature’s value validator</p>
+<p>The function validate if it is possible to derive the statistical properties of a given feature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feature_nr</strong> (<em>int</em>) – The index of the column where the feature is.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if it is possible to calculate the statistical properties of the given feature. Otherwise false.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visualization.visualization.CompareStatistics.compare_statistics_function">
+<code class="descname">compare_statistics_function</code><span class="sig-paren">(</span><em>feature_nr: int</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.CompareStatistics.compare_statistics_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistic plotter</p>
+<p>This function plots the statistical values of a certain feature among all given datasets in a single graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feature_nr</strong> (<em>int</em>) – The index of the column where the feature is.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="visualization.visualization.histogram">
+<code class="descclassname">visualization.visualization.</code><code class="descname">histogram</code><span class="sig-paren">(</span><em>data: pandas.core.series.Series</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Histogram plotter</p>
+<p>This function plots the histogram of the numeric values of a certain feature when calling the Interactive data
+explorer function in the preprocessing package.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>pd.Series</em>) – The values of the given feature/column from the dataset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="visualization.visualization.explore_missing_values">
+<code class="descclassname">visualization.visualization.</code><code class="descname">explore_missing_values</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>number_of_features: int</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.explore_missing_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Missing values explorer</p>
+<p>This function plots the amount of missing values for given amount of features among all datasets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary of pandas dataframes e.g. {“train”: train_dataframe,
+“test”: test_dataframe}</li>
+<li><strong>number_of_features</strong> (<em>int</em>) – The number of the features that should be shown in the plot.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="visualization.visualization.compare_statistics">
+<code class="descclassname">visualization.visualization.</code><code class="descname">compare_statistics</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.visualization.compare_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interactive statistic explorer</p>
+<p>This function is designed to be run in a Jupyter notebook. The user can go through the feature interactively using
+a slider.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary of pandas dataframes e.g. {“train”: train_dataframe,
+“test”: test_dataframe}</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="feature_engineering.html" class="btn btn-neutral float-right" title="Feature Engineering" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="preprocessing.html" class="btn btn-neutral" title="Preprocessing" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, KI labs GmbH.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="static/jquery.js"></script>
+      <script type="text/javascript" src="static/underscore.js"></script>
+      <script type="text/javascript" src="static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

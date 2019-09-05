@@ -1,0 +1,4 @@
+---
+step3:
+  - 'print(term.bold(term.magenta("Since one-hot encoding can produce a lot of features, class_number_range will
+  limit the encoding process only for features which have between 3 and 49 unique values.")))'

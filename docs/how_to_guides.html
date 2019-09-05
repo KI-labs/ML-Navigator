@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How-to Guides &mdash; ML Navigator 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ML Navigator 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="Reference" href="reference.html"/>
+        <link rel="prev" title="Tutorials" href="tutorials.html"/> 
+
+  
+  <script src="static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ML Navigator
+          
+
+          
+            
+            <img src="static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install / Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-apply-flows-to-your-data">How to apply flows to your data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-create-a-flow">How to create a flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-of-creating-the-flow-0-json">Example of creating the flow_0.json</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-new-flows-components">Creating new flows components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">LICENSE</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ML Navigator</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>How-to Guides</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/how_to_guides.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-guides">
+<h1>How-to Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-apply-flows-to-your-data">
+<h2>How to apply flows to your data<a class="headerlink" href="#how-to-apply-flows-to-your-data" title="Permalink to this headline">¶</a></h2>
+<p>It is straightforward. You need to point to the location of your data and the name of the datasets after loading a particular flow.
+Currently, the framework supports only reading CSV files. Here is an example:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;./data&#39;</span>
+<span class="n">files_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;train.csv&#39;</span><span class="p">,</span><span class="s1">&#39;test.csv&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-create-a-flow">
+<h2>How to create a flow<a class="headerlink" href="#how-to-create-a-flow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>For the first version, we have not prepared a tool for creating a flow in a cool way yet. However, this is one of the main focus in the near future.</p>
+<p>The flow should contain two elements:</p>
+<p>1. Visualization: I show a flow as a flowchart. I use a free online tool called draw.io to draw a chart. Feel free to use any other tool or method to visualize a flow.
+You can use the <cite>drawio</cite> files which are provided in the flows modules to create a visualization of new flows.</p>
+<p>2. guidance text: I use YAML files to define the guidance instructions for the flows. Currently, this method is not scalable, and it requires setting the steps manually.
+In the future, the flows will be created using a user interface, and they will be saved in a database using a unique key for each flow.</p>
+<p>Each method in the <cite>Flows</cite> class in the <cite>flows/flow.py</cite> has an ID. Each ID is defined as a string using the variable <cite>function_id</cite>. For example, the method <cite>load_data</cite> has <cite>function_id = 0</cite>.
+In the <cite>flows/flow_instructions_database.yaml</cite> there are the instruction texts. The instruction texts are defined using an ID (integer). Each text has two variables:
+* <cite>function</cite>: it describes the function or the method which is defined in <cite>flows/flow.py</cite>
+* <cite>guide</cite>: it the guidance text that describe how to use the defined function or the method.</p>
+<p>To build a flow you need to create a JSON file, e.g. <cite>flow_0.json</cite>, that map the <cite>function_id</cite> as a key and the ID of the guidance text that is defined in <cite>flows/flow_instructions_database.yaml</cite>.</p>
+<p><strong>IMPORTANT!!!!!</strong></p>
+<p>In the <cite>flow_x.json</cite>:
+<cite>function_id</cite> refers to the id of the current running function
+The ID of the guidance text in the <cite>flow_instructions_database.yaml</cite> refers to the function that should be executed after the current running function that has the <cite>function_id</cite>.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;function_id of running function&quot;</span><span class="p">:</span> <span class="s2">&quot;the ID of the guidance text of the function that should be executed next&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>An example for the mapping:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where <cite>function_id = 0</cite> refers to the <cite>load_data</cite> method and value 1 refers to the ID of the method <cite>Encode categorical features</cite> guidance text that should run after the <cite>load_data</cite> method.</p>
+</div>
+<div class="section" id="example-of-creating-the-flow-0-json">
+<h3>Example of creating the flow_0.json<a class="headerlink" href="#example-of-creating-the-flow-0-json" title="Permalink to this headline">¶</a></h3>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+  <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1000</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The translation of the JSON object is as follows:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;the current function: load the data&quot;</span><span class="p">:</span> <span class="s2">&quot;the next function: Encode categorical features&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;the current function: Encode categorical features&quot;</span><span class="p">:</span> <span class="s2">&quot;the next function: Scale numeric features&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;the current function: Scale numeric features&quot;</span><span class="p">:</span> <span class="s2">&quot;the next function: Train a model&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;the current function: Train a model&quot;</span><span class="p">:</span> <span class="s2">&quot;the next function: Finish or noting which indicates the end of the flow&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-new-flows-components">
+<h3>Creating new flows components<a class="headerlink" href="#creating-new-flows-components" title="Permalink to this headline">¶</a></h3>
+<p>You can create your own method inside the <cite>Flows</cite> class in the <cite>flows/flow.py</cite> and assign a unique ID to it by defining the variable <cite>function_id</cite>.
+Inside the <cite>flow_instructions_database.yaml</cite> you can create your own guidance text for already exiting methods or for the new methods. You should assign a unique ID for the
+new created guidance texts. Please include the <cite>function</cite> and <cite>quide</cite> keys to help other users understanding and find your guidance text easily.
+The key <cite>function</cite> is optional but <cite>quide</cite> is required. You can create multiple new guidance texts for the same defined function but each guidance text should have a unique ID.</p>
+<p>When creating a flow, the essential information that should be added at the end of each step is what the next step is. Adding an example, which shows how to perform
+the next level and what are the required variables is beneficial to the user.</p>
+<p>If you want to submit a flow, please provide the following in your pull request:</p>
+<ol class="arabic simple">
+<li><cite>flow_x.drawio</cite> where x is an integer that has not been given for other flows yet. Please check the flows module <cite>./flows</cite></li>
+<li><cite>flow_x.yaml</cite> where x is is an integer that has not been given for other flows yet and has the same value in <cite>flow_x.drawio</cite></li>
+<li><cite>flow_x.ipynb</cite> where x is is an integer that has not been given for other flows yet and has the same value in <cite>flow_x.drawio</cite> and in <cite>flow_x.yaml</cite>.</li>
+</ol>
+<p>The Jupyter Notebook <cite>flow_x.ipynb</cite> should work end-2-end without any errors.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorials.html" class="btn btn-neutral" title="Tutorials" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, KI labs GmbH.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="static/jquery.js"></script>
+      <script type="text/javascript" src="static/underscore.js"></script>
+      <script type="text/javascript" src="static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

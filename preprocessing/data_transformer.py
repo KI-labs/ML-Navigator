@@ -1,0 +1,158 @@
+import logging
+import os
+import random
+
+import numpy as np
+import pandas as pd
+from sklearn import preprocessing
+
+logger = logging.getLogger(__name__)
+formatting = (
+    "%(asctime)s: %(levelname)s: File:%(filename)s Function:%(funcName)s Line:%(lineno)d "
+    "message:%(message)s"
+)
+logging.basicConfig(
+    filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
+    level=logging.DEBUG,
+    format=formatting,
+)
+
+
+def standard_scale_numeric_features(
+        dataframe_dict: dict,
+        reference_dataframe_key: str,
+        columns_to_normalize: list,
+        handle_missing_values: bool = True,
+) -> dict:
+    """ Feature standardizer
+
+    This function standardizes the datesets passed as pandas dataframes by a dictionary. The reference dataframe will be
+    used to calculate the statistical properties (mean and standard deviation) and used to normalize other
+    dataframes. After standardizing the dataset, the features in each dataset have 0 mean and 1 standard deviation.
+
+    :param dict dataframe_dict: A dictionary that contains multiple pandas dataframes
+    :param str reference_dataframe_key: A string that is used to fit the scaler e.g. "train"
+    :param list columns_to_normalize: A list of the columns that should be standardized e.g. [col_1, col_2, ..., col_n]
+    :param bool handle_missing_values: boolean if true the missing values will be replaced by the value 0
+
+    :return:
+        scaled_dataframe_dict: A dictionary of pandas dataframes where the "columns_to_normalize" are normalized
+    :rtype: dict
+    """
+
+    scaler = None
+    scaled_dataframe_dict = {}
+
+    # For scaling the data, the reference, that will be used to fit the StandardScaler, should be selected.
+    reference_dataframe = dataframe_dict[reference_dataframe_key]
+
+    # fitting the StandardScaler
+    try:
+        scaler = preprocessing.StandardScaler().fit(
+            reference_dataframe[columns_to_normalize]
+        )
+    except Exception as e:
+        logger.error(f"Error is: {e}")
+
+    # Scaling data
+    for key_i, dataframe in dataframe_dict.items():
+        scaled = scaler.transform(dataframe[columns_to_normalize])
+
+        # After scaling, the mean values will be 0. Therefore, the missing values will be replaced by the mean value
+        if handle_missing_values:
+            logger.info("Missing values will be handled")
+            scaled[np.isnan(scaled)] = 0
+
+        dataframe[columns_to_normalize] = scaled
+        scaled_dataframe_dict[key_i] = dataframe
+
+    logger.info("Scaling data is finished")
+    return scaled_dataframe_dict
+
+
+def encoding_categorical_feature(dataset_dict: dict, feature_name: str) -> dict:
+    """ Single categorical feature string encoder
+
+    This function encodes categorical features. It is possible to use train data alone or all train data, validation
+    data and test data. If all datesets are provided (i.e. train, valid and test), they will be concatenated first
+    and then encoded.
+
+    :param str feature_name: The name of the feature/column that its values should be encoded.
+    :param dict dataset_dict: a dictionary of pandas series (i.e one column) that must contain the train data and
+                                optionally contains valid data and test data
+
+    :return:
+            dataset_dict_encoded: a dictionary of pandas series (i.e one column) after encoding.
+    """
+
+    # Replacing the missing values with a special hash value to avoid having the same class of missing values and
+    # non-missing values.
+    hash_missing_value = hex(random.getrandbits(128))
+    logger.debug(f"The hash for the missing values is {hash_missing_value}")
+
+    # Concatenate dataset if needed
+    print(f"the are {len(dataset_dict)} datasets provided")
+
+    # the check here is not a good idea because it check each column alone which is not efficient
+    valid_dataset_list = []
+    valid_dataset_keys = []
+
+    for key_i, dataseries in dataset_dict.items():
+        if dataseries.shape[0] > 0:
+            valid_dataset_list.append(dataseries)  # get the dataframes
+            valid_dataset_keys.append(key_i)  # get the keys
+
+    if len(valid_dataset_list) > 1:
+        x_original = pd.concat(valid_dataset_list, axis=0)
+    elif len(valid_dataset_list) == 1:
+        x_original = valid_dataset_list[0]
+    else:
+        raise ValueError("No valid dataset was provided")
+
+    # define the encoder
+    label_encoder = preprocessing.LabelEncoder()
+    label_encoder.fit(x_original.fillna(hash_missing_value))
+
+    dataset_dict_encoded = {}
+
+    for dataset_key in valid_dataset_keys:
+        print(f"encoding the feature in the dataset {dataset_key}")
+        dataset_dict_encoded[dataset_key] = label_encoder.transform(
+            dataset_dict[dataset_key].fillna(hash_missing_value)
+        )
+
+    labels_nr = len(list(label_encoder.classes_))
+
+    print(f"the number of classes in {feature_name} feature is: {labels_nr}")
+    logger.info(f"Encoding categorical feature {feature_name} process is finished!")
+    return dataset_dict_encoded
+
+
+def encode_categorical_features(dataframe_dict: dict, columns_list: list) -> dict:
+    """ Categorical features string encoder
+
+    This function applies the `encoding_categorical_feature` function to each feature in the `columns_list`.
+
+    :param dict dataframe_dict: a dictionary of Pandas dataframes.
+    :param list columns_list: The list of the names of the columns/features that their values should be encoded.
+
+    :return:
+            dataframe_dict: a dictionary of Pandas dataframes after encoding.
+    """
+
+    for feature_name in columns_list:
+        dataset_dict = {}
+        try:
+            for key_i, dataframe in dataframe_dict.items():
+                dataset_dict[key_i] = dataframe[feature_name].astype(str)
+
+            dataset_dict_encoded = encoding_categorical_feature(dataset_dict, feature_name)
+            for key_i, dataseries in dataset_dict_encoded.items():
+                dataframe_dict[key_i][feature_name] = dataseries
+
+            logger.info("Encoding all categorical features process is finished!")
+
+        except Exception as e:
+            logger.error(f"The Error: {e}")
+
+    return dataframe_dict

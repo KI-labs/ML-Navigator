@@ -1,0 +1,941 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Training &mdash; ML Navigator 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ML Navigator 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Reference" href="reference.html"/>
+        <link rel="next" title="Prediction" href="prediction.html"/>
+        <link rel="prev" title="Feature Engineering" href="feature_engineering.html"/> 
+
+  
+  <script src="static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ML Navigator
+          
+
+          
+            
+            <img src="static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install / Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How-to Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature_engineering.html">Feature Engineering</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prediction.html">Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flows.html">Flows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">LICENSE</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ML Navigator</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+      <li>Training</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/training.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="training">
+<h1>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-training.validator"></span><dl class="class">
+<dt id="training.validator.StructureValidation">
+<em class="property">class </em><code class="descclassname">training.validator.</code><code class="descname">StructureValidation</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters structure validation</p>
+<p>Validate the input parameters and raise an Exception if the structure of the parameters is invalid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type,
+model configurations and training configurations.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><div class="first last line-block">
+<div class="line">ValueError:</div>
+<div class="line">TypeError:</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="training.validator.StructureValidation.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type,
+model configurations and training configurations.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.features_validator">
+<code class="descname">features_validator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.features_validator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Features validator</p>
+<p>All datasets given inside the parameters object should have the same features.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_data">
+<code class="descname">validate_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>data key validator</p>
+<p>The following assumptions have to be met:</p>
+<ol class="arabic simple">
+<li>At least there is one dataset inside the data and it should had the key name: train</li>
+<li>All provided datasets should have two elements: features and target</li>
+<li>The value of the key features is a pandas dataframe. The target/label should not be between the features</li>
+<li>The target is a numpy array</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_main_keys">
+<code class="descname">validate_main_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_main_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main keys validator</p>
+<p>The user has to provide at least those four keys inside the parameters dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_metrics">
+<code class="descname">validate_metrics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>metrics key validator</p>
+<p>The following assumptions should be met:</p>
+<ol class="arabic simple">
+<li>The value of the <cite>metrics</cite> should be a list or a string.</li>
+<li>Currently, there are only two metrics to show: r2_score and mean_squared_error.</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_model">
+<code class="descname">validate_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>model key validator</p>
+<p>The following assumptions should be met:</p>
+<ol class="arabic simple">
+<li>The elements <cite>type</cite> and <cite>hyperparameters</cite> should be found inside the values of the key <cite>model</cite>.</li>
+<li>The type of the value of the <cite>hyperparameters</cite> should be a dictionary.</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_predict">
+<code class="descname">validate_predict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>predict key validator</p>
+<p>The following assumptions should be met:</p>
+<ol class="arabic simple">
+<li>If the predict key exists, all of the datasets should have the key <cite>features</cite></li>
+<li>The value of the <cite>features</cite> is a pandas dataframe</li>
+</ol>
+<p>3. The datasets inside the key <cite>predict</cite> have no target or labels. It is required to predict the target for
+those datasets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="training.validator.StructureValidation.validate_split">
+<code class="descname">validate_split</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.StructureValidation.validate_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>split key validator</p>
+<p>The following assumptions should be met:</p>
+<ol class="arabic simple">
+<li>There are two elements inside the <cite>split</cite> key: <cite>method</cite> and <cite>split_ratios</cite> or <cite>fold_nr</cite></li>
+<li>If the value of the <cite>method</cite> element is <cite>split</cite>, the second element should be <cite>split_ratios</cite></li>
+<li>If the value of the <cite>method</cite> element is <cite>kfold</cite>, the second element should be <cite>fold_nr</cite></li>
+<li>The <cite>split_ratios</cite> can be either a float or set/list of two floats.</li>
+<li>The <cite>split_ratios</cite> values should be in ]0, 1[</li>
+<li>The value of the <cite>fold_nr</cite> should be an integer larger than 1</li>
+<li>The <cite>method</cite> can take only two values: split` or <cite>kfold</cite></li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="training.validator.parameters_validator">
+<code class="descclassname">training.validator.</code><code class="descname">parameters_validator</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="headerlink" href="#training.validator.parameters_validator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters structure validator</p>
+<p>Apply all validation methods defined inside the class <cite>StructureValidation</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type,
+model configurations and training configurations.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-training.training"></span><dl class="function">
+<dt id="training.training.train_with_n_split">
+<code class="descclassname">training.training.</code><code class="descname">train_with_n_split</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>test_split_ratios: list</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_n_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>n split training</p>
+<p>This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the model will be saved.</li>
+<li><strong>test_split_ratios</strong> (<em>list</em>) – A list that contains the test split ratio e.g. [0.2] for testing size/training size
+or [0.2, 0.2] for validation size/training size and testing size/(training size - validation size)</li>
+<li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</li>
+<li><strong>train_array</strong> (<em>np.array</em>) – The values of the features that will be split to two sub-datasets based
+on the split value to multiple datasets.</li>
+<li><strong>target</strong> (<em>np.array</em>) – The values of the target that will be split to two sub-datasets based
+on the split value to multiple datasets.</li>
+<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
+locally after training. In this case there is only one model.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently there are two values:
+Ridge linear regression and lightgbm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>models_nr -  A list of indexes that will be used to point to the trained models which will be saved locally after training. In this case there is only one model.</li>
+<li>save_models_dir - The name of the directory where the trained models are saved locally.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.training.train_with_kfold_cross_validation">
+<code class="descclassname">training.training.</code><code class="descname">train_with_kfold_cross_validation</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>split: dict</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_kfold_cross_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>K-Fold cross-validation training</p>
+<p>This function trains a model to fit the data using K-Fold cross-validation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
+<li><strong>split</strong> (<em>dict</em>) – A dictionary that contains information about the K-Fold variables</li>
+<li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</li>
+<li><strong>train_array</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model to
+predict the target</li>
+<li><strong>target</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model.</li>
+<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
+locally after training. In this case there are n_fold models.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently there are two values:
+Ridge linear regression and lightgbm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>models_nr - A list of indexes that will be used to point to the trained models which will be saved locally after training. In this case there are n_fold models.</li>
+<li>save_models_dir - The name of the directory where the trained models are saved locally.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.training.model_training">
+<code class="descclassname">training.training.</code><code class="descname">model_training</code><span class="sig-paren">(</span><em>parameters: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.model_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model training</p>
+<p>This function trains a model to fit the data using the Scikit Learn of Ridge linear model implementation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type,
+model configurations and training configurations. Check the example below.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>models_nr - A list of indexes that will be used to point to the trained models which will be saved locally after training.</li>
+<li>save_models_dir - The name of the directory where the trained models are saved locally.</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><dl class="first last docutils">
+<dt>One split: train and test</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">train_target</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">valid_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">valid_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">test_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;split&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;split&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;split_ratios&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Ridge linear regression&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;r2_score&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_squared_error&quot;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>Two splits: train, valid and test</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">train_target</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">valid_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">valid_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">test_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;split&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;split&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;split_ratios&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="c1"># or [0.2, 0.2]</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Ridge linear regression&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;r2_score&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_squared_error&quot;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>KFold cross-validation:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">train_target</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">valid_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">valid_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">test_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;split&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;kfold&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;fold_nr&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Ridge linear regression&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;r2_score&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_squared_error&quot;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>KFold cross-validation with alpha optimization:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">train_target</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">valid_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">valid_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">test_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;split&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;kfold&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;fold_nr&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Ridge linear regression&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="s2">&quot;optimize&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;r2_score&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_squared_error&quot;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-training.optimizer"></span><dl class="function">
+<dt id="training.optimizer.int_2_float_alpha">
+<code class="descclassname">training.optimizer.</code><code class="descname">int_2_float_alpha</code><span class="sig-paren">(</span><em>alpha: int</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#training.optimizer.int_2_float_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alpha search step definer</p>
+<p>This function defines the searching step when optimizing alpha using a linear search.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alpha</strong> – A hyperparameter which used by the ridge linear regression to avoid over-fitting</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value of alpha after dividing it to a certain number e.g. 10 to define the searching step.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.optimizer.training_for_optimizing">
+<code class="descclassname">training.optimizer.</code><code class="descname">training_for_optimizing</code><span class="sig-paren">(</span><em>alpha_i: float</em>, <em>x_train: numpy.array</em>, <em>y_train: numpy.array</em>, <em>x_test: numpy.array</em>, <em>y_test: numpy.array</em>, <em>help_text: str</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#training.optimizer.training_for_optimizing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trainer</p>
+<p>This function trains the ridge linear regression model given a certain alpha.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>alpha_i</strong> (<em>float</em>) – A hyperparameter which used by the ridge linear regression to avoid over-fitting.</li>
+<li><strong>x_train</strong> (<em>np.array</em>) – The values of the features which are used to train the model to predict the target y_train</li>
+<li><strong>y_train</strong> (<em>np.array</em>) – The target values which are used to train the model.</li>
+<li><strong>x_test</strong> (<em>np.array</em>) – The values of the features which are used to evaluate the model by predicting the target
+y_test</li>
+<li><strong>y_test</strong> (<em>np.array</em>) – The target values which are used to evaluate the performance of the model based on the
+coefficient of determination R2</li>
+<li><strong>help_text</strong> (<em>str</em>) – A string to show useful information about the training cross-validation method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>r2_linear - Coefficient of determination for a given alpha and testing dataset</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.optimizer.choosing_alpha">
+<code class="descclassname">training.optimizer.</code><code class="descname">choosing_alpha</code><span class="sig-paren">(</span><em>r2_linear: float</em>, <em>r2_linear_max: float</em>, <em>alpha_i: float</em>, <em>best_alpha: float</em><span class="sig-paren">)</span><a class="headerlink" href="#training.optimizer.choosing_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alpha evaluator</p>
+<p>This function check if the current value of alpha gives higher value of coefficient of determination than the
+current value. It updates the values of the best found alpha and r2 if needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>r2_linear</strong> (<em>float</em>) – </li>
+<li><strong>r2_linear_max</strong> (<em>float</em>) – The current maximum coefficient of determination assiosated with the current
+best_alpha value and testing dataset</li>
+<li><strong>alpha_i</strong> (<em>float</em>) – The current value of the hyperparameter which used by the ridge linear regression to avoid
+over-fitting.</li>
+<li><strong>best_alpha</strong> (<em>float</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>r2_linear_max - The updated maximum coefficient of determination for a given best_alpha and testing dataset</li>
+<li>best_alpha - The updated alpha value that maximize the r2_linear_max for a given testing dataset</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.optimizer.get_best_alpha_split">
+<code class="descclassname">training.optimizer.</code><code class="descname">get_best_alpha_split</code><span class="sig-paren">(</span><em>x_train: numpy.array</em>, <em>y_train: numpy.array</em>, <em>x_test: numpy.array</em>, <em>y_test: numpy.array</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#training.optimizer.get_best_alpha_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>alpha optimizer for two datasets split</p>
+<p>This function finds the best alpha value based on the coefficient of determination.
+This function will be replaced by a native optimization method from other packages</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_train</strong> (<em>np.array</em>) – The values of the features which are used to train the model to predict the target y_train</li>
+<li><strong>y_train</strong> (<em>np.array</em>) – The target values which are used to train the model.</li>
+<li><strong>x_test</strong> (<em>np.array</em>) – The values of the features which are used to evaluate the model by predicting the target
+y_test</li>
+<li><strong>y_test</strong> (<em>np.array</em>) – The target values which are used to evaluate the performance of the model based on the
+coefficient of determination R2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">best_alpha: The alpha value that maximize the coefficient of determination R2</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.optimizer.get_best_alpha_kfold">
+<code class="descclassname">training.optimizer.</code><code class="descname">get_best_alpha_kfold</code><span class="sig-paren">(</span><em>kfold</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>n_fold: int</em><span class="sig-paren">)</span><a class="headerlink" href="#training.optimizer.get_best_alpha_kfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>alpha optimizer for K-Fold cross validation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kfold</strong> – </li>
+<li><strong>train_array</strong> – The values of the features which are used to train the model to predict the target target</li>
+<li><strong>target</strong> – The target values which are used to train the model.</li>
+<li><strong>n_fold</strong> – An integer that refers to the number of folds which will be used for cross-validation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">best_alpha: The alpha value that maximize the coefficient of determination R2</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-training.classification_model_evaluator"></span><dl class="function">
+<dt id="training.classification_model_evaluator.classification_evaluate_model">
+<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_evaluate_model</code><span class="sig-paren">(</span><em>model</em>, <em>x_values: numpy.array</em>, <em>y_values: numpy.array</em>, <em>key_str: str</em>, <em>help_print: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model evaluator</p>
+<p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
+<li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
+<li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
+<li><strong>key_str</strong> (<em>str</em>) – Help string that tells the user which dataset is used for the evaluation of the model
+performance</li>
+<li><strong>help_print</strong> (<em>bool</em>) – If True, information about the model’s performance is printed to the console.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><div class="line-block">
+<div class="line">y_prediction: The predicted target using the trained model</div>
+<div class="line">mse: Mean Squared Error value</div>
+<div class="line">r2: Coefficient of Determination value</div>
+</div>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.classification_model_evaluator.classification_model_evaluation">
+<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_model_evaluation</code><span class="sig-paren">(</span><em>data: dict</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_model_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Models set evaluator</p>
+<p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
+models by applying the function <cite>evaluate_model</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
+<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
+locally after training.</li>
+<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently, there are two values:
+Ridge linear regression and lightgbm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-training.regression_model_evaluator"></span><dl class="function">
+<dt id="training.regression_model_evaluator.regression_evaluate_model">
+<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_evaluate_model</code><span class="sig-paren">(</span><em>model</em>, <em>x_values: numpy.array</em>, <em>y_values: numpy.array</em>, <em>key_str: str</em>, <em>help_print: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model evaluator</p>
+<p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
+<li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
+<li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
+<li><strong>key_str</strong> (<em>str</em>) – Help string that tells the user which dataset is used for the evaluation of the model
+performance</li>
+<li><strong>help_print</strong> (<em>bool</em>) – If True, information about the model’s performance is printed to the console.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><div class="line-block">
+<div class="line">y_prediction: The predicted target using the trained model</div>
+<div class="line">mse: Mean Squared Error value</div>
+<div class="line">r2: Coefficient of Determination value</div>
+</div>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.regression_model_evaluator.regression_model_evaluation">
+<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_model_evaluation</code><span class="sig-paren">(</span><em>data: dict</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_model_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Models set evaluator</p>
+<p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
+models by applying the function <cite>evaluate_model</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
+<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
+locally after training.</li>
+<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently, there are two values:
+Ridge linear regression and lightgbm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-training.utils"></span><dl class="function">
+<dt id="training.utils.read_kfold_config">
+<code class="descclassname">training.utils.</code><code class="descname">read_kfold_config</code><span class="sig-paren">(</span><em>split: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.utils.read_kfold_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>KFold values reader</p>
+<p>This function ensures that the parameters of the KFold splitting method are defined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>split</strong> (<em>dict</em>) – A dictionary that contains the parameters about the KFold splitting method.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>n_fold - An integer that refers to the number of folds which will be used for cross-validation.</li>
+<li>shuffle - A boolean. If true, data will be shuffled before splitting it to multiple folds.</li>
+<li>random_state - An integer which helps to reproduce the results.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.utils.create_model_directory">
+<code class="descclassname">training.utils.</code><code class="descname">create_model_directory</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.utils.create_model_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model directory creator</p>
+<p>This function create a directory where the model during and after training will be saved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – It refers to the location where the models should be saved.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.utils.save_model_locally">
+<code class="descclassname">training.utils.</code><code class="descname">save_model_locally</code><span class="sig-paren">(</span><em>path: str</em>, <em>model: object</em><span class="sig-paren">)</span><a class="headerlink" href="#training.utils.save_model_locally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model saver</p>
+<p>This function saves the model locally in pickle format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – It refers to the location where the models should be saved.</li>
+<li><strong>model</strong> (<em>object</em>) – An object created by the training package e.g. Scikit Learn.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.utils.input_parameters_extraction">
+<code class="descclassname">training.utils.</code><code class="descname">input_parameters_extraction</code><span class="sig-paren">(</span><em>parameters: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.utils.input_parameters_extraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input data parsing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameters</strong> – dict parameters: A dictionary that contains information about the datasets, model type,
+model configurations and training configurations. Check the example below.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>data - A dictionary that contains pandas dataframes as datasets.</li>
+<li>split - A dictionary that contains information about the cross-validation method.</li>
+<li>train_array - A numpy array that is used to train the model and predict the target.</li>
+<li>target - A numpy array that is used to train the model.</li>
+<li>predict - If provided, a pandas dataframe that contains the features without the labels (target). Otherwise bool: False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.utils.split_dataset">
+<code class="descclassname">training.utils.</code><code class="descname">split_dataset</code><span class="sig-paren">(</span><em>features: numpy.array, target: numpy.array, tests_split_ratios: Union[list, set]</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#training.utils.split_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dataset splitter</p>
+<p>This function split a dataset to multiple datasets such train, valid and test.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>features</strong> (<em>np.array</em>) – The original dataset that should be split to subsets</li>
+<li><strong>target</strong> (<em>np.array</em>) – The original target/labels dataset that should be predicted</li>
+<li><strong>set</strong><strong>] </strong><strong>tests_split_ratios</strong> (<em>Union</em><em>[</em><em>list</em><em>,</em>) – A list or set of floats that represent the ratio of the size of the
+test dataset ot the train dataset. The values should be in the range ]0, 1[ e.g.
+tests_split_ratios = [0.2, 0.2]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">sub_datasets: A dictionary that contains the test and train dataset</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="prediction.html" class="btn btn-neutral float-right" title="Prediction" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="feature_engineering.html" class="btn btn-neutral" title="Feature Engineering" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, KI labs GmbH.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="static/jquery.js"></script>
+      <script type="text/javascript" src="static/underscore.js"></script>
+      <script type="text/javascript" src="static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

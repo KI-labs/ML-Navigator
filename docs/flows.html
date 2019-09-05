@@ -1,0 +1,574 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Flows &mdash; ML Navigator 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ML Navigator 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Reference" href="reference.html"/>
+        <link rel="next" title="Contribution" href="contribution.html"/>
+        <link rel="prev" title="Prediction" href="prediction.html"/> 
+
+  
+  <script src="static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ML Navigator
+          
+
+          
+            
+            <img src="static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install / Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How-to Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature_engineering.html">Feature Engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prediction.html">Prediction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Flows</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">LICENSE</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ML Navigator</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+      <li>Flows</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/flows.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="flows">
+<h1>Flows<a class="headerlink" href="#flows" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-flows.flows"></span><p>Flows pieces collector</p>
+<p>This module contains the Flows class, which is a container of the
+methods that construct the flows.</p>
+<p>The modules depends on the classes and methods which are writen
+in other package in this project.</p>
+<dl class="class">
+<dt id="flows.flows.Flows">
+<em class="property">class </em><code class="descclassname">flows.flows.</code><code class="descname">Flows</code><span class="sig-paren">(</span><em>flow_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flows methods container</p>
+<p>A class which meant to be a container for all flows elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>flow_id</strong> (<em>int</em>) – An integer which points to the flow that the
+use wants to follow.</li>
+<li><strong>step</strong> (<em>int</em>) – An integer which points to the current step that
+the user may perform.</li>
+<li><strong>commands</strong> (<em>object</em>) – It contains the list of the instructions
+that are loaded from the yaml file</li>
+<li><strong>columns_set</strong> (<em>list</em>) – A dictionary that contains the features’
+names sorted in multiple lists based on the
+type of the data for each given dataset.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><ul class="first last simple">
+<li><cite>guidance</cite> - Evaluate YAML commands</li>
+<li><cite>load_data</cite> - Read CSV data</li>
+<li><cite>encode_categorical_feature</cite> - Encode the categorical features by changing the string value to numeric values</li>
+<li><cite>scale_data</cite> - Scale the numerical value (Feature Standardization - mean = 0, STD = 1)</li>
+<li><cite>one_hot_encoding</cite> - Encode categorical features using one-hot encoding method</li>
+<li><cite>training_ridge_linear_model</cite> - Train a model using the regression Scikit Learn Ridge linear model implementation</li>
+<li><cite>training_lightgbm</cite> - Train a tree-based regression model using the LightGBM implementation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="flows.flows.Flows.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>flow_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>flow_id</strong> (<em>int</em>) – An integer which points to the flow that the use wants to follow.</li>
+<li><strong>step</strong> (<em>int</em>) – An integer which points to the current step that the user may perform.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="flows.flows.Flows.comparing_statistics">
+<em class="property">static </em><code class="descname">comparing_statistics</code><span class="sig-paren">(</span><em>dataframe_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.comparing_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Datasets statistics visualizer</p>
+<p>This function visualize the statistical properties of the given datasets. It plots Those properties in a
+single graph which help obtain an overview about the distribution of the data in different datasets. It is an
+interactive function. Therefore, it was designed to run in a Jupyter notebook.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframe_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes  e.g. dataframes_dict={“train”:
+train_dataframe, “test”: test_dataframe}</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.encode_categorical_feature">
+<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Categorical features encoder</p>
+<p>This function encodes the categorical features by replacing
+the strings with integers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
+before encoding the features e.g. dataframes_dict={“train”: train_dataframe,
+“test”: test_dataframe}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>dataframes_dict_encoded - A dictionary that contains Pandas dataframes after encoding the features e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="flows.flows.Flows.exploring_data">
+<em class="property">static </em><code class="descname">exploring_data</code><span class="sig-paren">(</span><em>dataframe_dict: dict</em>, <em>key_i: str</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.exploring_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Datasets explorer</p>
+<p>This functions explore a given dataset by showing information about the most and the least repeated value,
+the number of unique values and the distribution of each feature. It is an interactive function. Therefore,
+it was designed to run in a Jupyter notebook.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataframe_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes  e.g. dataframes_dict={“train”:
+train_dataframe, “test”: test_dataframe}</li>
+<li><strong>key_i</strong> (<em>str</em>) – It points to the dataset which the user wants to explore e.g. “train”.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.flatten_json_data">
+<code class="descname">flatten_json_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.flatten_json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>JSON data normalizer</p>
+<dl class="docutils">
+<dt>This function normalizes the nested JSON data type inside the pandas dataframes’ columns. The name of the new</dt>
+<dd>columns has the same name of the parent column with a predefined suffix to ensure unique columns’ names.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes with nested JSON data type e.g.
+dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>dataframes_dict - A dictionary that contains Pandas dataframes after flatting the nested JSON data type e.g. dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.guidance">
+<code class="descname">guidance</code><span class="sig-paren">(</span><em>step_ext: object</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.guidance" title="Permalink to this definition">¶</a></dt>
+<dd><p>YAML evaluator</p>
+<p>This function executes the command that is written in the yaml file under a certain step</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>step_ext</strong> (<em>object</em>) – It can be an integer that points to a certain step e.g. 1 or a combination of both
+an integer and a letter to point to a sub-step e.g. 1_a</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.load_data">
+<code class="descname">load_data</code><span class="sig-paren">(</span><em>path: str</em>, <em>files_list: list</em>, <em>rows_amount: int = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data reader</p>
+<p>This function reads data from CSV files and returns a dictionary
+that contains Pandas dataframes e.g. dataframes_dict={“train”:
+train_dataframe, “test”: test_dataframe}</p>
+<p>After reading the data, the function provides a summary of
+each dataset.</p>
+<p>After presenting the summary, the function tries to detect
+which column may contain the ids and which column can be
+the target (labels). Based on the values of the target,
+the function can tell if the problem which should be solved
+is a regression or classification problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – The path to the data.</li>
+<li><strong>files_list</strong> (<em>list</em>) – A list of strings which are the
+names of the files</li>
+<li><strong>rows_amount</strong> (<em>int</em>) – The number of rows that should be read from the CSV file. If 0, all rows will be read.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>dataframes_dict - A dictionary that contains Pandas dataframes.</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;train.csv&#39;</span><span class="p">,</span><span class="s1">&#39;test.csv&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataframes_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.one_hot_encoding">
+<code class="descname">one_hot_encoding</code><span class="sig-paren">(</span><em>dataframe_dict: dict, reference: str, ignore_columns: list, class_number_range=[3, 50]</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.one_hot_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>One-hot encoder</p>
+<p>This function encodes categorical features using the one-hot encoding method
+It assumes that the user encoded the categorical features with string values
+by replacing the those string values by integers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframe_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes before one-hot encoding features e.g.
+dataframes_dict={“train”: train_dataframe,
+“test”: test_dataframe}.</li>
+<li><strong>reference</strong> (<em>str</em>) – It is the key ind the dataframes dictionary that points to the dataframe which its
+inputs are taken as a reference to encode the data of other dataframes e.g. “train”.</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It is a list of strings that contains the name of the columns which should be
+ignored when applying the one-hot encoding.</li>
+<li><strong>class_number_range</strong> (<em>list</em>) – It is a list of two elements which define the minimum the and maximum number of
+the classes (unique value) that a feature should contain in order to apply the one-hot encoding to
+this feature.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframe_dict_one_hot -  A dictionary that contains Pandas dataframes after one-hot encoding features e.g. dataframe_dict_one_hot={“train”: train_dataframe, “test”: test_dataframe}.</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.scale_data">
+<code class="descname">scale_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.scale_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature scaling</p>
+<p>This function scales features that contains numeric continuous values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
+before scaling features e.g. dataframes_dict={“train”: train_dataframe,
+“test”: test_dataframe}</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be
+ignored when apply scaling e.g. the id and the target.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframes_dict_scaled - A dictionary that contains Pandas dataframes after scaling features e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.training">
+<code class="descname">training</code><span class="sig-paren">(</span><em>parameters: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.training" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ridge linear model</p>
+<p>This function fits the data using the ridge linear model. The function uses the implementation from
+scikit Learn. The user can train a model with specific configuration using the parameter variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type,
+model configurations and training configurations. Check the example below.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>model_index_list - A list of indexes that will be used to point to the trained models which will be saved locally after training</li>
+<li>save_models_dir - The path where the models will be saved.</li>
+<li>y_predict - numpy array If the <cite>predict</cite> key is given, the model <cite>my_model</cite> predict the labels of the <cite>parameters[“predict”][“test”]</cite> dataset gives back <cite>y_predict</cite>.</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">train_target</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">valid_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">valid_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">test_target</span><span class="p">},</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;split&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;split&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;split_ratios&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Ridge linear regression&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;r2_score&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_squared_error&quot;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># optional</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contribution.html" class="btn btn-neutral float-right" title="Contribution" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="prediction.html" class="btn btn-neutral" title="Prediction" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, KI labs GmbH.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="static/jquery.js"></script>
+      <script type="text/javascript" src="static/underscore.js"></script>
+      <script type="text/javascript" src="static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
