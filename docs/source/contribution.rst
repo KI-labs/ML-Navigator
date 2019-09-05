@@ -6,7 +6,7 @@ Your contributions are always welcome and appreciated. Following are the things 
 Report a bug
 ------------
 
-.. _here: https://github.com/KI-labs/ML-Navigator-beta/issues
+.. _here: https://github.com/KI-labs/ML-Navigator/issues
 
 If you think you have encountered a bug, and I should know about it, feel free to report it here_ and I will take
 care of it.

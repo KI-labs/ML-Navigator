@@ -10,11 +10,11 @@ To install the ML-Navigator Package you need to have `Python 3.6`:
 
 .. code:: shell
 
-        git clone https://github.com/KI-labs/ML-Navigator-beta.git
+        git clone https://github.com/KI-labs/ML-Navigator.git
 
 .. code:: shell
 
-        cd ML-Navigator-beta
+        cd ML-Navigator
 
 
 2. create a directory under the name "data" and move your data files to it e.g. "train.csv" and "test.csv"
