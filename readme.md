@@ -95,13 +95,16 @@ However, it doesn't guarantee that the user gets the model that satisfies the qu
 It needs a long time for testing a wide range of hyperparameters values. 
 Model reproducibility can be an issue when creating models using AutoML.
 
-# Tutorials
-Please check the tutorials directory: [Tutorials](https://github.com/KI-labs/ML-Navigator/tree/master/tutorials)
-
 # How-to Guides
 ## How to install ML-Navigator
 
 To install the ML-Navigator Package you need to have `Python 3.6`:
+
+You can install ML-Navigator using the `pip` tool directly:
+
+`pip install ML-Navigator`
+
+To install the ML-Navigator Package from the Github repo:
 
 1. clone the git repository:
 
@@ -120,20 +123,7 @@ To install the ML-Navigator Package you need to have `Python 3.6`:
 After setting up the virtual environment, you can install the package using pip command as follows:
 
    `$ pip install .`<br>
-
-
-4. OR: install the required packages
-
-    `$ pip install -r requirements.txt`
     
-5. Create a directory under the name "data" inside the project root directory.
-
-6. To run the tutorials, you can download the "train.csv" and "test.csv" datasets from Kaggle website:
-
-    * inside `./data/flow_0` and `./data/flow_1` store the data from the [House Prices: Advanced Regression Techniques competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
-
-    * inside `./data/flow_2` directory store the data from the: [TMDB Box Office Prediction competition](https://www.kaggle.com/c/tmdb-box-office-prediction)
-
 ## File Structure
 The structure of the directories looks like the following
 
@@ -210,6 +200,18 @@ The structure of the directories looks like the following
     └── visualization.py
 
 ````
+
+# Tutorials
+
+Create a directory under the name "data" inside the project root directory.
+
+To run the tutorials, you can download the "train.csv" and "test.csv" datasets from Kaggle website:
+
+    * inside `./data/flow_0` and `./data/flow_1` store the data from the [House Prices: Advanced Regression Techniques competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
+
+    * inside `./data/flow_2` directory store the data from the: [TMDB Box Office Prediction competition](https://www.kaggle.com/c/tmdb-box-office-prediction)
+
+Please check the tutorials directory: [Tutorials](https://github.com/KI-labs/ML-Navigator/tree/master/tutorials)
 
 # Reference
 

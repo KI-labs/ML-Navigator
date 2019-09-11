@@ -98,10 +98,10 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
     # Concatenate datasets if needed
 
     if isinstance(print_results, bool) and print_results:
-        print(f"the are {len(dataset_dict)} datasets provided")
+        print(f"there are {len(dataset_dict)} datasets provided")
     elif isinstance(print_results, int):
         if print_counter < print_results:
-            print(f"the are {len(dataset_dict)} datasets provided")
+            print(f"there are {len(dataset_dict)} datasets provided")
 
     # the check here is not a good idea because it check each column alone which is not efficient
     valid_dataset_list = []
