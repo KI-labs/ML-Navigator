@@ -1,6 +1,7 @@
 import logging
 import os
 import random
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -70,13 +71,17 @@ def standard_scale_numeric_features(
     return scaled_dataframe_dict
 
 
-def encoding_categorical_feature(dataset_dict: dict, feature_name: str) -> dict:
+def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
+                                 print_results: Union[bool, int] = True,
+                                 print_counter: int = 0) -> dict:
     """ Single categorical feature string encoder
 
     This function encodes categorical features. It is possible to use train data alone or all train data, validation
     data and test data. If all datesets are provided (i.e. train, valid and test), they will be concatenated first
     and then encoded.
 
+    :param int print_counter: if print_results is int, print counter control printing data to the conosle based on the print_results value.
+    :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
     :param str feature_name: The name of the feature/column that its values should be encoded.
     :param dict dataset_dict: a dictionary of pandas series (i.e one column) that must contain the train data and
                                 optionally contains valid data and test data
@@ -90,8 +95,13 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str) -> dict:
     hash_missing_value = hex(random.getrandbits(128))
     logger.debug(f"The hash for the missing values is {hash_missing_value}")
 
-    # Concatenate dataset if needed
-    print(f"the are {len(dataset_dict)} datasets provided")
+    # Concatenate datasets if needed
+
+    if isinstance(print_results, bool) and print_results:
+        print(f"the are {len(dataset_dict)} datasets provided")
+    elif isinstance(print_results, int):
+        if print_counter < print_results:
+            print(f"the are {len(dataset_dict)} datasets provided")
 
     # the check here is not a good idea because it check each column alone which is not efficient
     valid_dataset_list = []
@@ -116,23 +126,31 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str) -> dict:
     dataset_dict_encoded = {}
 
     for dataset_key in valid_dataset_keys:
-        print(f"encoding the feature in the dataset {dataset_key}")
         dataset_dict_encoded[dataset_key] = label_encoder.transform(
             dataset_dict[dataset_key].fillna(hash_missing_value)
         )
 
     labels_nr = len(list(label_encoder.classes_))
+    if isinstance(print_results, bool) and print_results:
+        print(f"encoding the feature in the dataset {dataset_key}")
+        print(f"the number of classes in {feature_name} feature is: {labels_nr}")
 
-    print(f"the number of classes in {feature_name} feature is: {labels_nr}")
+    elif isinstance(print_results, int):
+        if print_counter < print_results:
+            print(f"encoding the feature in the dataset {dataset_key}")
+            print(f"the number of classes in {feature_name} feature is: {labels_nr}")
+
     logger.info(f"Encoding categorical feature {feature_name} process is finished!")
     return dataset_dict_encoded
 
 
-def encode_categorical_features(dataframe_dict: dict, columns_list: list) -> dict:
+def encode_categorical_features(dataframe_dict: dict, columns_list: list,
+                                print_results: Union[bool, int] = True) -> dict:
     """ Categorical features string encoder
 
     This function applies the `encoding_categorical_feature` function to each feature in the `columns_list`.
 
+    :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
     :param dict dataframe_dict: a dictionary of Pandas dataframes.
     :param list columns_list: The list of the names of the columns/features that their values should be encoded.
 
@@ -140,13 +158,16 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list) -> dic
             dataframe_dict: a dictionary of Pandas dataframes after encoding.
     """
 
+    print_counter = 0
     for feature_name in columns_list:
         dataset_dict = {}
         try:
             for key_i, dataframe in dataframe_dict.items():
                 dataset_dict[key_i] = dataframe[feature_name].astype(str)
 
-            dataset_dict_encoded = encoding_categorical_feature(dataset_dict, feature_name)
+            dataset_dict_encoded = encoding_categorical_feature(dataset_dict, feature_name,
+                                                                print_results,
+                                                                print_counter)
             for key_i, dataseries in dataset_dict_encoded.items():
                 dataframe_dict[key_i][feature_name] = dataseries
 
@@ -154,5 +175,7 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list) -> dic
 
         except Exception as e:
             logger.error(f"The Error: {e}")
+
+        print_counter += 1
 
     return dataframe_dict

@@ -8,26 +8,27 @@ in other package in this project.
 
 """
 
+import json
 import logging
 import os
 import warnings
-import json
+from typing import Union
 
 import yaml
 from blessings import Terminal
 
 from feature_engineering.feature_generator import one_hot_encoding_sklearn
+from flows.utils import unify_dataframes
 from prediction.model_predictor import model_prediction
+from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from preprocessing.data_explorer import explore_data
 from preprocessing.data_science_help_functions import detect_id_target_problem
 from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features
 from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
 from preprocessing.utils import read_data
-from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from training.training import model_training
 from visualization.visualization import compare_statistics
-from flows.utils import unify_dataframes
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -181,15 +182,17 @@ class Flows:
 
         return dataframes_dict, self.columns_set
 
-    def encode_categorical_feature(self, dataframes_dict: dict):
+    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = True):
         """ Categorical features encoder
 
         This function encodes the categorical features by replacing
         the strings with integers
 
+        :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
                 before encoding the features e.g. dataframes_dict={"train": train_dataframe,
                 "test": test_dataframe}
+
 
         :return:
                 - dataframes_dict_encoded - A dictionary that contains Pandas dataframes after encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
@@ -205,7 +208,7 @@ class Flows:
         string_columns = self.columns_set[_reference]["categorical_string"] + self.columns_set[_reference][
             "categorical_integer"]
 
-        dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns)
+        dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns, print_results)
 
         print(term.red("*" * 30))
 

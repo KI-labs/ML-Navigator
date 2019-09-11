@@ -21,7 +21,7 @@ setup(
         "Documentation": "https://ki-labs.github.io/ML-Navigator/index.html",
     },
     classifiers=[
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: Apache Software License'
     ]
 )
