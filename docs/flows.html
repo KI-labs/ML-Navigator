@@ -253,7 +253,7 @@ train_dataframe, “test”: test_dataframe}</td>
 
 <dl class="method">
 <dt id="flows.flows.Flows.encode_categorical_feature">
-<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>print_results: Union[bool</em>, <em>int] = True</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Categorical features encoder</p>
 <p>This function encodes the categorical features by replacing
 the strings with integers</p>
@@ -261,14 +261,19 @@ the strings with integers</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>int</strong><strong>] </strong><strong>print_results</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.</li>
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
 before encoding the features e.g. dataframes_dict={“train”: train_dataframe,
-“test”: test_dataframe}</td>
+“test”: test_dataframe}</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li>dataframes_dict_encoded - A dictionary that contains Pandas dataframes after encoding the features e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
 <li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
 </ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -498,6 +503,36 @@ model configurations and training configurations. Check the example below.</p>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-flows.utils"></span><dl class="function">
+<dt id="flows.utils.unify_dataframes">
+<code class="descclassname">flows.utils.</code><code class="descname">unify_dataframes</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>_reference: str</em>, <em>ignore_columns: list</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#flows.utils.unify_dataframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dataframes unifier</p>
+<p>This function ensures that all datasets have the same features after dropping highly correlated features or columns that have constant values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes with nested JSON data type e.g.
+dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
+<li><strong>_reference</strong> (<em>str</em>) – The name of the Pandas dataframe that will be used as a reference to adjust the features of other dataframes. Usually it is the train dataframe</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be
+ignored when apply scaling e.g. the id and the target.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframes_dict - A dictionary that contains Pandas dataframes.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

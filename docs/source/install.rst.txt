@@ -6,6 +6,14 @@ Quick Start
 
 To install the ML-Navigator Package you need to have `Python 3.6`:
 
+You can install ML-Navigator using the `pip` tool directly:
+
+.. code:: shell
+
+        pip install ML-Navigator
+
+To install the ML-Navigator Package from the Github repo:
+
 1. clone the git repository:
 
 .. code:: shell
@@ -29,22 +37,18 @@ To install the ML-Navigator Package you need to have `Python 3.6`:
 
         source /venv/bin/activate
 
-After setting up the virtual environment, you can install the package using pip command as follows:
+4. After setting up the virtual environment, you can install the package using pip command as follows:
 
 .. code:: shell
 
         pip install .
 
-4. OR install the required packages
+For running the tutorials:
 
-.. code:: shell
-
-        pip install -r requirements.txt
-
-5. Create a directory under the name "data" inside the project root directory.
+1. Create a directory under the name "data" inside the project root directory.
 
 
-6. To run the tutorials, you can download the "train.csv" and "test.csv" datasets from Kaggle website:
+2. To run the tutorials, you can download the "train.csv" and "test.csv" datasets from Kaggle website:
 
     * inside `./data/flow_0` and `./data/flow_1` store the data from the the House Prices - Advanced Regression Techniques competition:
         https://www.kaggle.com/c/house-prices-advanced-regression-techniques

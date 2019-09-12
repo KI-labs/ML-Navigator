@@ -434,7 +434,7 @@ dataframes. After standardizing the dataset, the features in each dataset have 0
 
 <dl class="function">
 <dt id="preprocessing.data_transformer.encoding_categorical_feature">
-<code class="descclassname">preprocessing.data_transformer.</code><code class="descname">encoding_categorical_feature</code><span class="sig-paren">(</span><em>dataset_dict: dict</em>, <em>feature_name: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_transformer.encoding_categorical_feature" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">preprocessing.data_transformer.</code><code class="descname">encoding_categorical_feature</code><span class="sig-paren">(</span><em>dataset_dict: dict</em>, <em>feature_name: str</em>, <em>print_results: Union[bool</em>, <em>int] = True</em>, <em>print_counter: int = 0</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_transformer.encoding_categorical_feature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single categorical feature string encoder</p>
 <p>This function encodes categorical features. It is possible to use train data alone or all train data, validation
 data and test data. If all datesets are provided (i.e. train, valid and test), they will be concatenated first
@@ -444,6 +444,8 @@ and then encoded.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>print_counter</strong> (<em>int</em>) – if print_results is int, print counter control printing data to the conosle based on the print_results value.</li>
+<li><strong>int</strong><strong>] </strong><strong>print_results</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.</li>
 <li><strong>feature_name</strong> (<em>str</em>) – The name of the feature/column that its values should be encoded.</li>
 <li><strong>dataset_dict</strong> (<em>dict</em>) – a dictionary of pandas series (i.e one column) that must contain the train data and
 optionally contains valid data and test data</li>
@@ -459,7 +461,7 @@ optionally contains valid data and test data</li>
 
 <dl class="function">
 <dt id="preprocessing.data_transformer.encode_categorical_features">
-<code class="descclassname">preprocessing.data_transformer.</code><code class="descname">encode_categorical_features</code><span class="sig-paren">(</span><em>dataframe_dict: dict</em>, <em>columns_list: list</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_transformer.encode_categorical_features" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">preprocessing.data_transformer.</code><code class="descname">encode_categorical_features</code><span class="sig-paren">(</span><em>dataframe_dict: dict</em>, <em>columns_list: list</em>, <em>print_results: Union[bool</em>, <em>int] = True</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_transformer.encode_categorical_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Categorical features string encoder</p>
 <p>This function applies the <cite>encoding_categorical_feature</cite> function to each feature in the <cite>columns_list</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -467,6 +469,7 @@ optionally contains valid data and test data</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>int</strong><strong>] </strong><strong>print_results</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.</li>
 <li><strong>dataframe_dict</strong> (<em>dict</em>) – a dictionary of Pandas dataframes.</li>
 <li><strong>columns_list</strong> (<em>list</em>) – The list of the names of the columns/features that their values should be encoded.</li>
 </ul>

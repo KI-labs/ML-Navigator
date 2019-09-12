@@ -1,10 +1,15 @@
 def unify_dataframes(dataframes_dict: dict, _reference: str, ignore_columns: list) -> dict:
     """ Dataframes unifier
 
-    :param dataframes_dict:
-    :param _reference:
-    :param ignore_columns:
+    This function ensures that all datasets have the same features after dropping highly correlated features or columns that have constant values.
+
+    :param dict dataframes_dict: A dictionary that contains Pandas dataframes with nested JSON data type e.g.
+                dataframes_dict={ "train": train_dataframe, "test": test_dataframe}
+    :param str _reference: The name of the Pandas dataframe that will be used as a reference to adjust the features of other dataframes. Usually it is the train dataframe
+    :param list ignore_columns: It contains the columns that should be
+                ignored when apply scaling e.g. the id and the target.
     :return:
+            - dataframes_dict - A dictionary that contains Pandas dataframes.
     """
 
     remaining_columns = dataframes_dict[_reference].columns
