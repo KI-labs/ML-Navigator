@@ -105,8 +105,8 @@ class Flows:
             with open(flow_path, 'r') as stream:
                 self.flow_steps = json.load(stream)
                 logger.info(f"flow_{self.flow_id}.json was loaded successfully.")
-        except yaml.YAMLError as exc:
-            logger.error(f"Loading the yaml file failed. The error is {exc}")
+        except Exception as exc:
+            logger.error(f"Loading the json file failed. The error is {exc}")
 
         # First thing first: tell the user how to read the data
         print(term.bold(term.magenta("Please use the following function to read the data")))
