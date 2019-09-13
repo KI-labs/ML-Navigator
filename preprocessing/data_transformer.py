@@ -1,11 +1,13 @@
 import logging
 import os
+import itertools
 import random
 from typing import Union
 
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
+from IPython.display import display
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -150,7 +152,8 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
 
     This function applies the `encoding_categorical_feature` function to each feature in the `columns_list`.
 
-    :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
+    :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to
+        the console. If an integer n, only the data for n features is printed to the console.
     :param dict dataframe_dict: a dictionary of Pandas dataframes.
     :param list columns_list: The list of the names of the columns/features that their values should be encoded.
 
@@ -177,5 +180,19 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
             logger.error(f"The Error: {e}")
 
         print_counter += 1
+
+    dfs = [v[columns_list].nunique().to_frame(name=k) for k, v in dataframe_dict.items()]
+    result = pd.concat(dfs, axis=1, sort=False)
+
+    dfs = [v[columns_list].apply(lambda x: list(set(x)), axis=0).to_frame(name=k) for k, v in
+           dataframe_dict.items()]
+    result_all = pd.concat(dfs, axis=1, sort=False)
+    result_all = result_all.apply(lambda x: len(set(itertools.chain(*x))), axis=1).to_frame(name='all data sets')
+
+    result = pd.concat([result, result_all], axis=1, sort=False)
+    result.index.name = 'string columns'
+
+    print(f"Number of unique elements per string column")
+    display(result)
 
     return dataframe_dict
