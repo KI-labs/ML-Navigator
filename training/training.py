@@ -36,7 +36,8 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
                        train_array: np.array,
                        target: np.array,
                        models_nr: list,
-                       model_type: str):
+                       model_type: str,
+                       required_metrics: list):
     """ n split training
 
     This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test
@@ -126,13 +127,15 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
             _, _, _ = regression_evaluate_model(model,
                                                 sub_datasets[f"features_{sub_dataset_i}"],
                                                 sub_datasets[f"target_{sub_dataset_i}"],
-                                                f"Evaluating sub-dataset nr.{sub_dataset_i}")
+                                                f"Evaluating sub-dataset nr.{sub_dataset_i}",
+                                                required_metrics=required_metrics)
         else:
 
             _, _, _ = classification_model_evaluation(model,
                                                       sub_datasets[f"features_{sub_dataset_i}"],
                                                       sub_datasets[f"target_{sub_dataset_i}"],
-                                                      f"Evaluating sub-dataset nr.{sub_dataset_i}")
+                                                      f"Evaluating sub-dataset nr.{sub_dataset_i}",
+                                                      required_metrics=required_metrics)
     path = os.path.join(save_models_dir, f"{model_type}_{0}.pkl")
     save_model_locally(path, model)
 
@@ -149,7 +152,8 @@ def train_with_kfold_cross_validation(save_models_dir: str,
                                       train_array: np.array,
                                       target: np.array,
                                       models_nr: list,
-                                      model_type):
+                                      model_type,
+                                      required_metrics: list):
     """K-Fold cross-validation training
 
     This function trains a model to fit the data using K-Fold cross-validation.
@@ -248,19 +252,14 @@ def train_with_kfold_cross_validation(save_models_dir: str,
 
         if problem_to_solve == "regression":
             y_predict, _, _ = regression_evaluate_model(kfold_model, train_array[test], target[test],
-                                                        f"dataset kfold {fold_nr}")
+                                                        f"dataset kfold {fold_nr}",
+                                                        required_metrics=required_metrics)
+            r2 += r2_score(target[test], y_predict)
+            mse += mean_squared_error(target[test], y_predict)
         else:
             y_predict, _, _ = classification_evaluate_model(kfold_model, train_array[test], target[test],
-                                                            f"dataset kfold {fold_nr}")
-
-        r2 += r2_score(target[test], y_predict)
-        mse += mean_squared_error(target[test], y_predict)
-
-    r2 = round(100 * r2 / n_fold, 2)
-    mse = round(mse / n_fold, 4)
-
-    print(f"mean R2 {n_fold} Folds: ", r2)
-    print(f"mean MSE {n_fold} Folds: ", mse)
+                                                            f"dataset kfold {fold_nr}",
+                                                            required_metrics=required_metrics)
 
     logger.info("Training the model using KFold cross-validation is finished")
     return models_nr, save_models_dir
@@ -390,7 +389,8 @@ def model_training(parameters: dict):
                                                         train_array,
                                                         target,
                                                         models_nr,
-                                                        model_type)
+                                                        model_type,
+                                                        parameters["metrics"])
 
     elif split["method"] == "kfold":
         logger.info("Start training using KFold cross-validation")
@@ -400,16 +400,17 @@ def model_training(parameters: dict):
                                                                        train_array,
                                                                        target,
                                                                        models_nr,
-                                                                       model_type)
+                                                                       model_type,
+                                                                       parameters["metrics"])
 
     if model_type == "Ridge linear regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type)
+        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "Logistic regression":
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type)
+        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "lightgbm" and hyperparameters["objective"] == "regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type)
+        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "lightgbm" and hyperparameters["objective"] != "regression":
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type)
+        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
 
     logger.info("Training process is finished")
     return models_nr, save_models_dir

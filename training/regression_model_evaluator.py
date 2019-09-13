@@ -17,11 +17,13 @@ logging.basicConfig(
 )
 
 
-def regression_evaluate_model(model, x_values: np.array, y_values: np.array, key_str: str, help_print: bool = True):
+def regression_evaluate_model(model, x_values: np.array, y_values: np.array, key_str: str, help_print: bool = True,
+                              required_metrics: list = ["mean_squared_error", "r2_score"]):
     """ Model evaluator
 
     This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.
 
+    :param list required_metrics: The list of the classification metrics that the user wants to check
     :param model: An object created by the training package e.g. Scikit Learn.
     :param np.array x_values: The values of the features which are used to predict the y_values .
     :param np.array y_values: The target that should be predicted.
@@ -41,20 +43,25 @@ def regression_evaluate_model(model, x_values: np.array, y_values: np.array, key
     r2 = round(100 * r2_score(y_values, y_prediction), 1)
 
     if help_print:
+        print("the required metrics = ", required_metrics)
         print(f"The quality of the model using the {key_str}")
-        print(f"{key_str}: Mean squared error: {mse}")
-        print(f'{key_str}:  R2: {r2} %')
+        if "mean_squared_error" in required_metrics:
+            print(f"{key_str}: Mean squared error: {mse}")
+        if "r2_score" in required_metrics:
+            print(f'{key_str}:  R2: {r2} %')
 
     logger.info("Evaluate Model process is finished")
     return y_prediction, mse, r2
 
 
-def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str):
+def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str,
+                                required_metrics: list = ["mean_squared_error", "r2_score"]):
     """ Models set evaluator
 
     The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
     models by applying the function `evaluate_model`
 
+    :param list required_metrics: The list of the classification metrics that the user wants to check
     :param dict data: A dictionary that contains pandas dataframes as datasets.
     :param list models_nr: A list of indexes that will be used to point to the trained models which will be saved
             locally after training.
@@ -81,13 +88,16 @@ def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: st
             except Exception as e:
                 logger.error(f"Error is: {e}")
 
-            y_prediction, _, _ = regression_evaluate_model(model, array, target, f"Evaluating the dataset: {data_key}")
+            y_prediction, _, _ = regression_evaluate_model(model, array, target, f"Evaluating the dataset: {data_key}",
+                                                           required_metrics=required_metrics)
 
             mse += round(mean_squared_error(target, y_prediction), 4)
             r2 += round(100 * r2_score(target, y_prediction), 1)
 
             logger.info(f"Model number {model_i} was loaded successfully")
-        print(f"{data_key}: Mean squared error linear: {mse / len(models_nr)}")
-        print(f'{data_key}:  Mean R2: {r2 / len(models_nr)} %')
+        if "mean_squared_error" in required_metrics:
+            print(f"{data_key}: Mean squared error linear: {mse / len(models_nr)}")
+        if "r2_score" in required_metrics:
+            print(f'{data_key}:  Mean R2: {r2 / len(models_nr)} %')
 
         logger.info("The evaluation process is completed")

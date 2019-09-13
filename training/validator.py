@@ -17,6 +17,12 @@ logging.basicConfig(
 )
 
 
+def _raise_metrics_error():
+    raise ValueError("Invalid parameters structure. The metrics should be a list of strings that have maximum two "
+                     "elements: r2_score and mean_squared_error for regression, and accuracy_score and"
+                     " roc_auc_score for classification")
+
+
 class StructureValidation:
     """ Parameters structure validation
 
@@ -97,7 +103,8 @@ class StructureValidation:
             if "split_ratios" not in self.parameters["split"].keys():
                 raise ValueError("Invalid parameters structure. The key `split_ratios` inside the key split is missing")
 
-            elif isinstance(self.parameters["split"]["split_ratios"], float):
+            elif isinstance(self.parameters["split"]["split_ratios"], float) or \
+                    isinstance(self.parameters["split"]["split_ratios"], int):
                 if self.parameters["split"]["split_ratios"] <= 0 or \
                         self.parameters["split"]["split_ratios"] >= 1:
                     raise ValueError("Invalid parameters structure. split_ratios should be in ]0, 1[")
@@ -109,12 +116,12 @@ class StructureValidation:
                 raise ValueError("Invalid parameters structure. split_ratios either float or a list or a set that has "
                                  "two floats in the range of ]0, 1[")
 
-        if self.parameters["split"]["method"] == "kfold":
+        elif self.parameters["split"]["method"] == "kfold":
             if "fold_nr" not in self.parameters["split"].keys():
-                raise ValueError("Invalid parameters structure. The key `fold_nr` inside the key split is missing")
-            elif not isinstance(self.parameters["split"]["fold_nr"], int) and \
+                raise TypeError("Invalid parameters structure. The key `fold_nr` inside the key split is missing")
+            elif not isinstance(self.parameters["split"]["fold_nr"], int) or \
                     self.parameters["split"]["fold_nr"] < 1:
-                raise TypeError("Invalid parameters structure. The key `fold_nr` should be an integer larger than 1")
+                raise ValueError("Invalid parameters structure. The key `fold_nr` should be an integer larger than 1")
 
         if self.parameters["split"]["method"] != "split" and self.parameters["split"]["method"] != "kfold":
             raise ValueError("Invalid parameters structure. The split method should be either split or kfold ")
@@ -129,9 +136,9 @@ class StructureValidation:
         """
 
         if "type" not in self.parameters["model"].keys():
-            raise ValueError("Invalid parameters structure. The key type inside the key model is missing")
+            raise TypeError("Invalid parameters structure. The key type inside the key model is missing")
         elif "hyperparameters" not in self.parameters["model"].keys():
-            raise ValueError("Invalid parameters structure. The key hyperparameters inside the key model is missing")
+            raise TypeError("Invalid parameters structure. The key hyperparameters inside the key model is missing")
         if not isinstance(self.parameters["model"]["hyperparameters"], dict):
             raise TypeError("Invalid parameters structure. Invalid hyperparameters structure")
 
@@ -139,27 +146,25 @@ class StructureValidation:
         """metrics key validator
 
         The following assumptions should be met:\n
-        1. The value of the `metrics` should be a list or a string.\n
-        2. Currently, there are only two metrics to show: r2_score and mean_squared_error.
+        1. The value of the `metrics` should be a list.\n
+        2. Currently, there are only two regression metrics: r2_score and mean_squared_error, and two classification metrics: accuracy_score and roc_auc_score
 
         """
 
         if isinstance(self.parameters["metrics"], list):
-            if len(self.parameters["metrics"]) != 2 and \
-                    self.parameters["metrics"][0] not in ["r2_score", "mean_squared_error", "accuracy_score"] and \
-                    self.parameters["metrics"][1] not in ["r2_score", "mean_squared_error", "accuracy_score"]:
-                raise ValueError("Invalid parameters structure. The metrics should be a string or a list that have two "
-                                 "elements: r2_score and mean_squared_error for regression and accuracy_score for"
-                                 " classification")
+            if len(self.parameters["metrics"]) > 2 or len(self.parameters["metrics"]) == 0:
+                _raise_metrics_error()
 
-        elif isinstance(self.parameters["metrics"], str) and \
-                self.parameters["metrics"] not in ["r2_score", "mean_squared_error", "accuracy_score"]:
-            raise ValueError("Invalid parameters structure. The metrics should be a string or a list that have n "
-                             "elements: r2_score, mean_squared_error and accuracy_score")
-        elif not isinstance(self.parameters["metrics"], str) or not isinstance(self.parameters["metrics"], list):
-            raise TypeError("Invalid parameters structure. The metrics is invalid."
-                            " The metrics should be a string or a list"
-                            " that have n elements: r2_score, mean_squared_error and accuracy_score")
+            else:
+                for metric_i in self.parameters["metrics"]:
+                    if metric_i not in ["r2_score",
+                                        "mean_squared_error",
+                                        "accuracy_score",
+                                        "roc_auc_score"]:
+                        _raise_metrics_error()
+
+        else:
+            _raise_metrics_error()
 
     def validate_predict(self):
         """predict key validator
@@ -223,8 +228,16 @@ def parameters_validator(parameters):
     validator.validate_split()
     logger.info("Validating the split data is finished")
 
+    validator.validate_metrics()
+    logger.info("Validating the metrics is finished")
+
+    validator.validate_model()
+    logger.info("Validating the model data is finished")
+
     validator.validate_predict()
     logger.info("Validating the predict is finished")
 
     validator.features_validator()
     logger.info("Validating the features is finished")
+
+    return True
