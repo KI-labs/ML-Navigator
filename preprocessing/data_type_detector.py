@@ -2,6 +2,7 @@ import logging
 import os
 from enum import Enum
 
+from IPython.display import display
 import pandas as pd
 
 from preprocessing.json_preprocessor import feature_with_json_detector
@@ -291,30 +292,26 @@ def detect_columns_types_summary(dataframes_dict: dict, threshold: int = 50) -> 
             dataframe, threshold=threshold
         )
 
-        print(f"\033[1mThe summary of the {key_i} dataset:\033[0;0m")
-        print(f"The {key_i} dataset contains {number_of_columns} columns")
-
-        print(f"There are {len(columns_types_list[0])} string categorical columns")
-
-        print(f"There are {len(columns_types_list[1])} numeric categorical columns")
-        print(
-            f"\033[1mNOTE: numeric categorical columns that contains more than {threshold} "
-            "classes are considered numeric continuous features.\033[0;0m"
-        )
-        print(
-            "\033[1mNOTE: You can modify the threshold value if you want to consider more or less numeric categorical "
-            "features as numeric continuous features.\033[0;0m"
-        )
-        print(
-            f"There are {len(columns_types_list[2])} columns with numeric continuous values "
-        )
-        print(f"There are {len(columns_types_list[3])} columns that contain date")
-        print(f"There are {len(columns_types_list[4])} columns that contain valid nested JSON data")
-        print(
-            f"There are {len(columns_types_list[5])} columns that contain other type of data"
-        )
-
-        print("*" * 10, f"End of the summary of the {key_i} dataset", "*" * 10)
-
         columns_types_dict[key_i] = list_2_dict(columns_types_list)
+
+    print(f"A summary of the data sets")
+
+    data = dict((k, dict((k_, len(v_)) for k_, v_ in v.items())) for k, v in columns_types_dict.items())
+
+    for k, v in data.items():
+        v['total amount'] = sum(v.values())
+
+    summary = pd.DataFrame(data)
+    summary.index.name = 'column type'
+    display(summary)
+
+    print(
+        f"\033[1mNOTE: numeric categorical columns that contains more than {threshold} "
+        "classes are considered numeric continuous features.\033[0;0m"
+    )
+    print(
+        "\033[1mNOTE: You can modify the threshold value if you want to consider more or less numeric categorical "
+        "features as numeric continuous features.\033[0;0m"
+    )
+
     return columns_types_dict

@@ -182,7 +182,7 @@ class Flows:
 
         return dataframes_dict, self.columns_set
 
-    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = True):
+    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = False):
         """ Categorical features encoder
 
         This function encodes the categorical features by replacing
