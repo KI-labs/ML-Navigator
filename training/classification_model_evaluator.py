@@ -17,11 +17,13 @@ logging.basicConfig(
 )
 
 
-def classification_evaluate_model(model, x_values: np.array, y_values: np.array, key_str: str, help_print: bool = True):
+def classification_evaluate_model(model, x_values: np.array, y_values: np.array, key_str: str, help_print: bool = True,
+                                  required_metrics: list = ["accuracy_score", "roc_auc_score"]):
     """ Model evaluator
 
     This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.
 
+    :param list required_metrics: The list of the classification metrics that the user wants to check
     :param model: An object created by the training package e.g. Scikit Learn.
     :param np.array x_values: The values of the features which are used to predict the y_values .
     :param np.array y_values: The target that should be predicted.
@@ -31,8 +33,8 @@ def classification_evaluate_model(model, x_values: np.array, y_values: np.array,
 
     :return:
             | y_prediction: The predicted target using the trained model
-            | mse: Mean Squared Error value
-            | r2: Coefficient of Determination value
+            | accuracy: Accuracy classification score.
+            | roc_auc:Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores
     """
 
     y_prediction = model.predict(x_values)
@@ -43,21 +45,30 @@ def classification_evaluate_model(model, x_values: np.array, y_values: np.array,
 
         if help_print:
             print(f"The quality of the model using the {key_str}")
-            print(f"{key_str}: accuracy score: {accuracy}")
-            print(f'{key_str}:  ROC AUC score: {roc_auc} %')
+            if "accuracy_score" in required_metrics:
+                print(f"{key_str}: accuracy score: {accuracy}")
+            if "roc_auc_score" in required_metrics:
+                print(f'{key_str}:  ROC AUC score: {roc_auc} %')
 
         logger.info("Evaluate Model process is finished")
         return y_prediction, accuracy, roc_auc
     else:
+        if help_print:
+            if "accuracy_score" in required_metrics:
+                print(f"{key_str}: accuracy score: {accuracy}")
+            if "roc_auc_score" in required_metrics:
+                print("ROC AUC score is not available for multi-class classification")
         return y_prediction, accuracy
 
 
-def classification_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str):
+def classification_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str,
+                                    required_metrics: list = ["accuracy_score", "roc_auc_score"]):
     """ Models set evaluator
 
     The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
     models by applying the function `evaluate_model`
 
+    :param required_metrics: The list of the classification metrics that the user wants to check
     :param dict data: A dictionary that contains pandas dataframes as datasets.
     :param list models_nr: A list of indexes that will be used to point to the trained models which will be saved
             locally after training.
@@ -84,15 +95,18 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
             except Exception as e:
                 logger.error(f"Error is: {e}")
 
-            y_prediction, _, _ = classification_evaluate_model(model, array, target, f"Evaluating the dataset: {data_key}")
+            y_prediction, _, _ = classification_evaluate_model(model, array, target,
+                                                               f"Evaluating the dataset: {data_key}",
+                                                               required_metrics=required_metrics)
 
             accuracy += round(accuracy_score(target, np.around(y_prediction)), 4)
             if len(set(target)) < 3:
                 roc_auc += round(100 * roc_auc_score(target, y_prediction), 1)
 
             logger.info(f"Model number {model_i} was loaded successfully")
-        print(f"{data_key}: The accuracy score: {accuracy / len(models_nr)}")
-        if len(set(target)) < 3:
+        if "accuracy_score" in required_metrics:
+            print(f"{data_key}: The accuracy score: {accuracy / len(models_nr)}")
+        if len(set(target)) < 3 and "roc_auc_score" in required_metrics:
             print(f'{data_key}:  ROC AUC score: {roc_auc / len(models_nr)} %')
 
         logger.info("The evaluation process is completed")

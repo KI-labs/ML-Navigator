@@ -7,9 +7,9 @@ from training.training import model_training
 # create dataframe for testing the preprocessing functions:
 def mock_data(number_of_samples):
     integer_array = np.random.randint(2, size=(number_of_samples, 2))
-    for catagories_numbers in range(5, 50, 10):
+    for categories_numbers in range(5, 50, 10):
         integer_array = np.append(
-            integer_array, np.random.randint(catagories_numbers, size=(number_of_samples, 2)), axis=1
+            integer_array, np.random.randint(categories_numbers, size=(number_of_samples, 2)), axis=1
         )
     integer_columns = [f"int_col_{x}" for x in range(integer_array.shape[1])]
 
