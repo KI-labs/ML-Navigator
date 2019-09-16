@@ -42,7 +42,7 @@ def regression_evaluate_model(model, x_values: np.array, y_values: np.array, key
     mse = round(mean_squared_error(y_values, y_prediction), 4)
     r2 = round(100 * r2_score(y_values, y_prediction), 1)
 
-    summary = {
+    metrics_summary = {
         "mean_squared_error": mse,
         "r2_score": r2
     }
@@ -56,7 +56,7 @@ def regression_evaluate_model(model, x_values: np.array, y_values: np.array, key
             print(f'{key_str}:  R2: {r2} %')
 
     logger.info("Evaluate Model process is finished")
-    return y_prediction, summary
+    return y_prediction, metrics_summary
 
 
 def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str,
@@ -94,7 +94,7 @@ def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: st
                 logger.error(f"Error is: {e}")
 
             y_prediction, _ = regression_evaluate_model(model, array, target, f"Evaluating the dataset: {data_key}",
-                                                           required_metrics=required_metrics)
+                                                        required_metrics=required_metrics)
 
             mse += round(mean_squared_error(target, y_prediction), 4)
             r2 += round(100 * r2_score(target, y_prediction), 1)
