@@ -124,7 +124,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
     # Evaluate the model on all sub-datasets
     for sub_dataset_i in range(len(test_split_ratios)):
         if problem_to_solve == "regression":
-            _, _, _ = regression_evaluate_model(model,
+            _, _ = regression_evaluate_model(model,
                                                 sub_datasets[f"features_{sub_dataset_i}"],
                                                 sub_datasets[f"target_{sub_dataset_i}"],
                                                 f"Evaluating sub-dataset nr.{sub_dataset_i}",
@@ -251,13 +251,13 @@ def train_with_kfold_cross_validation(save_models_dir: str,
         models_nr.append(fold_nr)
 
         if problem_to_solve == "regression":
-            y_predict, _, _ = regression_evaluate_model(kfold_model, train_array[test], target[test],
+            y_predict, _ = regression_evaluate_model(kfold_model, train_array[test], target[test],
                                                         f"dataset kfold {fold_nr}",
                                                         required_metrics=required_metrics)
             r2 += r2_score(target[test], y_predict)
             mse += mean_squared_error(target[test], y_predict)
         else:
-            y_predict, _, _ = classification_evaluate_model(kfold_model, train_array[test], target[test],
+            y_predict, _ = classification_evaluate_model(kfold_model, train_array[test], target[test],
                                                             f"dataset kfold {fold_nr}",
                                                             required_metrics=required_metrics)
 

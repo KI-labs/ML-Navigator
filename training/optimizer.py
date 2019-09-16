@@ -51,8 +51,10 @@ def training_for_optimizing(alpha_i: float, x_train: np.array, y_train: np.array
 
     linear_regression_model = linear_model.Ridge(alpha=alpha_i)
     model = linear_regression_model.fit(x_train, y_train)
-    _, _, r2_linear = regression_evaluate_model(model, x_test, y_test, help_text,
+    _, summary = regression_evaluate_model(model, x_test, y_test, help_text,
                                      help_print=False)
+
+    r2_linear = summary['r2_score']
 
     return r2_linear
 

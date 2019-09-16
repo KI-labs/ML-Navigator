@@ -40,8 +40,14 @@ def classification_evaluate_model(model, x_values: np.array, y_values: np.array,
     y_prediction = model.predict(x_values)
 
     accuracy = round(accuracy_score(y_values, np.around(y_prediction)), 4)
+
+    summary = {
+        "accuracy": accuracy
+    }
+
     if len(set(y_values)) < 3:
         roc_auc = round(100 * roc_auc_score(y_values, y_prediction), 1)
+        summary["roc_auc"] = roc_auc
 
         if help_print:
             print(f"The quality of the model using the {key_str}")
@@ -51,14 +57,15 @@ def classification_evaluate_model(model, x_values: np.array, y_values: np.array,
                 print(f'{key_str}:  ROC AUC score: {roc_auc} %')
 
         logger.info("Evaluate Model process is finished")
-        return y_prediction, accuracy, roc_auc
+        return y_prediction, summary
     else:
         if help_print:
             if "accuracy_score" in required_metrics:
                 print(f"{key_str}: accuracy score: {accuracy}")
             if "roc_auc_score" in required_metrics:
                 print("ROC AUC score is not available for multi-class classification")
-        return y_prediction, accuracy
+
+        return y_prediction, summary
 
 
 def classification_model_evaluation(data: dict, models_nr: list, save_models_dir: str, model_type: str,
@@ -95,15 +102,16 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
             except Exception as e:
                 logger.error(f"Error is: {e}")
 
-            y_prediction, _, _ = classification_evaluate_model(model, array, target,
+            y_prediction, summary = classification_evaluate_model(model, array, target,
                                                                f"Evaluating the dataset: {data_key}",
                                                                required_metrics=required_metrics)
 
-            accuracy += round(accuracy_score(target, np.around(y_prediction)), 4)
-            if len(set(target)) < 3:
-                roc_auc += round(100 * roc_auc_score(target, y_prediction), 1)
+            accuracy += summary["accuracy"]
+            roc_auc += summary.get("roc_auc", 0)
 
             logger.info(f"Model number {model_i} was loaded successfully")
+
+
         if "accuracy_score" in required_metrics:
             print(f"{data_key}: The accuracy score: {accuracy / len(models_nr)}")
         if len(set(target)) < 3 and "roc_auc_score" in required_metrics:

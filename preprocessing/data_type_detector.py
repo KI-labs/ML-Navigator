@@ -17,6 +17,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format=formatting,
 )
+pd.set_option('display.max_rows', None)
 
 
 class ColumnDataFormat:
