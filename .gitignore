@@ -2,6 +2,13 @@
 .idea/
 data/
 
+
+tutorials/Untitled.ipynb
+tutorials/flow_0_copy.ipynb
+tutorials/flow_1_copy.ipynb
+tutorials/flow_2_copy.ipynb
+tutorials/flow_3_copy.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

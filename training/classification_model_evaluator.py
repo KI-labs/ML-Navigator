@@ -2,8 +2,10 @@ import logging
 import os
 import pickle
 
+import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score, roc_auc_score
+from IPython.display import display
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -42,12 +44,12 @@ def classification_evaluate_model(model, x_values: np.array, y_values: np.array,
     accuracy = round(accuracy_score(y_values, np.around(y_prediction)), 4)
 
     metrics_summary = {
-        "accuracy": accuracy
+        "accuracy_score": accuracy
     }
 
     if len(set(y_values)) < 3:
         roc_auc = round(100 * roc_auc_score(y_values, y_prediction), 1)
-        metrics_summary["roc_auc"] = roc_auc
+        metrics_summary["roc_auc_score"] = roc_auc
 
         if help_print:
             print(f"The quality of the model using the {key_str}")
@@ -87,6 +89,7 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
     """
 
     model = None
+    metrics_summary_all = {}
 
     for data_key, dataframe in data.items():
         array = data[data_key]["features"].to_numpy()
@@ -102,19 +105,25 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
             except Exception as e:
                 logger.error(f"Error is: {e}")
 
-            y_prediction, metrics_summary = classification_evaluate_model(model, array, target,
-                                                                          f"Evaluating the dataset: {data_key}",
-                                                                          required_metrics=required_metrics)
+            _, metrics_summary = classification_evaluate_model(model, array, target,
+                                                               f"Evaluating the dataset: {data_key}",
+                                                               required_metrics=required_metrics)
 
-            accuracy += metrics_summary["accuracy"]
-            roc_auc += metrics_summary.get("roc_auc", 0)
+            metrics_summary_all[f"model_{model_i}"] = dict((f"{k} ({data_key})", v) for k, v in metrics_summary.items()
+                                                           if k in required_metrics)
+
+            accuracy += metrics_summary["accuracy_score"]
+            roc_auc += metrics_summary.get("roc_auc_score", 0)
 
             logger.info(f"Model number {model_i} was loaded successfully")
-
 
         if "accuracy_score" in required_metrics:
             print(f"{data_key}: The accuracy score: {accuracy / len(models_nr)}")
         if len(set(target)) < 3 and "roc_auc_score" in required_metrics:
             print(f'{data_key}:  ROC AUC score: {roc_auc / len(models_nr)} %')
 
-        logger.info("The evaluation process is completed")
+    metrics_summary_all = pd.DataFrame(metrics_summary_all)
+    metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
+    display(metrics_summary_all)
+
+    logger.info("The evaluation process is completed")
