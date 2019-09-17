@@ -182,21 +182,24 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
 
         print_counter += 1
 
-    dfs = [v[[c for c in v.columns if c in columns_list]].nunique().to_frame(name=k)
-           for k, v in dataframe_dict.items()]
-    result = pd.concat(dfs, axis=1, sort=False)
+    if print_results is not False:
 
-    dfs = [v[[c for c in v.columns if c in columns_list]].apply(lambda x: list(set(x)), axis=0).to_frame(name=k)
-           for k, v in dataframe_dict.items()]
-    result_all = pd.concat(dfs, axis=1, sort=False)
-    result_all = result_all \
-        .apply(lambda x: len(set(itertools.chain(*filter(lambda y: type(y) == list, x)))), axis=1) \
-        .to_frame(name='all data sets')
+        dfs = [v[[c for c in v.columns if c in columns_list]].nunique().to_frame(name=k)
+               for k, v in dataframe_dict.items()]
+        result = pd.concat(dfs, axis=1, sort=False)
 
-    result = pd.concat([result, result_all], axis=1, sort=False)
-    result.index.name = 'string columns'
+        dfs = [v[[c for c in v.columns if c in columns_list]].apply(lambda x: list(set(x)), axis=0).to_frame(name=k)
+               for k, v in dataframe_dict.items()]
 
-    print(f"Number of unique elements per string column")
-    display(result)
+        result_all = pd.concat(dfs, axis=1, sort=False)
+        result_all = result_all \
+            .apply(lambda x: len(set(itertools.chain(*filter(lambda y: type(y) == list, x)))), axis=1) \
+            .to_frame(name='all data sets')
+
+        result = pd.concat([result, result_all], axis=1, sort=False)
+        result.index.name = 'string columns'
+
+        print(f"Number of unique elements per string column")
+        display(result)
 
     return dataframe_dict

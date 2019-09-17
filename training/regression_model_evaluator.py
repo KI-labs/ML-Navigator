@@ -2,8 +2,10 @@ import logging
 import os
 import pickle
 
+import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
+from IPython.display import display
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -78,6 +80,7 @@ def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: st
     """
 
     model = None
+    metrics_summary_all = {}
 
     for data_key, dataframe in data.items():
         array = data[data_key]["features"].to_numpy()
@@ -93,16 +96,25 @@ def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: st
             except Exception as e:
                 logger.error(f"Error is: {e}")
 
-            y_prediction, _ = regression_evaluate_model(model, array, target, f"Evaluating the dataset: {data_key}",
-                                                        required_metrics=required_metrics)
+            _, metrics_summary = regression_evaluate_model(model, array, target,
+                                                           f"Evaluating the dataset: {data_key}",
+                                                           required_metrics=required_metrics)
 
-            mse += round(mean_squared_error(target, y_prediction), 4)
-            r2 += round(100 * r2_score(target, y_prediction), 1)
+            metrics_summary_all[f"model_{model_i}"] = dict((f"{k} ({data_key})", v) for k, v in metrics_summary.items()
+                                                           if k in required_metrics)
+
+            mse += metrics_summary["mean_squared_error"]
+            r2 += metrics_summary["r2_score"]
 
             logger.info(f"Model number {model_i} was loaded successfully")
+
         if "mean_squared_error" in required_metrics:
             print(f"{data_key}: Mean squared error linear: {mse / len(models_nr)}")
         if "r2_score" in required_metrics:
             print(f'{data_key}:  Mean R2: {r2 / len(models_nr)} %')
 
-        logger.info("The evaluation process is completed")
+    metrics_summary_all = pd.DataFrame(metrics_summary_all)
+    metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
+    display(metrics_summary_all)
+
+    logger.info("The evaluation process is completed")

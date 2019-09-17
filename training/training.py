@@ -5,11 +5,12 @@ import warnings
 warnings.filterwarnings('ignore')
 
 import lightgbm as lgb
+import pandas as pd
 import numpy as np
 from sklearn import linear_model
-from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
+from IPython.display import display
 
 from training.regression_model_evaluator import regression_evaluate_model, regression_model_evaluation
 from training.classification_model_evaluator import classification_model_evaluation, classification_evaluate_model
@@ -122,20 +123,29 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
         raise ValueError("Model type is not recognized")
 
     # Evaluate the model on all sub-datasets
+    metrics_summary_all = {}
+
     for sub_dataset_i in range(len(test_split_ratios)):
         if problem_to_solve == "regression":
-            _, _ = regression_evaluate_model(model,
-                                                sub_datasets[f"features_{sub_dataset_i}"],
-                                                sub_datasets[f"target_{sub_dataset_i}"],
-                                                f"Evaluating sub-dataset nr.{sub_dataset_i}",
-                                                required_metrics=required_metrics)
+            _, metrics_summary = regression_evaluate_model(model,
+                                                           sub_datasets[f"features_{sub_dataset_i}"],
+                                                           sub_datasets[f"target_{sub_dataset_i}"],
+                                                           f"Evaluating sub-dataset nr.{sub_dataset_i}",
+                                                           required_metrics=required_metrics)
         else:
+            _, metrics_summary = classification_evaluate_model(model,
+                                                               sub_datasets[f"features_{sub_dataset_i}"],
+                                                               sub_datasets[f"target_{sub_dataset_i}"],
+                                                               f"Evaluating sub-dataset nr.{sub_dataset_i}",
+                                                               required_metrics=required_metrics)
 
-            _, _, _ = classification_model_evaluation(model,
-                                                      sub_datasets[f"features_{sub_dataset_i}"],
-                                                      sub_datasets[f"target_{sub_dataset_i}"],
-                                                      f"Evaluating sub-dataset nr.{sub_dataset_i}",
-                                                      required_metrics=required_metrics)
+        metrics_summary_all[f"sub_dataset_{sub_dataset_i}"] = dict((k, v) for k, v in metrics_summary.items()
+                                                                   if k in required_metrics)
+
+    metrics_summary_all = pd.DataFrame(metrics_summary_all)
+    metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
+    display(metrics_summary_all)
+
     path = os.path.join(save_models_dir, f"{model_type}_{0}.pkl")
     save_model_locally(path, model)
 
@@ -174,7 +184,6 @@ def train_with_kfold_cross_validation(save_models_dir: str,
             - models_nr - A list of indexes that will be used to point to the trained models which will be saved locally after training. In this case there are n_fold models.
             - save_models_dir - The name of the directory where the trained models are saved locally.
     """
-
     problem_to_solve = None
 
     # Ensure that the user provided the required variable.
@@ -213,8 +222,7 @@ def train_with_kfold_cross_validation(save_models_dir: str,
     create_model_directory(save_models_dir)
 
     fold_nr = 0  # counter for identifying models
-    r2 = 0
-    mse = 0
+    metrics_summary_all = {}
 
     for train, test in kfold.split(train_array):
         fold_nr += 1
@@ -251,15 +259,21 @@ def train_with_kfold_cross_validation(save_models_dir: str,
         models_nr.append(fold_nr)
 
         if problem_to_solve == "regression":
-            y_predict, _ = regression_evaluate_model(kfold_model, train_array[test], target[test],
-                                                        f"dataset kfold {fold_nr}",
-                                                        required_metrics=required_metrics)
-            r2 += r2_score(target[test], y_predict)
-            mse += mean_squared_error(target[test], y_predict)
+            _, metrics_summary = regression_evaluate_model(kfold_model, train_array[test], target[test],
+                                                           f"dataset kfold {fold_nr}",
+                                                           required_metrics=required_metrics)
+
         else:
-            y_predict, _ = classification_evaluate_model(kfold_model, train_array[test], target[test],
-                                                            f"dataset kfold {fold_nr}",
-                                                            required_metrics=required_metrics)
+            _, metrics_summary = classification_evaluate_model(kfold_model, train_array[test], target[test],
+                                                               f"dataset kfold {fold_nr}",
+                                                               required_metrics=required_metrics)
+
+        metrics_summary_all[f"fold_{fold_nr}"] = dict((k, v) for k, v in metrics_summary.items()
+                                                      if k in required_metrics)
+
+    metrics_summary_all = pd.DataFrame(metrics_summary_all)
+    metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
+    display(metrics_summary_all)
 
     logger.info("Training the model using KFold cross-validation is finished")
     return models_nr, save_models_dir
