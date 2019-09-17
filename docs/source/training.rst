@@ -30,6 +30,18 @@ Training
 
 .. toctree::
    :maxdepth: 2
+   :caption: XGboost Model Training:
+.. automodule:: training.xgboost_train
+.. autofunction:: xgboost_data_preparation
+.. autofunction:: xgboost_regression_train
+.. autofunction:: xgboost_data_preparation_to_predict
+.. autofunction:: training_xgboost_n_split
+.. autofunction:: training_xgboost_kfold
+.. autofunction:: get_num_round
+.. autofunction:: evaluate_xgboost_model
+
+.. toctree::
+   :maxdepth: 2
    :caption: Model Evaluator:
 .. automodule:: training.classification_model_evaluator
 .. autofunction:: classification_evaluate_model

@@ -14,7 +14,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -83,7 +83,11 @@ def regression_model_evaluation(data: dict, models_nr: list, save_models_dir: st
     metrics_summary_all = {}
 
     for data_key, dataframe in data.items():
-        array = data[data_key]["features"].to_numpy()
+        try:
+            array = data[data_key]["features"].to_numpy()
+        except Exception as e:
+            print(f"This is xgboost exception. Error: {e}")
+            array = data[data_key]["features"]
         target = np.array(data[data_key]["target"])
 
         mse = 0

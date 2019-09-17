@@ -17,8 +17,11 @@ from training.classification_model_evaluator import classification_model_evaluat
 from training.optimizer import get_best_alpha_split, get_best_alpha_kfold
 from training.utils import input_parameters_extraction
 from training.utils import read_kfold_config, create_model_directory, \
-    save_model_locally, split_dataset
+    save_model_locally, split_dataset, xgboost_problem_type
 from training.validator import parameters_validator
+from training.xgboost_train import xgboost_data_preparation, \
+    training_xgboost_n_split, \
+    training_xgboost_kfold, get_num_round, evaluate_xgboost_model
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -27,7 +30,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -117,6 +120,10 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
             logistic_regression_model = LogisticRegression()
 
         model = logistic_regression_model.fit(x_train, y_train)
+
+    elif model_type == "xgboost":
+        num_round = get_num_round(hyperparameters)
+        model, problem_to_solve, validation_list = training_xgboost_n_split(sub_datasets, hyperparameters, num_round)
 
     else:
         logger.error("Model type is not recognized")
@@ -215,7 +222,8 @@ def train_with_kfold_cross_validation(save_models_dir: str,
             logistic_regression_model = LogisticRegression(multi_class='multinomial')
         else:
             logistic_regression_model = LogisticRegression()
-
+    elif model_type == "xgboost":
+        save_models_dir += f'_xgboost_{split["method"]}_{n_fold}'
     else:
         raise ValueError("Model type is not recognized")
 
@@ -249,6 +257,16 @@ def train_with_kfold_cross_validation(save_models_dir: str,
         elif model_type == "Logistic regression":
             problem_to_solve = "classification"
             kfold_model = logistic_regression_model.fit(train_array[train], target[train])
+
+        elif model_type == "xgboost":
+            num_round = get_num_round(hyperparameters)
+            kfold_model, problem_to_solve, validation_list = training_xgboost_kfold(train_array,
+                                                                                    target,
+                                                                                    train,
+                                                                                    test,
+                                                                                    hyperparameters,
+                                                                                    num_round)
+
         else:
             logger.error("Model type is not recognized")
             raise ValueError("Model type is not recognized")
@@ -259,14 +277,24 @@ def train_with_kfold_cross_validation(save_models_dir: str,
         models_nr.append(fold_nr)
 
         if problem_to_solve == "regression":
-            _, metrics_summary = regression_evaluate_model(kfold_model, train_array[test], target[test],
-                                                           f"dataset kfold {fold_nr}",
-                                                           required_metrics=required_metrics)
-
-        else:
-            _, metrics_summary = classification_evaluate_model(kfold_model, train_array[test], target[test],
+            if model_type == "xgboost":
+                _, metrics_summary = regression_evaluate_model(kfold_model, validation_list[-1][0], target[test],
                                                                f"dataset kfold {fold_nr}",
                                                                required_metrics=required_metrics)
+            else:
+                _, metrics_summary = regression_evaluate_model(kfold_model, train_array[test], target[test],
+                                                               f"dataset kfold {fold_nr}",
+                                                               required_metrics=required_metrics)
+
+        else:
+            if model_type == "xgboost":
+                _, metrics_summary = classification_evaluate_model(kfold_model, validation_list[-1][0], target[test],
+                                                                   f"dataset kfold {fold_nr}",
+                                                                   required_metrics=required_metrics)
+            else:
+                _, metrics_summary = classification_evaluate_model(kfold_model, train_array[test], target[test],
+                                                                   f"dataset kfold {fold_nr}",
+                                                                   required_metrics=required_metrics)
 
         metrics_summary_all[f"fold_{fold_nr}"] = dict((k, v) for k, v in metrics_summary.items()
                                                       if k in required_metrics)
@@ -376,6 +404,7 @@ def model_training(parameters: dict):
     parameters_validator(parameters)
     data, split, train_array, target, model_type, hyperparameters, predict = input_parameters_extraction(parameters)
 
+    # define the name of the directory where the models will be saved
     if model_type == "Ridge linear regression":
         alpha = hyperparameters["alpha"]
         save_models_dir = os.path.join(".", "models", f'linear_ridge_{split["method"]}_{alpha}')
@@ -385,6 +414,8 @@ def model_training(parameters: dict):
                            f'_{hyperparameters["boosting"]}')
     elif model_type == "Logistic regression":
         save_models_dir = os.path.join(".", "models", f'logistic_{split["method"]}')
+    elif model_type == "xgboost":
+        save_models_dir = os.path.join(".", "models", f'xgboost_{split["method"]}')
     else:
         raise ValueError("Model type is not recognized")
 
@@ -425,6 +456,9 @@ def model_training(parameters: dict):
         regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "lightgbm" and hyperparameters["objective"] != "regression":
         classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
+    elif model_type == "xgboost":
+        problem_to_solve = xgboost_problem_type(hyperparameters)
+        evaluate_xgboost_model(data, problem_to_solve, models_nr, save_models_dir, model_type, parameters)
 
     logger.info("Training process is finished")
     return models_nr, save_models_dir

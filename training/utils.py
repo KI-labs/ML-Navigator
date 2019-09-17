@@ -14,7 +14,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -170,3 +170,24 @@ def split_dataset(features: np.array, target: np.array, tests_split_ratios: Unio
     number_of_datasets = len(tests_split_ratios) + 1
     logger.info(f"Splitting the dataset to {number_of_datasets} sub-datasets is finished")
     return sub_datasets
+
+
+def xgboost_problem_type(hyperparameters: dict) -> str:
+    """
+
+    :param hyperparameters:
+    :return:
+    """
+
+    try:
+        # the default value of the objective is regression reg:squarederror.
+        # Here the exception is caught to avoid that the objective is not given by the user
+        objective = hyperparameters["objective"]
+        if objective.startswith("reg"):
+            problem_to_solve = "regression"
+        else:
+            problem_to_solve = "classification"
+    except Exception as e:
+        print(f"The objective is not defined. The default value is reg:squarederror. Error: {e}")
+        problem_to_solve = "regression"
+    return problem_to_solve
