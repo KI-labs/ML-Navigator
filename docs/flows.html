@@ -253,7 +253,7 @@ train_dataframe, “test”: test_dataframe}</td>
 
 <dl class="method">
 <dt id="flows.flows.Flows.drop_columns_constant_values">
-<code class="descname">drop_columns_constant_values</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_columns_constant_values" title="Permalink to this definition">¶</a></dt>
+<code class="descname">drop_columns_constant_values</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_columns_constant_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constant value features eliminator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -265,6 +265,7 @@ e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}<
 <li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be ignored e.g. the id and the target.</li>
 <li><strong>drop_columns</strong> (<em>bool</em>) – If true, the columns that contain constant values along all the rows will be dropped.</li>
 <li><strong>print_columns</strong> (<em>bool</em>) – If true, information about the columns that contain constant values will be printed to the console</li>
+<li><strong>str</strong><strong>] </strong><strong>_reference</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe</li>
 </ul>
 </td>
 </tr>
@@ -281,7 +282,7 @@ e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}<
 
 <dl class="method">
 <dt id="flows.flows.Flows.drop_correlated_columns">
-<code class="descname">drop_correlated_columns</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em>, <em>threshold: float = 0.98</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_correlated_columns" title="Permalink to this definition">¶</a></dt>
+<code class="descname">drop_correlated_columns</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em>, <em>threshold: float = 0.98</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_correlated_columns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Correlation eliminator</p>
 <p>The function drop correlated columns and keep only one of these columns.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -297,6 +298,7 @@ e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}<
 <li><strong>threshold</strong> (<em>float</em>) – A value between 0 and 1. If the correlation between two columns is larger than this.
 value, they are considered highly correlated. If drop_columns is True, one of those columns will be
 dropped. The recommended value of the <cite>threshold</cite> is in [0.7 … 1].</li>
+<li><strong>str</strong><strong>] </strong><strong>_reference</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe</li>
 </ul>
 </td>
 </tr>
@@ -313,7 +315,7 @@ dropped. The recommended value of the <cite>threshold</cite> is in [0.7 … 1].<
 
 <dl class="method">
 <dt id="flows.flows.Flows.encode_categorical_feature">
-<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>print_results: Union[bool</em>, <em>int] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>print_results: Union[bool</em>, <em>int] = False</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Categorical features encoder</p>
 <p>This function encodes the categorical features by replacing
 the strings with integers</p>
@@ -324,8 +326,8 @@ the strings with integers</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>int</strong><strong>] </strong><strong>print_results</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.</li>
 <li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
-before encoding the features e.g. dataframes_dict={“train”: train_dataframe,
-“test”: test_dataframe}</li>
+before encoding the features e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
+<li><strong>str</strong><strong>] </strong><strong>_reference</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe</li>
 </ul>
 </td>
 </tr>
@@ -364,7 +366,7 @@ train_dataframe, “test”: test_dataframe}</li>
 
 <dl class="method">
 <dt id="flows.flows.Flows.flatten_json_data">
-<code class="descname">flatten_json_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.flatten_json_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">flatten_json_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.flatten_json_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>JSON data normalizer</p>
 <dl class="docutils">
 <dt>This function normalizes the nested JSON data type inside the pandas dataframes’ columns. The name of the new</dt>
@@ -374,13 +376,18 @@ train_dataframe, “test”: test_dataframe}</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes with nested JSON data type e.g.
-dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes with nested JSON data type e.g.
+dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
+<li><strong>str</strong><strong>] </strong><strong>_reference</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li>dataframes_dict - A dictionary that contains Pandas dataframes after flatting the nested JSON data type e.g. dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
 <li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
 </ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -487,7 +494,7 @@ this feature.</li>
 
 <dl class="method">
 <dt id="flows.flows.Flows.scale_data">
-<code class="descname">scale_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.scale_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">scale_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.scale_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Feature scaling</p>
 <p>This function scales features that contains numeric continuous values.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -500,6 +507,7 @@ before scaling features e.g. dataframes_dict={“train”: train_dataframe,
 “test”: test_dataframe}</li>
 <li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be
 ignored when apply scaling e.g. the id and the target.</li>
+<li><strong>str</strong><strong>] </strong><strong>_reference</strong> (<em>Union</em><em>[</em><em>bool</em><em>,</em>) – The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe</li>
 </ul>
 </td>
 </tr>
