@@ -251,8 +251,8 @@ model configurations and training configurations.</td>
 <dd><p>metrics key validator</p>
 <p>The following assumptions should be met:</p>
 <ol class="arabic simple">
-<li>The value of the <cite>metrics</cite> should be a list or a string.</li>
-<li>Currently, there are only two metrics to show: r2_score and mean_squared_error.</li>
+<li>The value of the <cite>metrics</cite> should be a list.</li>
+<li>Currently, there are only two regression metrics: r2_score and mean_squared_error, and two classification metrics: accuracy_score and roc_auc_score</li>
 </ol>
 </dd></dl>
 
@@ -318,7 +318,7 @@ model configurations and training configurations.</td>
 </div>
 <span class="target" id="module-training.training"></span><dl class="function">
 <dt id="training.training.train_with_n_split">
-<code class="descclassname">training.training.</code><code class="descname">train_with_n_split</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>test_split_ratios: list</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_n_split" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.training.</code><code class="descname">train_with_n_split</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>test_split_ratios: list</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type: str</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_n_split" title="Permalink to this definition">¶</a></dt>
 <dd><p>n split training</p>
 <p>This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -355,7 +355,7 @@ Ridge linear regression and lightgbm.</li>
 
 <dl class="function">
 <dt id="training.training.train_with_kfold_cross_validation">
-<code class="descclassname">training.training.</code><code class="descname">train_with_kfold_cross_validation</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>split: dict</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_kfold_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.training.</code><code class="descname">train_with_kfold_cross_validation</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>split: dict</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_kfold_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-Fold cross-validation training</p>
 <p>This function trains a model to fit the data using K-Fold cross-validation.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -643,7 +643,7 @@ coefficient of determination R2</li>
 </div>
 <span class="target" id="module-training.classification_model_evaluator"></span><dl class="function">
 <dt id="training.classification_model_evaluator.classification_evaluate_model">
-<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_evaluate_model</code><span class="sig-paren">(</span><em>model</em>, <em>x_values: numpy.array</em>, <em>y_values: numpy.array</em>, <em>key_str: str</em>, <em>help_print: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_evaluate_model" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_evaluate_model</code><span class="sig-paren">(</span><em>model, x_values: numpy.array, y_values: numpy.array, key_str: str, help_print: bool = True, required_metrics: list = ['accuracy_score', 'roc_auc_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_evaluate_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model evaluator</p>
 <p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -651,6 +651,7 @@ coefficient of determination R2</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
 <li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
 <li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
 <li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
@@ -662,8 +663,8 @@ performance</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><div class="line-block">
 <div class="line">y_prediction: The predicted target using the trained model</div>
-<div class="line">mse: Mean Squared Error value</div>
-<div class="line">r2: Coefficient of Determination value</div>
+<div class="line">accuracy: Accuracy classification score.</div>
+<div class="line">roc_auc:Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores</div>
 </div>
 </p>
 </td>
@@ -674,7 +675,7 @@ performance</li>
 
 <dl class="function">
 <dt id="training.classification_model_evaluator.classification_model_evaluation">
-<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_model_evaluation</code><span class="sig-paren">(</span><em>data: dict</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_model_evaluation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_model_evaluation</code><span class="sig-paren">(</span><em>data: dict, models_nr: list, save_models_dir: str, model_type: str, required_metrics: list = ['accuracy_score', 'roc_auc_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_model_evaluation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Models set evaluator</p>
 <p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
 models by applying the function <cite>evaluate_model</cite></p>
@@ -683,6 +684,7 @@ models by applying the function <cite>evaluate_model</cite></p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>required_metrics</strong> – The list of the classification metrics that the user wants to check</li>
 <li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
 <li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
 locally after training.</li>
@@ -701,7 +703,7 @@ Ridge linear regression and lightgbm.</li>
 
 <span class="target" id="module-training.regression_model_evaluator"></span><dl class="function">
 <dt id="training.regression_model_evaluator.regression_evaluate_model">
-<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_evaluate_model</code><span class="sig-paren">(</span><em>model</em>, <em>x_values: numpy.array</em>, <em>y_values: numpy.array</em>, <em>key_str: str</em>, <em>help_print: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_evaluate_model" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_evaluate_model</code><span class="sig-paren">(</span><em>model, x_values: numpy.array, y_values: numpy.array, key_str: str, help_print: bool = True, required_metrics: list = ['mean_squared_error', 'r2_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_evaluate_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model evaluator</p>
 <p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -709,6 +711,7 @@ Ridge linear regression and lightgbm.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
 <li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
 <li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
 <li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
@@ -732,7 +735,7 @@ performance</li>
 
 <dl class="function">
 <dt id="training.regression_model_evaluator.regression_model_evaluation">
-<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_model_evaluation</code><span class="sig-paren">(</span><em>data: dict</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_model_evaluation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_model_evaluation</code><span class="sig-paren">(</span><em>data: dict, models_nr: list, save_models_dir: str, model_type: str, required_metrics: list = ['mean_squared_error', 'r2_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_model_evaluation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Models set evaluator</p>
 <p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
 models by applying the function <cite>evaluate_model</cite></p>
@@ -741,6 +744,7 @@ models by applying the function <cite>evaluate_model</cite></p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
 <li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
 <li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
 locally after training.</li>
