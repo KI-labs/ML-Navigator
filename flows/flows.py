@@ -182,15 +182,12 @@ class Flows:
 
         _, _, _ = detect_id_target_problem(dataframes_dict)
 
-        # The reference dataframe is the first dataframe inside the
-        # dataframes_dict dictionary. Usually it is the train dataframe
-        _reference = list(dataframes_dict.keys())[0]
-
         self.guidance(self.flow_steps[function_id])
 
         return dataframes_dict, self.columns_set
 
-    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = False):
+    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = False,
+                                   _reference: Union[bool, str] = False):
         """ Categorical features encoder
 
         This function encodes the categorical features by replacing
@@ -198,9 +195,8 @@ class Flows:
 
         :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
-                before encoding the features e.g. dataframes_dict={"train": train_dataframe,
-                "test": test_dataframe}
-
+                before encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
+        :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
 
         :return:
                 - dataframes_dict_encoded - A dictionary that contains Pandas dataframes after encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
@@ -210,7 +206,8 @@ class Flows:
 
         function_id = "1"
 
-        _reference = list(dataframes_dict.keys())[0]
+        if not _reference:
+            _reference = list(dataframes_dict.keys())[0]
         print(f"The reference dataframe is: {_reference}")
 
         string_columns = self.columns_set[_reference]["categorical_string"] + self.columns_set[_reference][
@@ -227,7 +224,7 @@ class Flows:
 
         return dataframes_dict_encoded, self.columns_set
 
-    def scale_data(self, dataframes_dict: dict, ignore_columns: list):
+    def scale_data(self, dataframes_dict: dict, ignore_columns: list, _reference: Union[bool, str] = False):
         """ Feature scaling
 
         This function scales features that contains numeric continuous values.
@@ -237,19 +234,21 @@ class Flows:
                 "test": test_dataframe}
         :param list ignore_columns: It contains the columns that should be
                 ignored when apply scaling e.g. the id and the target.
+        :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
+
         :return:
                 - dataframes_dict_scaled - A dictionary that contains Pandas dataframes after scaling features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
                 - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
         """
 
         function_id = "2"
-        # Using the first dataframe as a reference to scale other
-        # datasets. Usually the first dataset is the train one
-        scaling_reference = list(dataframes_dict.keys())[0]
 
-        numerical = [x for x in self.columns_set[scaling_reference]["continuous"] if x not in ignore_columns]
+        if not _reference:
+            _reference = list(dataframes_dict.keys())[0]
 
-        dataframes_dict_scaled = standard_scale_numeric_features(dataframes_dict, scaling_reference, numerical)
+        numerical = [x for x in self.columns_set[_reference]["continuous"] if x not in ignore_columns]
+
+        dataframes_dict_scaled = standard_scale_numeric_features(dataframes_dict, _reference, numerical)
 
         # Suggesting the next step
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
@@ -373,7 +372,7 @@ class Flows:
 
         explore_data(dataframe_dict[key_i])
 
-    def flatten_json_data(self, dataframes_dict: dict):
+    def flatten_json_data(self, dataframes_dict: dict, _reference: Union[bool, str] = False):
         """ JSON data normalizer
 
         This function normalizes the nested JSON data type inside the pandas dataframes' columns. The name of the new
@@ -381,6 +380,8 @@ class Flows:
 
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes with nested JSON data type e.g.
                 dataframes_dict={ "train": train_dataframe, "test": test_dataframe}
+        :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
+
 
         :return:
 
@@ -391,7 +392,9 @@ class Flows:
 
         function_id = "5"
 
-        _reference = list(dataframes_dict.keys())[0]
+        if not _reference:
+            _reference = list(dataframes_dict.keys())[0]
+
         while len(self.columns_set[_reference]["json"]) > 0:
             dataframes_dict = flat_json(dataframes_dict, self.columns_set[_reference]["json"])
             self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
@@ -401,7 +404,8 @@ class Flows:
         return dataframes_dict, self.columns_set
 
     def drop_correlated_columns(self, dataframes_dict: dict, ignore_columns: list, drop_columns: bool = True,
-                                print_columns: bool = True, threshold: float = 0.98):
+                                print_columns: bool = True, threshold: float = 0.98,
+                                _reference: Union[bool, str] = False):
         """ Correlation eliminator
 
         The function drop correlated columns and keep only one of these columns.
@@ -414,6 +418,7 @@ class Flows:
         :param float threshold: A value between 0 and 1. If the correlation between two columns is larger than this.
                 value, they are considered highly correlated. If drop_columns is True, one of those columns will be
                 dropped. The recommended value of the `threshold` is in [0.7 ... 1].
+        :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
 
 
         :return:
@@ -423,7 +428,8 @@ class Flows:
 
         function_id = "6"
 
-        _reference = list(dataframes_dict.keys())[0]
+        if not _reference:
+            _reference = list(dataframes_dict.keys())[0]
         dataframes_dict[_reference] = drop_corr_columns(dataframes_dict[_reference],
                                                         drop_columns,
                                                         print_columns,
@@ -436,7 +442,7 @@ class Flows:
         return dataframes_dict, self.columns_set
 
     def drop_columns_constant_values(self, dataframes_dict: dict, ignore_columns: list, drop_columns: bool = True,
-                                     print_columns: bool = True):
+                                     print_columns: bool = True, _reference: Union[bool, str] = False):
         """ Constant value features eliminator
 
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
@@ -444,6 +450,7 @@ class Flows:
         :param list ignore_columns: It contains the columns that should be ignored e.g. the id and the target.
         :param bool drop_columns: If true, the columns that contain constant values along all the rows will be dropped.
         :param bool print_columns: If true, information about the columns that contain constant values will be printed to the console
+        :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
 
         :return:
                 - dataframes_dict - A dictionary that contains Pandas dataframes after dropping features with constant values e.g. dataframes_dict={ "train": train_dataframe, "test": test_dataframe}
@@ -452,7 +459,8 @@ class Flows:
 
         function_id = "7"
 
-        _reference = list(dataframes_dict.keys())[0]
+        if not _reference:
+            _reference = list(dataframes_dict.keys())[0]
         dataframes_dict[_reference] = drop_const_columns(dataframes_dict[_reference],
                                                          drop_columns,
                                                          print_columns)
