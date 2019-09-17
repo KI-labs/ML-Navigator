@@ -398,8 +398,19 @@ class Flows:
 
         The function drop correlated columns and keep only one of these columns.
 
+        :param dict dataframes_dict: A dictionary that contains Pandas dataframes
+                e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
+        :param list ignore_columns: It contains the columns that should be ignored e.g. the id and the target.
+        :param bool drop_columns: If true, all correlated columns will be dropped but one.
+        :param bool print_columns: If True, information about the correlated columns will be printed to the console.
+        :param float threshold: A value between 0 and 1. If the correlation between two columns is larger than this.
+                value, they are considered highly correlated. If drop_columns is True, one of those columns will be
+                dropped. The recommended value of the `threshold` is in [0.7 ... 1].
+
 
         :return:
+                - dataframes_dict - A dictionary that contains Pandas dataframes after dropping correlated columns e.g. dataframes_dict={ "train": train_dataframe, "test": test_dataframe}
+                - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
         """
 
         function_id = "6"
@@ -418,6 +429,18 @@ class Flows:
 
     def drop_columns_constant_values(self, dataframes_dict: dict, ignore_columns: list, drop_columns: bool = True,
                                      print_columns: bool = True):
+        """ Constant value features eliminator
+
+        :param dict dataframes_dict: A dictionary that contains Pandas dataframes
+                e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
+        :param list ignore_columns: It contains the columns that should be ignored e.g. the id and the target.
+        :param bool drop_columns: If true, the columns that contain constant values along all the rows will be dropped.
+        :param bool print_columns: If true, information about the columns that contain constant values will be printed to the console
+
+        :return:
+                - dataframes_dict - A dictionary that contains Pandas dataframes after dropping features with constant values e.g. dataframes_dict={ "train": train_dataframe, "test": test_dataframe}
+                - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
+        """
 
         function_id = "7"
 
@@ -433,3 +456,26 @@ class Flows:
         self.guidance(self.flow_steps[function_id])
 
         return dataframes_dict, self.columns_set
+
+    def update_data_summary(self, dataframes_dict: dict) -> dict:
+        """Data type updater
+
+        This function update the list of the features in the columns types dictionary. This function should be used in
+         case of modifying the features in a  dataset manually. For example, dropping some features or after joining two
+         datasets.
+
+        :param dict dataframes_dict: A dictionary that contains Pandas dataframes  e.g. dataframes_dict={"train":
+                train_dataframe, "test": test_dataframe}
+        :return:
+                - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
+        """
+
+        function_id = "8"
+
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
+
+        return self.columns_set

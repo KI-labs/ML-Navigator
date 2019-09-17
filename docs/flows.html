@@ -252,8 +252,68 @@ train_dataframe, “test”: test_dataframe}</td>
 </dd></dl>
 
 <dl class="method">
+<dt id="flows.flows.Flows.drop_columns_constant_values">
+<code class="descname">drop_columns_constant_values</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_columns_constant_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant value features eliminator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
+e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be ignored e.g. the id and the target.</li>
+<li><strong>drop_columns</strong> (<em>bool</em>) – If true, the columns that contain constant values along all the rows will be dropped.</li>
+<li><strong>print_columns</strong> (<em>bool</em>) – If true, information about the columns that contain constant values will be printed to the console</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframes_dict - A dictionary that contains Pandas dataframes after dropping features with constant values e.g. dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.drop_correlated_columns">
+<code class="descname">drop_correlated_columns</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>ignore_columns: list</em>, <em>drop_columns: bool = True</em>, <em>print_columns: bool = True</em>, <em>threshold: float = 0.98</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.drop_correlated_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation eliminator</p>
+<p>The function drop correlated columns and keep only one of these columns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes
+e.g. dataframes_dict={“train”: train_dataframe, “test”: test_dataframe}</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It contains the columns that should be ignored e.g. the id and the target.</li>
+<li><strong>drop_columns</strong> (<em>bool</em>) – If true, all correlated columns will be dropped but one.</li>
+<li><strong>print_columns</strong> (<em>bool</em>) – If True, information about the correlated columns will be printed to the console.</li>
+<li><strong>threshold</strong> (<em>float</em>) – A value between 0 and 1. If the correlation between two columns is larger than this.
+value, they are considered highly correlated. If drop_columns is True, one of those columns will be
+dropped. The recommended value of the <cite>threshold</cite> is in [0.7 … 1].</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframes_dict - A dictionary that contains Pandas dataframes after dropping correlated columns e.g. dataframes_dict={ “train”: train_dataframe, “test”: test_dataframe}</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="flows.flows.Flows.encode_categorical_feature">
-<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>print_results: Union[bool</em>, <em>int] = True</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">encode_categorical_feature</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>print_results: Union[bool</em>, <em>int] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.encode_categorical_feature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Categorical features encoder</p>
 <p>This function encodes the categorical features by replacing
 the strings with integers</p>
@@ -497,6 +557,31 @@ model configurations and training configurations. Check the example below.</p>
 <span class="gp">&gt;&gt;&gt; </span> <span class="p">}</span>
 </pre></div>
 </div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flows.flows.Flows.update_data_summary">
+<code class="descname">update_data_summary</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#flows.flows.Flows.update_data_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data type updater</p>
+<dl class="docutils">
+<dt>This function update the list of the features in the columns types dictionary. This function should be used in</dt>
+<dd>case of modifying the features in a  dataset manually. For example, dropping some features or after joining two
+datasets.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes  e.g. dataframes_dict={“train”:
+train_dataframe, “test”: test_dataframe}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
 </td>
 </tr>
 </tbody>
