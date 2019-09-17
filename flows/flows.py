@@ -50,6 +50,12 @@ print(term.bold(term.magenta("Welcome to the Data Science Package. First create 
 print(term.bold(term.magenta("For example, use the code below to import the flow 0:")))
 
 print(term.green_on_black("flow = Flows(0)"))
+print(term.bold(term.magenta("You can define the `categorical_threshold` which is the maximum number of categories"
+                             " that a categorical feature should have before considering it as continuous"
+                             " numeric feature. The default value is 50")))
+print(term.bold(term.magenta("For example, use the code below to import the flow 0"
+                             " with defining the categorical_threshold as 50")))
+print(term.green_on_black("flow = Flows(flow_id=0, categorical_threshold=50)"))
 
 
 class Flows:
@@ -60,8 +66,8 @@ class Flows:
 
     :param int flow_id: An integer which points to the flow that the
             use wants to follow.
-    :param int step: An integer which points to the current step that
-            the user may perform.
+    :param int categorical_threshold: The maximum number of categories that a categorical feature should have before
+                                      considering it as continuous numeric feature.
     :param object commands: It contains the list of the instructions
             that are loaded from the yaml file
     :param list columns_set: A dictionary that contains the features'
@@ -79,16 +85,18 @@ class Flows:
 
     """
 
-    def __init__(self, flow_id: int):
+    def __init__(self, flow_id: int, categorical_threshold: int = 50):
         """
 
         :param int flow_id: An integer which points to the flow that the use wants to follow.
-        :param int step: An integer which points to the current step that the user may perform.
+        :param int categorical_threshold: The maximum number of categories that a categorical feature should have before
+                                      considering it as continuous numeric feature.
 
         """
         self.columns_set = None
         self.flow_id = flow_id
         self.flow_steps = {}
+        self.categorical_threshold = categorical_threshold
 
         # load the yaml file that contains the instructions of the flow
         flow_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "flows", f"flow_{self.flow_id}.json")
@@ -170,7 +178,7 @@ class Flows:
 
         dataframes_dict = read_data(path, files_list, rows_amount)
 
-        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
         _, _, _ = detect_id_target_problem(dataframes_dict)
 
@@ -213,7 +221,7 @@ class Flows:
         print(term.red("*" * 30))
 
         # After encoding features, A new summary of the data will be presented
-        self.columns_set = detect_columns_types_summary(dataframes_dict_encoded, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict_encoded, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
@@ -244,7 +252,7 @@ class Flows:
         dataframes_dict_scaled = standard_scale_numeric_features(dataframes_dict, scaling_reference, numerical)
 
         # Suggesting the next step
-        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
@@ -279,7 +287,7 @@ class Flows:
         dataframe_dict_one_hot = one_hot_encoding_sklearn(dataframe_dict, reference, categorical_feature,
                                                           class_number_range, ignore_columns)
 
-        self.columns_set = detect_columns_types_summary(dataframe_dict_one_hot, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframe_dict_one_hot, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
@@ -386,7 +394,7 @@ class Flows:
         _reference = list(dataframes_dict.keys())[0]
         while len(self.columns_set[_reference]["json"]) > 0:
             dataframes_dict = flat_json(dataframes_dict, self.columns_set[_reference]["json"])
-            self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+            self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
@@ -421,7 +429,7 @@ class Flows:
                                                         print_columns,
                                                         threshold)
         dataframes_dict = unify_dataframes(dataframes_dict, _reference, ignore_columns)
-        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
@@ -451,7 +459,7 @@ class Flows:
 
         dataframes_dict = unify_dataframes(dataframes_dict, _reference, ignore_columns)
 
-        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
