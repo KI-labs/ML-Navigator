@@ -154,7 +154,7 @@ def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1):
     :return:
             | possible_ids: A list of candidates as strings.
             | possible_target: list of candidates as strings.
-            | detect_problem_type: dictionary of target candidates associated with the problem type.
+            | possible_problems: dictionary of target candidates associated with the problem type.
     """
 
     possible_ids = detect_id(dataframes_dict)
@@ -167,4 +167,4 @@ def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1):
     print(f"The possible ids are {possible_ids}")
     print(f"The possible possible_target are {possible_target}")
     print(f"The type of the problem that should be solved {possible_problems}")
-    return possible_ids, possible_target, detect_problem_type
+    return possible_ids, possible_target, possible_problems

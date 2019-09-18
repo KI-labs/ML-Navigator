@@ -27,6 +27,7 @@ from preprocessing.data_transformer import encode_categorical_features, standard
 from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
 from preprocessing.utils import read_data
+from preprocessing.utils import check_if_target_columns_are_imballanced
 from training.training import model_training
 from visualization.visualization import compare_statistics
 
@@ -85,7 +86,7 @@ class Flows:
 
     """
 
-    def __init__(self, flow_id: int, categorical_threshold: int = 50):
+    def __init__(self, flow_id: int, categorical_threshold: int = 50, kl_div_threshold: float = 0.05):
         """
 
         :param int flow_id: An integer which points to the flow that the use wants to follow.
@@ -97,6 +98,7 @@ class Flows:
         self.flow_id = flow_id
         self.flow_steps = {}
         self.categorical_threshold = categorical_threshold
+        self.kl_div_threshold = kl_div_threshold
 
         # load the yaml file that contains the instructions of the flow
         flow_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "flows", f"flow_{self.flow_id}.json")
@@ -180,7 +182,9 @@ class Flows:
 
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
-        _, _, _ = detect_id_target_problem(dataframes_dict)
+        _, _, possible_problems = detect_id_target_problem(dataframes_dict)
+
+        _ = check_if_target_columns_are_imballanced(dataframes_dict, possible_problems, self.kl_div_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
