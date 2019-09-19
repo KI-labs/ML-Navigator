@@ -1,6 +1,7 @@
 import logging
 import os
 import pickle
+from training.xgboost_train import xgboost_data_preparation_to_predict
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -34,7 +35,12 @@ def predict_unseen_data(predict: dict, models_nr: list, save_models_dir: str, mo
     model = None
 
     for data_key, dataframe in predict.items():
-        array = predict[data_key]["features"].values
+        if model_type == "xgboost":
+            dataframe_i = predict[data_key]["features"]
+            dataframe_i.columns = [x for x in range(len(list(dataframe_i.columns)))]
+            array = xgboost_data_preparation_to_predict(dataframe_i)
+        else:
+            array = predict[data_key]["features"].values
 
         # reset the variable
         y_prediction = 0

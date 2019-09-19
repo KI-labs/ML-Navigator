@@ -14,7 +14,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -82,8 +82,7 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
     :param list models_nr: A list of indexes that will be used to point to the trained models which will be saved
             locally after training.
     :param str save_models_dir: The path where the models will be saved.
-    :param str model_type: The type of model that will be used to fit the data. Currently, there are two values:
-                Ridge linear regression and lightgbm.
+    :param str model_type: The type of model that will be used to fit the data
 
     :return:
     """
@@ -92,7 +91,11 @@ def classification_model_evaluation(data: dict, models_nr: list, save_models_dir
     metrics_summary_all = {}
 
     for data_key, dataframe in data.items():
-        array = data[data_key]["features"].to_numpy()
+        try:
+            array = data[data_key]["features"].to_numpy()
+        except Exception as e:
+            print(f"This is xgboost exception. Error: {e}")
+            array = data[data_key]["features"]
         target = np.array(data[data_key]["target"])
 
         accuracy = 0
