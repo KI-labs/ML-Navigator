@@ -31,7 +31,6 @@ lightgbm==2.2.3
 MarkupSafe==1.1.1
 matplotlib==3.1.0
 mistune==0.8.4
-ML-Navigator==0.0.22
 more-itertools==7.2.0
 nbconvert==5.5.0
 nbformat==4.4.0
