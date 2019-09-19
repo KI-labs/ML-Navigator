@@ -641,6 +641,192 @@ coefficient of determination R2</li>
 
 <div class="toctree-wrapper compound">
 </div>
+<span class="target" id="module-training.xgboost_train"></span><dl class="function">
+<dt id="training.xgboost_train.xgboost_data_preparation">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">xgboost_data_preparation</code><span class="sig-paren">(</span><em>validation_list: list</em>, <em>dataframe: pandas.core.frame.DataFrame</em>, <em>target: numpy.array</em>, <em>key: str</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.xgboost_data_preparation" title="Permalink to this definition">¶</a></dt>
+<dd><p>xgboost data preparing for training</p>
+<p>The function transforms the data from a Pandas dataframe format to a xgboost-compatible format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>validation_list</strong> (<em>list</em>) – The list that contains the data the should be used to train and validate the model.</li>
+<li><strong>dataframe</strong> (<em>pd.DataFrame</em>) – Pandas dataframe that contains the data which will be transformed to xgboost format.</li>
+<li><strong>target</strong> (<em>np.array</em>) – An array that contains the target that should be predict by the xgboost model</li>
+<li><strong>key</strong> (<em>str</em>) – A label that is used to name the dataset in the validation_list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>The updated validation_list</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.xgboost_regression_train">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">xgboost_regression_train</code><span class="sig-paren">(</span><em>validation_list: list</em>, <em>hyperparameters: dict</em>, <em>num_round: int = 10</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.xgboost_regression_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>xgboost trainer</p>
+<p>The function uses the xgboost framework to train the model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>validation_list</strong> (<em>list</em>) – The list that contains the data the should be used to train and validate the model.</li>
+<li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</li>
+<li><strong>num_round</strong> (<em>int</em>) – The number of rounds for boosting</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>xgboost model</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.xgboost_data_preparation_to_predict">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">xgboost_data_preparation_to_predict</code><span class="sig-paren">(</span><em>dataframe: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.xgboost_data_preparation_to_predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>xgboost data preparing for prediction</p>
+<p>The function transforms the data from a Pandas dataframe format to a xgboost-compatible format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataframe</strong> (<em>pd.DataFrame</em>) – Pandas dataframe that contains the data which will be transformed to xgboost format.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>The dataset in xgboost-compatible format</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.training_xgboost_n_split">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">training_xgboost_n_split</code><span class="sig-paren">(</span><em>sub_datasets: dict</em>, <em>hyperparameters: dict</em>, <em>num_round: int = 10</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.training_xgboost_n_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>XGboost training with n-split</p>
+<p>This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sub_datasets</strong> (<em>dict</em>) – </li>
+<li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</li>
+<li><strong>num_round</strong> (<em>int</em>) – The number of rounds for boosting</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>model: xgboost model.</li>
+<li>problem_to_solve: string that defines the problem to solve: regression or classification.</li>
+<li>validation_list: The list that contains the data the should be used to train and validate the model.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.training_xgboost_kfold">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">training_xgboost_kfold</code><span class="sig-paren">(</span><em>train_array</em>, <em>target</em>, <em>train: list</em>, <em>test: list</em>, <em>hyperparameters: dict</em>, <em>num_round: int = 10</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.training_xgboost_kfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>XGboost training with kfold</p>
+<p>This function trains a model to fit the data using K-Fold cross-validation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>train_array</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model to
+predict the target</li>
+<li><strong>target</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model.</li>
+<li><strong>train</strong> (<em>list</em>) – A list of integers that define the training dataset</li>
+<li><strong>test</strong> (<em>list</em>) – A list of integers that define the testing dataset</li>
+<li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</li>
+<li><strong>num_round</strong> (<em>int</em>) – The number of rounds for boosting</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>kfold_model: xgboost model</li>
+<li>problem_to_solve: string that defines the problem to solve: regression or classification.</li>
+<li>validation_list: The list that contains the data the should be used to train and validate the model.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.get_num_round">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">get_num_round</code><span class="sig-paren">(</span><em>hyperparameters</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#training.xgboost_train.get_num_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>num_round getter</p>
+<p>Get the value of num_round that will be used to train the xgboost model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hyperparameters</strong> – A dictionary that contains the hyperparameters which the selected training method
+need to train the model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>num_round: The number of rounds for boosting</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="training.xgboost_train.evaluate_xgboost_model">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">evaluate_xgboost_model</code><span class="sig-paren">(</span><em>data: dict</em>, <em>problem_to_solve: str</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em>, <em>parameters: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.evaluate_xgboost_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>XGboost model validator</p>
+<p>The functions transforms the data to xgboost-compatible format and applies the model evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
+<li><strong>problem_to_solve</strong> (<em>str</em>) – string that defines the problem to solve: regression or classification.</li>
+<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
+locally after training.</li>
+<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. In this function, it is xgboost</li>
+<li><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type, model configurations and training configurations.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
 <span class="target" id="module-training.classification_model_evaluator"></span><dl class="function">
 <dt id="training.classification_model_evaluator.classification_evaluate_model">
 <code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_evaluate_model</code><span class="sig-paren">(</span><em>model, x_values: numpy.array, y_values: numpy.array, key_str: str, help_print: bool = True, required_metrics: list = ['accuracy_score', 'roc_auc_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_evaluate_model" title="Permalink to this definition">¶</a></dt>
@@ -689,8 +875,7 @@ models by applying the function <cite>evaluate_model</cite></p>
 <li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
 locally after training.</li>
 <li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
-<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently, there are two values:
-Ridge linear regression and lightgbm.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data</li>
 </ul>
 </td>
 </tr>
