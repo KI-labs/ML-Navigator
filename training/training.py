@@ -22,6 +22,8 @@ from training.validator import parameters_validator
 from training.xgboost_train import xgboost_data_preparation, \
     training_xgboost_n_split, \
     training_xgboost_kfold, get_num_round, evaluate_xgboost_model
+from training.gridsearch_train import train_rf_grid_search
+
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -124,6 +126,9 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
     elif model_type == "xgboost":
         num_round = get_num_round(hyperparameters)
         model, problem_to_solve, validation_list = training_xgboost_n_split(sub_datasets, hyperparameters, num_round)
+
+    elif model_type == "Random Forest":
+        model = train_rf_grid_search(x_train, y_train, hyperparameters, required_metrics)
 
     else:
         logger.error("Model type is not recognized")
@@ -416,6 +421,8 @@ def model_training(parameters: dict):
         save_models_dir = os.path.join(".", "models", f'logistic_{split["method"]}')
     elif model_type == "xgboost":
         save_models_dir = os.path.join(".", "models", f'xgboost_{split["method"]}')
+    elif model_type == "Random Forest":
+        save_models_dir = os.path.join(".", "models", "random_forest")
     else:
         raise ValueError("Model type is not recognized")
 
@@ -455,6 +462,8 @@ def model_training(parameters: dict):
     elif model_type == "lightgbm" and hyperparameters["objective"] == "regression":
         regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "lightgbm" and hyperparameters["objective"] != "regression":
+        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
+    elif model_type == "Random Forest" and hyperparameters["objective"] != "regression":
         classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "xgboost":
         problem_to_solve = xgboost_problem_type(hyperparameters)
