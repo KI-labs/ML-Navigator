@@ -183,7 +183,7 @@ methods that construct the flows.</p>
 in other package in this project.</p>
 <dl class="class">
 <dt id="flows.flows.Flows">
-<em class="property">class </em><code class="descclassname">flows.flows.</code><code class="descname">Flows</code><span class="sig-paren">(</span><em>flow_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">flows.flows.</code><code class="descname">Flows</code><span class="sig-paren">(</span><em>flow_id: int</em>, <em>categorical_threshold: int = 50</em>, <em>kl_div_threshold: float = 0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flows methods container</p>
 <p>A class which meant to be a container for all flows elements.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -193,8 +193,8 @@ in other package in this project.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>flow_id</strong> (<em>int</em>) – An integer which points to the flow that the
 use wants to follow.</li>
-<li><strong>step</strong> (<em>int</em>) – An integer which points to the current step that
-the user may perform.</li>
+<li><strong>categorical_threshold</strong> (<em>int</em>) – The maximum number of categories that a categorical feature should have before
+considering it as continuous numeric feature.</li>
 <li><strong>commands</strong> (<em>object</em>) – It contains the list of the instructions
 that are loaded from the yaml file</li>
 <li><strong>columns_set</strong> (<em>list</em>) – A dictionary that contains the features’
@@ -218,14 +218,15 @@ type of the data for each given dataset.</li>
 </table>
 <dl class="method">
 <dt id="flows.flows.Flows.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>flow_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>flow_id: int</em>, <em>categorical_threshold: int = 50</em>, <em>kl_div_threshold: float = 0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>flow_id</strong> (<em>int</em>) – An integer which points to the flow that the use wants to follow.</li>
-<li><strong>step</strong> (<em>int</em>) – An integer which points to the current step that the user may perform.</li>
+<li><strong>categorical_threshold</strong> (<em>int</em>) – The maximum number of categories that a categorical feature should have before
+considering it as continuous numeric feature.</li>
 </ul>
 </td>
 </tr>
