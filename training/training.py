@@ -8,7 +8,7 @@ import lightgbm as lgb
 import pandas as pd
 import numpy as np
 from sklearn import linear_model
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from IPython.display import display
 
@@ -37,7 +37,7 @@ logging.basicConfig(
 )
 
 
-def train_with_n_split(save_models_dir: str, test_split_ratios: list,
+def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: bool,
                        hyperparameters: dict,
                        train_array: np.array,
                        target: np.array,
@@ -51,6 +51,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
     :param str save_models_dir: The path where the model will be saved.
     :param list test_split_ratios: A list that contains the test split ratio e.g. [0.2] for testing size/training size
             or [0.2, 0.2] for validation size/training size and testing size/(training size - validation size)
+    :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
             need to train the model.
     :param np.array train_array: The values of the features that will be split to two sub-datasets based
@@ -68,7 +69,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
     """
 
     problem_to_solve = None
-    sub_datasets = split_dataset(train_array, target, test_split_ratios)
+    sub_datasets = split_dataset(train_array, target, test_split_ratios, stratify)
 
     # Get a unique name when saving the model
     for n_split in test_split_ratios:
@@ -170,6 +171,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list,
 
 def train_with_kfold_cross_validation(save_models_dir: str,
                                       split: dict,
+                                      stratify: bool,
                                       hyperparameters: dict,
                                       train_array: np.array,
                                       target: np.array,
@@ -182,6 +184,7 @@ def train_with_kfold_cross_validation(save_models_dir: str,
 
     :param str save_models_dir: The path where the models will be saved.
     :param dict split: A dictionary that contains information about the K-Fold variables
+    :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
             need to train the model.
     :param np.array train_array: The values of the target that will be split into K-Folds and used to train the model to
@@ -201,7 +204,10 @@ def train_with_kfold_cross_validation(save_models_dir: str,
     # Ensure that the user provided the required variable.
     n_fold, shuffle, random_state = read_kfold_config(split)
 
-    kfold = KFold(n_splits=n_fold, shuffle=shuffle, random_state=random_state)
+    if stratify:
+        kfold = StratifiedKFold(n_splits=n_fold, shuffle=shuffle, random_state=random_state)
+    else:
+        kfold = KFold(n_splits=n_fold, shuffle=shuffle, random_state=random_state)
 
     # Avoiding warning of local variable might be referenced before assignment
     linear_regression_model = None
@@ -237,7 +243,7 @@ def train_with_kfold_cross_validation(save_models_dir: str,
     fold_nr = 0  # counter for identifying models
     metrics_summary_all = {}
 
-    for train, test in kfold.split(train_array):
+    for train, test in kfold.split(train_array, target):
         fold_nr += 1
         print("fold_nr.", fold_nr)
 
@@ -408,6 +414,7 @@ def model_training(parameters: dict):
 
     parameters_validator(parameters)
     data, split, train_array, target, model_type, hyperparameters, predict = input_parameters_extraction(parameters)
+    stratify = parameters["split"].get("stratify", False)
 
     # define the name of the directory where the models will be saved
     if model_type == "Ridge linear regression":
@@ -437,6 +444,7 @@ def model_training(parameters: dict):
 
         models_nr, save_models_dir = train_with_n_split(save_models_dir,
                                                         test_split_ratio,
+                                                        stratify,
                                                         hyperparameters,
                                                         train_array,
                                                         target,
@@ -448,6 +456,7 @@ def model_training(parameters: dict):
         logger.info("Start training using KFold cross-validation")
         models_nr, save_models_dir = train_with_kfold_cross_validation(save_models_dir,
                                                                        split,
+                                                                       stratify,
                                                                        hyperparameters,
                                                                        train_array,
                                                                        target,
