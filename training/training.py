@@ -213,45 +213,44 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
     logistic_regression_model = None
 
     if model_type == "Ridge linear regression":
+        problem_to_solve = "regression"
         alpha = hyperparameters["alpha"]
-
         if alpha == "optimize":
             alpha = get_best_alpha_kfold(kfold, train_array, target, n_fold)
-
         linear_regression_model = linear_model.Ridge(alpha=alpha)
-
+    elif model_type == "lightgbm":
+        if hyperparameters["objective"] != "regression":
+            problem_to_solve = "classification"
+        else:
+            problem_to_solve = "regression"
     elif model_type == "Logistic regression":
-
+        problem_to_solve = "classification"
         if len(set(target)) > 2:
             logistic_regression_model = LogisticRegression(multi_class='multinomial')
         else:
             logistic_regression_model = LogisticRegression()
-
-    # Define the directory name of the models
-    split = "kfold"
-    save_models_dir = define_model_directory_name(model_type, hyperparameters, split, problem_to_solve)
-    save_models_dir += f"folds_n_{n_fold}"
-    create_model_directory(save_models_dir)
+    elif model_type == "xgboost":
+        # Find out what is the type of the problem that should be solved based on the defined objective
+        problem_to_solve = xgboost_problem_type(hyperparameters)
 
     fold_nr = 0  # counter for identifying models
     metrics_summary_all = {}
+    # Define the directory name of the models
+    split = "kfold"
+    save_models_dir = define_model_directory_name(model_type, hyperparameters, split, problem_to_solve)
+    save_models_dir += f"_folds_n_{n_fold}"
+    create_model_directory(save_models_dir)
 
     for train, test in kfold.split(train_array, target):
         fold_nr += 1
         print("fold_nr.", fold_nr)
 
         if model_type == "Ridge linear regression":
-            problem_to_solve = "regression"
             logger.info("LightGBM regression will be used to train the model")
             kfold_model = linear_regression_model.fit(train_array[train], target[train])
 
         elif model_type == "lightgbm":
-            if hyperparameters["objective"] != "regression":
-                problem_to_solve = "classification"
-            else:
-                problem_to_solve = "regression"
-
-            logger.info("LightGBM regression will be used to train the model")
+            logger.info("LightGBM will be used to train the model")
             lgb_train = lgb.Dataset(train_array[train], label=target[train].reshape(len(target[train])))
             lgb_valid = lgb.Dataset(train_array[test], label=target[test].reshape(len(target[test])))
 
@@ -259,17 +258,16 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
             kfold_model = lgb.train(hyperparameters, train_set=lgb_train, valid_sets=[lgb_valid], verbose_eval=0)
 
         elif model_type == "Logistic regression":
-            problem_to_solve = "classification"
             kfold_model = logistic_regression_model.fit(train_array[train], target[train])
 
         elif model_type == "xgboost":
             num_round = get_num_round(hyperparameters)
-            kfold_model, problem_to_solve, validation_list = training_xgboost_kfold(train_array,
-                                                                                    target,
-                                                                                    train,
-                                                                                    test,
-                                                                                    hyperparameters,
-                                                                                    num_round)
+            kfold_model, validation_list = training_xgboost_kfold(train_array,
+                                                                  target,
+                                                                  train,
+                                                                  test,
+                                                                  hyperparameters,
+                                                                  num_round)
 
         else:
             logger.error("Model type is not recognized")

@@ -130,9 +130,6 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
             - validation_list: The list that contains the data the should be used to train and validate the model.
     """
 
-    # Find out what is the type of the problem that should be solved based on the defined objective
-    problem_to_solve = xgboost_problem_type(hyperparameters)
-
     # train data transformation
     validation_list = []
     data_i = "train"
@@ -148,7 +145,7 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
 
     kfold_model = xgboost_regression_train(validation_list, hyperparameters, num_round=num_round)
 
-    return kfold_model, problem_to_solve, validation_list
+    return kfold_model, validation_list
 
 
 def get_num_round(hyperparameters) -> int:
