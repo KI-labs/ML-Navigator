@@ -216,61 +216,21 @@ def detect_column_types(dataframe: pd.DataFrame, threshold: int = 50):
 
     string_columns, json_columns = column_detector.json_detector(string_columns)
 
-    columns_types_list = [
-        string_columns,
-        categorical_integer,
-        numeric_columns,
-        date_columns,
-        json_columns,
-        other_columns,
-    ]
+    columns_types = {
+        "categorical_string": string_columns,
+        "categorical_integer": categorical_integer,
+        "continuous": numeric_columns,
+        "date": date_columns,
+        "json": json_columns,
+        "other": other_columns
+    }
 
-    number_of_columns = sum([len(x) for x in columns_types_list])
+    number_of_columns = sum([len(x) for x in columns_types.values()])
 
     if number_of_columns != dataframe.shape[1]:
         raise ValueError("Number of columns must be equal to the dataframe's columns")
 
-    return columns_types_list, number_of_columns
-
-
-class Categories(Enum):
-    """ Data types keys provider
-
-    This class maps the keys that will be used to filter columns based on their data type.
-
-    """
-
-    STRING = "categorical_string"
-    INTEGER = "categorical_integer"
-    NUMERICAL = "continuous"
-    DATE = "date"
-    JSON = "json"
-    OTHERS = "other"
-
-
-def list_2_dict(list_set: list) -> dict:
-    """ List to dictionary convector
-
-    The function returns a dictionary that contains the types of data inside the columns as keys and the list of the
-    names of the columns for each data type as values.
-
-    :param list list_set: A list of lists of strings which are the names of the columns filtered based on the type of
-            the data that those columns contain
-    :return: A dictionary
-
-    :example:
-
-    >>>   {'categorical_string': ['string_col_0', 'string_col_1', 'string_col_2'],
-    >>>     'categorical_integer': ['int_col_0', 'int_col_1', 'int_col_2'],
-    >>>     'continuous': ['cont_col_0', 'cont_col_1', 'cont_col_2],
-    >>>     'date': [],
-    >>>     'json': [],
-    >>>     'other': []}
-    """
-
-    indexes = [c.value for c in Categories]
-
-    return {indexes[i]: list_set[i] for i in range(len(indexes))}
+    return columns_types, number_of_columns
 
 
 def detect_columns_types_summary(dataframes_dict: dict, threshold: int = 50) -> dict:
@@ -289,11 +249,11 @@ def detect_columns_types_summary(dataframes_dict: dict, threshold: int = 50) -> 
 
     columns_types_dict = {}
     for key_i, dataframe in dataframes_dict.items():
-        columns_types_list, number_of_columns = detect_column_types(
+        columns_types, _ = detect_column_types(
             dataframe, threshold=threshold
         )
 
-        columns_types_dict[key_i] = list_2_dict(columns_types_list)
+        columns_types_dict[key_i] = columns_types
 
     print(f"A summary of the data sets")
 

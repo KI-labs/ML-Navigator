@@ -133,7 +133,8 @@ def input_parameters_extraction(parameters: dict):
         logger.error(f"Parameters extraction failed: {e}")
 
 
-def split_dataset(features: np.array, target: np.array, tests_split_ratios: Union[list, set]) -> dict:
+def split_dataset(features: np.array, target: np.array, tests_split_ratios: Union[list, set],
+                  stratify: bool = False) -> dict:
     """ Dataset splitter
 
     This function split a dataset to multiple datasets such train, valid and test.
@@ -143,6 +144,7 @@ def split_dataset(features: np.array, target: np.array, tests_split_ratios: Unio
     :param Union[list, set] tests_split_ratios: A list or set of floats that represent the ratio of the size of the
             test dataset ot the train dataset. The values should be in the range ]0, 1[ e.g.
             tests_split_ratios = [0.2, 0.2]
+    :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :return:
             sub_datasets: A dictionary that contains the test and train dataset
 
@@ -154,9 +156,11 @@ def split_dataset(features: np.array, target: np.array, tests_split_ratios: Unio
     sub_datasets = {}
 
     for split_ratio in tests_split_ratios:
+        stratify_ = target if stratify else None
         features, x_test, target, y_test = train_test_split(features,
                                                             target,
                                                             test_size=split_ratio,
+                                                            stratify=stratify_,
                                                             random_state=42)
 
         sub_datasets[f"features_{split_count}"] = x_test
