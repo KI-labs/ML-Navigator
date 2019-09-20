@@ -195,3 +195,26 @@ def xgboost_problem_type(hyperparameters: dict) -> str:
         print(f"The objective is not defined. The default value is reg:squarederror. Error: {e}")
         problem_to_solve = "regression"
     return problem_to_solve
+
+
+def define_model_directory_name(model_type, hyperparameters, split, problem_to_solve):
+    # define the name of the directory where the models will be saved
+    if model_type == "Ridge linear regression":
+        alpha = hyperparameters["alpha"]
+        save_models_dir = os.path.join(".", "models", f'linear_ridge_{split}_{alpha}')
+    elif model_type == "lightgbm":
+        save_models_dir = os.path.join(
+            ".", "models", f'lightgbm_{split}_{hyperparameters["num_leaves"]}' +
+                           f'_{hyperparameters["boosting"]}')
+    elif model_type == "Logistic regression":
+        save_models_dir = os.path.join(".", "models", f'logistic_{split}')
+    elif model_type == "xgboost":
+        save_models_dir = os.path.join(".", "models", f'xgboost_{split}')
+    elif model_type == "Random Forest":
+        save_models_dir = os.path.join(".", "models", "random_forest")
+    else:
+        raise ValueError("Model type is not recognized")
+
+    save_models_dir += "_" + problem_to_solve
+
+    return save_models_dir
