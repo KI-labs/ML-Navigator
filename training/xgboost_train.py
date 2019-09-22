@@ -36,7 +36,7 @@ def xgboost_regression_train(validation_list: list,
 
     :param list validation_list: The list that contains the data the should be used to train and validate the model.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param int num_round: The number of rounds for boosting
 
     :return:
@@ -121,7 +121,7 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
     :param list train: A list of integers that define the training dataset
     :param list test: A list of integers that define the testing dataset
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param int num_round: The number of rounds for boosting
 
     :return:
@@ -154,7 +154,7 @@ def get_num_round(hyperparameters) -> int:
     Get the value of num_round that will be used to train the xgboost model
 
     :param hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :return:
             - num_round: The number of rounds for boosting
     """

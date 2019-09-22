@@ -51,7 +51,7 @@ def train_with_n_split(test_split_ratios: list, stratify: bool,
             or [0.2, 0.2] for validation size/training size and testing size/(training size - validation size)
     :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param np.array train_array: The values of the features that will be split to two sub-datasets based
             on the split value to multiple datasets.
     :param np.array target: The values of the target that will be split to two sub-datasets based
@@ -184,14 +184,13 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
     :param dict split: A dictionary that contains information about the K-Fold variables
     :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param np.array train_array: The values of the target that will be split into K-Folds and used to train the model to
             predict the target
     :param np.array target: The values of the target that will be split into K-Folds and used to train the model.
     :param list models_nr: A list of indexes that will be used to point to the trained models which will be saved
             locally after training. In this case there are n_fold models.
-    :param str model_type: The type of model that will be used to fit the data. Currently there are two values:
-                Ridge linear regression and lightgbm.
+    :param str model_type: The type of model that will be used to fit the data.
     :param list required_metrics:
 
     :return:
