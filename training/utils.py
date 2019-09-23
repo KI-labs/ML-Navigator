@@ -106,7 +106,6 @@ def input_parameters_extraction(parameters: dict):
             - train_array - A numpy array that is used to train the model and predict the target.
             - target - A numpy array that is used to train the model.
             - predict - If provided, a pandas dataframe that contains the features without the labels (target). Otherwise bool: False
-
     """
 
     try:
@@ -177,10 +176,15 @@ def split_dataset(features: np.array, target: np.array, tests_split_ratios: Unio
 
 
 def xgboost_problem_type(hyperparameters: dict) -> str:
-    """
+    """ XGboost problem type finder
 
-    :param hyperparameters:
+    The function finds the type of the problem that should be solved when using the xgboost method. The function uses
+     the objective variable to find out what type of problem that should be solved
+
+    :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
+            needs to train the model.
     :return:
+            - problem_to_solve: A string that defines the problem to solve: regression or classification.
     """
 
     try:
@@ -195,3 +199,40 @@ def xgboost_problem_type(hyperparameters: dict) -> str:
         print(f"The objective is not defined. The default value is reg:squarederror. Error: {e}")
         problem_to_solve = "regression"
     return problem_to_solve
+
+
+def define_model_directory_name(model_type: str, hyperparameters: dict, split: str, problem_to_solve: str):
+    """ Assign directory name
+
+    The function defines the name of the directory where the models will be saved locally after training.
+    The name contains the information about the model type, split method and some information from the hyperparameters
+
+    :param str model_type: The type of model that will be used to fit the data.
+    :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
+            needs to train the model.
+    :param str split: A string that define the data splitting method: split or kfold
+    :param str problem_to_solve: A string that defines the problem to solve: regression or classification.
+    :return:
+            - save_models_dir: The name of the directory where the trained models are saved locally
+    """
+
+    # define the name of the directory where the models will be saved
+    if model_type == "Ridge linear regression":
+        alpha = hyperparameters["alpha"]
+        save_models_dir = os.path.join(".", "models", f'linear_ridge_{split}_{alpha}')
+    elif model_type == "lightgbm":
+        save_models_dir = os.path.join(
+            ".", "models", f'lightgbm_{split}_{hyperparameters["num_leaves"]}' +
+                           f'_{hyperparameters["boosting"]}')
+    elif model_type == "Logistic regression":
+        save_models_dir = os.path.join(".", "models", f'logistic_{split}')
+    elif model_type == "xgboost":
+        save_models_dir = os.path.join(".", "models", f'xgboost_{split}')
+    elif model_type == "Random Forest":
+        save_models_dir = os.path.join(".", "models", "random_forest")
+    else:
+        raise ValueError("Model type is not recognized")
+
+    save_models_dir += "_" + problem_to_solve
+
+    return save_models_dir

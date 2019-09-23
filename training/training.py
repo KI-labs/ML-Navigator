@@ -15,7 +15,7 @@ from IPython.display import display
 from training.regression_model_evaluator import regression_evaluate_model, regression_model_evaluation
 from training.classification_model_evaluator import classification_model_evaluation, classification_evaluate_model
 from training.optimizer import get_best_alpha_split, get_best_alpha_kfold
-from training.utils import input_parameters_extraction
+from training.utils import input_parameters_extraction, define_model_directory_name
 from training.utils import read_kfold_config, create_model_directory, \
     save_model_locally, split_dataset, xgboost_problem_type
 from training.validator import parameters_validator
@@ -23,7 +23,6 @@ from training.xgboost_train import xgboost_data_preparation, \
     training_xgboost_n_split, \
     training_xgboost_kfold, get_num_round, evaluate_xgboost_model
 from training.gridsearch_train import train_rf_grid_search
-
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -37,7 +36,7 @@ logging.basicConfig(
 )
 
 
-def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: bool,
+def train_with_n_split(test_split_ratios: list, stratify: bool,
                        hyperparameters: dict,
                        train_array: np.array,
                        target: np.array,
@@ -48,12 +47,11 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
 
     This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test
 
-    :param str save_models_dir: The path where the model will be saved.
     :param list test_split_ratios: A list that contains the test split ratio e.g. [0.2] for testing size/training size
             or [0.2, 0.2] for validation size/training size and testing size/(training size - validation size)
     :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param np.array train_array: The values of the features that will be split to two sub-datasets based
             on the split value to multiple datasets.
     :param np.array target: The values of the target that will be split to two sub-datasets based
@@ -62,6 +60,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
             locally after training. In this case there is only one model.
     :param str model_type: The type of model that will be used to fit the data. Currently there are two values:
             Ridge linear regression and lightgbm.
+    :param list required_metrics:
 
     :return:
             - models_nr -  A list of indexes that will be used to point to the trained models which will be saved locally after training. In this case there is only one model.
@@ -70,13 +69,6 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
 
     problem_to_solve = None
     sub_datasets = split_dataset(train_array, target, test_split_ratios, stratify)
-
-    # Get a unique name when saving the model
-    for n_split in test_split_ratios:
-        save_models_dir += f'_{str(n_split).replace(".", "_")}'
-    logger.debug(f"the name of the directory where the model will be saved is: {save_models_dir}")
-
-    create_model_directory(save_models_dir)
 
     x_train, y_train = sub_datasets["train"], sub_datasets["target"]
 
@@ -130,7 +122,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
 
     elif model_type == "Random Forest":
         model = train_rf_grid_search(x_train, y_train, hyperparameters, required_metrics)
-
+        problem_to_solve = "classification"
     else:
         logger.error("Model type is not recognized")
         raise ValueError("Model type is not recognized")
@@ -159,6 +151,15 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
     metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
     display(metrics_summary_all)
 
+    # Define the directory name of the models
+    split = "n_split"
+    save_models_dir = define_model_directory_name(model_type, hyperparameters, split, problem_to_solve)
+    # Get a unique name when saving the model
+    for n_split in test_split_ratios:
+        save_models_dir += f'_{str(n_split).replace(".", "_")}'
+    logger.debug(f"the name of the directory where the model will be saved is: {save_models_dir}")
+    create_model_directory(save_models_dir)
+
     path = os.path.join(save_models_dir, f"{model_type}_{0}.pkl")
     save_model_locally(path, model)
 
@@ -169,9 +170,7 @@ def train_with_n_split(save_models_dir: str, test_split_ratios: list, stratify: 
     return models_nr, save_models_dir
 
 
-def train_with_kfold_cross_validation(save_models_dir: str,
-                                      split: dict,
-                                      stratify: bool,
+def train_with_kfold_cross_validation(split: dict, stratify: bool,
                                       hyperparameters: dict,
                                       train_array: np.array,
                                       target: np.array,
@@ -182,18 +181,17 @@ def train_with_kfold_cross_validation(save_models_dir: str,
 
     This function trains a model to fit the data using K-Fold cross-validation.
 
-    :param str save_models_dir: The path where the models will be saved.
     :param dict split: A dictionary that contains information about the K-Fold variables
     :param bool stratify: If set to True the ratios of the labels is kept the same in the splitted data sets.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param np.array train_array: The values of the target that will be split into K-Folds and used to train the model to
             predict the target
     :param np.array target: The values of the target that will be split into K-Folds and used to train the model.
     :param list models_nr: A list of indexes that will be used to point to the trained models which will be saved
             locally after training. In this case there are n_fold models.
-    :param str model_type: The type of model that will be used to fit the data. Currently there are two values:
-                Ridge linear regression and lightgbm.
+    :param str model_type: The type of model that will be used to fit the data.
+    :param list required_metrics:
 
     :return:
             - models_nr - A list of indexes that will be used to point to the trained models which will be saved locally after training. In this case there are n_fold models.
@@ -214,51 +212,44 @@ def train_with_kfold_cross_validation(save_models_dir: str,
     logistic_regression_model = None
 
     if model_type == "Ridge linear regression":
+        problem_to_solve = "regression"
         alpha = hyperparameters["alpha"]
-
-        save_models_dir += f'_linear_ridge_{split["method"]}_{alpha}_{n_fold}'
-
         if alpha == "optimize":
             alpha = get_best_alpha_kfold(kfold, train_array, target, n_fold)
-
         linear_regression_model = linear_model.Ridge(alpha=alpha)
-
     elif model_type == "lightgbm":
-        save_models_dir += f'_lightgbm_{split["method"]}_{n_fold}'
-
+        if hyperparameters["objective"] != "regression":
+            problem_to_solve = "classification"
+        else:
+            problem_to_solve = "regression"
     elif model_type == "Logistic regression":
-        save_models_dir += f'_logistic_{split["method"]}_{n_fold}'
-
+        problem_to_solve = "classification"
         if len(set(target)) > 2:
             logistic_regression_model = LogisticRegression(multi_class='multinomial')
         else:
             logistic_regression_model = LogisticRegression()
     elif model_type == "xgboost":
-        save_models_dir += f'_xgboost_{split["method"]}_{n_fold}'
-    else:
-        raise ValueError("Model type is not recognized")
-
-    create_model_directory(save_models_dir)
+        # Find out what is the type of the problem that should be solved based on the defined objective
+        problem_to_solve = xgboost_problem_type(hyperparameters)
 
     fold_nr = 0  # counter for identifying models
     metrics_summary_all = {}
+    # Define the directory name of the models
+    split = "kfold"
+    save_models_dir = define_model_directory_name(model_type, hyperparameters, split, problem_to_solve)
+    save_models_dir += f"_folds_n_{n_fold}"
+    create_model_directory(save_models_dir)
 
     for train, test in kfold.split(train_array, target):
         fold_nr += 1
         print("fold_nr.", fold_nr)
 
         if model_type == "Ridge linear regression":
-            problem_to_solve = "regression"
             logger.info("LightGBM regression will be used to train the model")
             kfold_model = linear_regression_model.fit(train_array[train], target[train])
 
         elif model_type == "lightgbm":
-            if hyperparameters["objective"] != "regression":
-                problem_to_solve = "classification"
-            else:
-                problem_to_solve = "regression"
-
-            logger.info("LightGBM regression will be used to train the model")
+            logger.info("LightGBM will be used to train the model")
             lgb_train = lgb.Dataset(train_array[train], label=target[train].reshape(len(target[train])))
             lgb_valid = lgb.Dataset(train_array[test], label=target[test].reshape(len(target[test])))
 
@@ -266,17 +257,16 @@ def train_with_kfold_cross_validation(save_models_dir: str,
             kfold_model = lgb.train(hyperparameters, train_set=lgb_train, valid_sets=[lgb_valid], verbose_eval=0)
 
         elif model_type == "Logistic regression":
-            problem_to_solve = "classification"
             kfold_model = logistic_regression_model.fit(train_array[train], target[train])
 
         elif model_type == "xgboost":
             num_round = get_num_round(hyperparameters)
-            kfold_model, problem_to_solve, validation_list = training_xgboost_kfold(train_array,
-                                                                                    target,
-                                                                                    train,
-                                                                                    test,
-                                                                                    hyperparameters,
-                                                                                    num_round)
+            kfold_model, validation_list = training_xgboost_kfold(train_array,
+                                                                  target,
+                                                                  train,
+                                                                  test,
+                                                                  hyperparameters,
+                                                                  num_round)
 
         else:
             logger.error("Model type is not recognized")
@@ -416,24 +406,8 @@ def model_training(parameters: dict):
     data, split, train_array, target, model_type, hyperparameters, predict = input_parameters_extraction(parameters)
     stratify = parameters["split"].get("stratify", False)
 
-    # define the name of the directory where the models will be saved
-    if model_type == "Ridge linear regression":
-        alpha = hyperparameters["alpha"]
-        save_models_dir = os.path.join(".", "models", f'linear_ridge_{split["method"]}_{alpha}')
-    elif model_type == "lightgbm":
-        save_models_dir = os.path.join(
-            ".", "models", f'lightgbm_{split["method"]}_{hyperparameters["num_leaves"]}' +
-                           f'_{hyperparameters["boosting"]}')
-    elif model_type == "Logistic regression":
-        save_models_dir = os.path.join(".", "models", f'logistic_{split["method"]}')
-    elif model_type == "xgboost":
-        save_models_dir = os.path.join(".", "models", f'xgboost_{split["method"]}')
-    elif model_type == "Random Forest":
-        save_models_dir = os.path.join(".", "models", "random_forest")
-    else:
-        raise ValueError("Model type is not recognized")
-
     models_nr = []
+    save_models_dir = None
 
     if split["method"] == "split":
         logger.info("Start training using Split cross-validation")
@@ -442,8 +416,7 @@ def model_training(parameters: dict):
         else:
             test_split_ratio = split["split_ratios"]
 
-        models_nr, save_models_dir = train_with_n_split(save_models_dir,
-                                                        test_split_ratio,
+        models_nr, save_models_dir = train_with_n_split(test_split_ratio,
                                                         stratify,
                                                         hyperparameters,
                                                         train_array,
@@ -454,8 +427,7 @@ def model_training(parameters: dict):
 
     elif split["method"] == "kfold":
         logger.info("Start training using KFold cross-validation")
-        models_nr, save_models_dir = train_with_kfold_cross_validation(save_models_dir,
-                                                                       split,
+        models_nr, save_models_dir = train_with_kfold_cross_validation(split,
                                                                        stratify,
                                                                        hyperparameters,
                                                                        train_array,

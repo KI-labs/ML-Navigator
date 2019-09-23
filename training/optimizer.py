@@ -149,7 +149,7 @@ def get_best_alpha_kfold(kfold, train_array: np.array, target: np.array, n_fold:
         fold_nr = 0  # counter for identifying models
         r2_linear = 0
 
-        for train, test in kfold.split(train_array):
+        for train, test in kfold.split(train_array, target):
             fold_nr += 1
 
             help_text = f"dataset kfold {fold_nr}"

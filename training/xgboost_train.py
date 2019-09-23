@@ -36,7 +36,7 @@ def xgboost_regression_train(validation_list: list,
 
     :param list validation_list: The list that contains the data the should be used to train and validate the model.
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param int num_round: The number of rounds for boosting
 
     :return:
@@ -121,7 +121,7 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
     :param list train: A list of integers that define the training dataset
     :param list test: A list of integers that define the testing dataset
     :param dict hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :param int num_round: The number of rounds for boosting
 
     :return:
@@ -129,9 +129,6 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
             - problem_to_solve: string that defines the problem to solve: regression or classification.
             - validation_list: The list that contains the data the should be used to train and validate the model.
     """
-
-    # Find out what is the type of the problem that should be solved based on the defined objective
-    problem_to_solve = xgboost_problem_type(hyperparameters)
 
     # train data transformation
     validation_list = []
@@ -148,7 +145,7 @@ def training_xgboost_kfold(train_array, target, train: list, test: list, hyperpa
 
     kfold_model = xgboost_regression_train(validation_list, hyperparameters, num_round=num_round)
 
-    return kfold_model, problem_to_solve, validation_list
+    return kfold_model, validation_list
 
 
 def get_num_round(hyperparameters) -> int:
@@ -157,7 +154,7 @@ def get_num_round(hyperparameters) -> int:
     Get the value of num_round that will be used to train the xgboost model
 
     :param hyperparameters: A dictionary that contains the hyperparameters which the selected training method
-            need to train the model.
+            needs to train the model.
     :return:
             - num_round: The number of rounds for boosting
     """
