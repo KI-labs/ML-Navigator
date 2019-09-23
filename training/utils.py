@@ -228,8 +228,8 @@ def define_model_directory_name(model_type: str, hyperparameters: dict, split: s
         save_models_dir = os.path.join(".", "models", f'logistic_{split}')
     elif model_type == "xgboost":
         save_models_dir = os.path.join(".", "models", f'xgboost_{split}')
-    elif model_type == "Random Forest":
-        save_models_dir = os.path.join(".", "models", "random_forest")
+    elif model_type.split(".")[0] == "sklearn":
+        save_models_dir = os.path.join(".", "models", model_type)
     else:
         raise ValueError("Model type is not recognized")
 

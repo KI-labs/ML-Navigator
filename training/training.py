@@ -120,9 +120,9 @@ def train_with_n_split(test_split_ratios: list, stratify: bool,
         num_round = get_num_round(hyperparameters)
         model, problem_to_solve, validation_list = training_xgboost_n_split(sub_datasets, hyperparameters, num_round)
 
-    elif model_type == "Random Forest":
-        model = train_rf_grid_search(x_train, y_train, hyperparameters, required_metrics)
-        problem_to_solve = "classification"
+    elif model_type.split(".")[0] == "sklearn":
+        model = train_rf_grid_search(x_train, y_train, model_type, hyperparameters)
+        problem_to_solve = hyperparameters["objective"]
     else:
         logger.error("Model type is not recognized")
         raise ValueError("Model type is not recognized")
@@ -231,6 +231,8 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
     elif model_type == "xgboost":
         # Find out what is the type of the problem that should be solved based on the defined objective
         problem_to_solve = xgboost_problem_type(hyperparameters)
+    elif model_type.split(".")[0] == "sklearn":
+        problem_to_solve = hyperparameters["objective"]
 
     fold_nr = 0  # counter for identifying models
     metrics_summary_all = {}
@@ -444,7 +446,9 @@ def model_training(parameters: dict):
         regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "lightgbm" and hyperparameters["objective"] != "regression":
         classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type == "Random Forest" and hyperparameters["objective"] != "regression":
+    elif model_type.split(".")[0] == "sklearn" and hyperparameters["objective"] == "regression":
+        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
+    elif model_type.split(".")[0] == "sklearn" and hyperparameters["objective"] == "classification":
         classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
     elif model_type == "xgboost":
         problem_to_solve = xgboost_problem_type(hyperparameters)
