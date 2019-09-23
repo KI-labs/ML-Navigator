@@ -2,8 +2,6 @@ import logging
 import os
 import warnings
 
-warnings.filterwarnings('ignore')
-
 import lightgbm as lgb
 import pandas as pd
 import numpy as np
@@ -12,18 +10,17 @@ from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from IPython.display import display
 
-from training.regression_model_evaluator import regression_evaluate_model, regression_model_evaluation
-from training.classification_model_evaluator import classification_model_evaluation, classification_evaluate_model
+from training.model_evaluator import evaluate_model, load_all_models
 from training.optimizer import get_best_alpha_split, get_best_alpha_kfold
 from training.utils import input_parameters_extraction, define_model_directory_name
 from training.utils import read_kfold_config, create_model_directory, \
     save_model_locally, split_dataset, xgboost_problem_type
 from training.validator import parameters_validator
-from training.xgboost_train import xgboost_data_preparation, \
-    training_xgboost_n_split, \
-    training_xgboost_kfold, get_num_round, evaluate_xgboost_model
+from training.xgboost_train import training_xgboost_n_split, \
+    training_xgboost_kfold, get_num_round, xgboost_data_preparation_for_evaluation
 from training.gridsearch_train import train_sklearn_grid_search
 
+warnings.filterwarnings('ignore')
 logger = logging.getLogger(__name__)
 formatting = (
     "%(asctime)s: %(levelname)s: File:%(filename)s Function:%(funcName)s Line:%(lineno)d "
@@ -128,27 +125,15 @@ def train_with_n_split(test_split_ratios: list, stratify: bool,
         raise ValueError("Model type is not recognized")
 
     # Evaluate the model on all sub-datasets
-    metrics_summary_all = {}
-
-    for sub_dataset_i in range(len(test_split_ratios)):
-        if problem_to_solve == "regression":
-            _, metrics_summary = regression_evaluate_model(model,
-                                                           sub_datasets[f"features_{sub_dataset_i}"],
-                                                           sub_datasets[f"target_{sub_dataset_i}"],
-                                                           f"Evaluating sub-dataset nr.{sub_dataset_i}",
-                                                           required_metrics=required_metrics)
-        else:
-            _, metrics_summary = classification_evaluate_model(model,
-                                                               sub_datasets[f"features_{sub_dataset_i}"],
-                                                               sub_datasets[f"target_{sub_dataset_i}"],
-                                                               f"Evaluating sub-dataset nr.{sub_dataset_i}",
-                                                               required_metrics=required_metrics)
-
-        metrics_summary_all[f"sub_dataset_{sub_dataset_i}"] = dict((k, v) for k, v in metrics_summary.items()
-                                                                   if k in required_metrics)
+    metrics_summary_all = dict()
+    metrics_summary_all["model 0"] = evaluate_model(
+        model,
+        xs=[x_train] + [sub_datasets[f"features_{i}"] for i in range(len(test_split_ratios))],
+        ys=[y_train] + [sub_datasets[f"target_{i}"] for i in range(len(test_split_ratios))],
+        labels=["(train.train)"] + [f"(train.validation_{i})" for i in range(len(test_split_ratios))],
+        metrics=required_metrics)
 
     metrics_summary_all = pd.DataFrame(metrics_summary_all)
-    metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
     display(metrics_summary_all)
 
     # Define the directory name of the models
@@ -279,28 +264,20 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
 
         models_nr.append(fold_nr)
 
-        if problem_to_solve == "regression":
-            if model_type == "xgboost":
-                _, metrics_summary = regression_evaluate_model(kfold_model, validation_list[-1][0], target[test],
-                                                               f"dataset kfold {fold_nr}",
-                                                               required_metrics=required_metrics)
-            else:
-                _, metrics_summary = regression_evaluate_model(kfold_model, train_array[test], target[test],
-                                                               f"dataset kfold {fold_nr}",
-                                                               required_metrics=required_metrics)
-
+        if model_type == "xgboost":
+            metrics_summary = evaluate_model(kfold_model,
+                                             xs=[validation_list[0][0], validation_list[1][0]],
+                                             ys=[target[train], target[test]],
+                                             labels=["(train.train)", "(train.validation)"],
+                                             metrics=required_metrics)
         else:
-            if model_type == "xgboost":
-                _, metrics_summary = classification_evaluate_model(kfold_model, validation_list[-1][0], target[test],
-                                                                   f"dataset kfold {fold_nr}",
-                                                                   required_metrics=required_metrics)
-            else:
-                _, metrics_summary = classification_evaluate_model(kfold_model, train_array[test], target[test],
-                                                                   f"dataset kfold {fold_nr}",
-                                                                   required_metrics=required_metrics)
+            metrics_summary = evaluate_model(kfold_model,
+                                             xs=[train_array[train], train_array[test]],
+                                             ys=[target[train], target[test]],
+                                             labels=["(train.train)", "(train.validation)"],
+                                             metrics=required_metrics)
 
-        metrics_summary_all[f"fold_{fold_nr}"] = dict((k, v) for k, v in metrics_summary.items()
-                                                      if k in required_metrics)
+        metrics_summary_all[f"fold_{fold_nr}"] = metrics_summary
 
     metrics_summary_all = pd.DataFrame(metrics_summary_all)
     metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
@@ -438,21 +415,26 @@ def model_training(parameters: dict):
                                                                        model_type,
                                                                        parameters["metrics"])
 
-    if model_type == "Ridge linear regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type == "Logistic regression":
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type == "lightgbm" and hyperparameters["objective"] == "regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type == "lightgbm" and hyperparameters["objective"] != "regression":
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type.split(".")[0] == "sklearn" and hyperparameters["objective"] == "regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type.split(".")[0] == "sklearn" and hyperparameters["objective"] == "classification":
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    elif model_type == "xgboost":
-        problem_to_solve = xgboost_problem_type(hyperparameters)
-        evaluate_xgboost_model(data, problem_to_solve, models_nr, save_models_dir, model_type, parameters)
+    # Evaluate models
+    if model_type == "xgboost":
+        data = xgboost_data_preparation_for_evaluation(data)
+
+    metrics_summary_all = {}
+    for model_i in models_nr:
+        model = load_all_models(save_models_dir, model_type, model_i)
+        xs = [v["features"] for k, v in data.items()]
+        ys = [v["target"] for k, v in data.items()]
+        labels = [f"({k})" for k, v in data.items()]
+
+        metrics_summary = evaluate_model(model, xs, ys, labels, parameters["metrics"])
+
+        metrics_summary_all[f"model {model_i}"] = metrics_summary
+
+    metrics_summary_all = pd.DataFrame(metrics_summary_all)
+    if metrics_summary_all.shape[1] > 1:
+        # calculate mean only if we have more than one model
+        metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
+    display(metrics_summary_all)
 
     logger.info("Training process is finished")
     return models_nr, save_models_dir

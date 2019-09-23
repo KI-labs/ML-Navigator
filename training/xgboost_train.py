@@ -1,10 +1,7 @@
 import xgboost as xgb
 import numpy as np
 import pandas as pd
-
 from training.utils import xgboost_problem_type
-from training.regression_model_evaluator import regression_model_evaluation
-from training.classification_model_evaluator import classification_model_evaluation
 
 
 def xgboost_data_preparation(validation_list: list, dataframe: pd.DataFrame, target: np.array, key: str):
@@ -167,38 +164,20 @@ def get_num_round(hyperparameters) -> int:
     return num_round
 
 
-def evaluate_xgboost_model(data: dict, problem_to_solve: str,
-                           models_nr: list,
-                           save_models_dir: str,
-                           model_type: str,
-                           parameters: dict):
-    """ XGboost model validator
+def xgboost_data_preparation_for_evaluation(data: dict):
+    """ Date preparation for evaluation
 
-    The functions transforms the data to xgboost-compatible format and applies the model evaluation.
+    Prepare the data in a form that could be used for model evaluation.
 
-    :param dict data: A dictionary that contains pandas dataframes as datasets.
-    :param str problem_to_solve: string that defines the problem to solve: regression or classification.
-    :param list models_nr:  A list of indexes that will be used to point to the trained models which will be saved
-            locally after training.
-    :param str save_models_dir: The path where the models will be saved.
-    :param str model_type: The type of model that will be used to fit the data. In this function, it is xgboost
-    :param dict parameters:  A dictionary that contains information about the datasets, model type, model configurations and training configurations.
-
+    :param data:
     :return:
     """
-
-    validation_list = []
 
     for data_i in data.keys():
         dataframe = data[data_i]["features"]
         dataframe.columns = [x for x in range(len(list(dataframe.columns)))]
         target = data[data_i]["target"]
 
-        validation_list = xgboost_data_preparation(validation_list, dataframe, target, data_i)
-        data[data_i]["features"] = validation_list[-1][0]
+        data[data_i]["features"] = xgb.DMatrix(dataframe, label=target)
 
-    if problem_to_solve == "regression":
-        regression_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    else:
-        classification_model_evaluation(data, models_nr, save_models_dir, model_type, parameters["metrics"])
-    pass
+    return data

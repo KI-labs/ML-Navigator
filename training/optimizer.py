@@ -4,7 +4,7 @@ import os
 import numpy as np
 from sklearn import linear_model
 
-from training.regression_model_evaluator import regression_evaluate_model
+from training.model_evaluator import evaluate_model
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -38,10 +38,14 @@ def training_for_optimizing(alpha_i: float, x_train: np.array, y_train: np.array
 
     linear_regression_model = linear_model.Ridge(alpha=alpha_i)
     model = linear_regression_model.fit(x_train, y_train)
-    _, metrics_summary = regression_evaluate_model(model, x_test, y_test, help_text,
-                                                   help_print=False)
 
-    r2_linear = metrics_summary['r2_score']
+    metrics_summary = evaluate_model(model,
+                                     xs=[x_test],
+                                     ys=[y_test],
+                                     labels=[""],
+                                     metrics=["r2_score"])
+
+    r2_linear = metrics_summary['r2_score ']
 
     return r2_linear
 
