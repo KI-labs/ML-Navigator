@@ -401,7 +401,7 @@ with open('./requirements.txt') as f:
 
 setup(
     name="ML-Navigator",
-    version="0.0.22",
+    version="0.0.3",
     python_requires='>=3.6',
     packages=find_packages(),
     install_requires=requirements,
