@@ -3,7 +3,7 @@ from sklearn import *
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, KFold
 
 
-def train_rf_grid_search(x_train, y_train, model_type, hyperparameters):
+def train_sklearn_grid_search(x_train, y_train, model_type, hyperparameters):
     """ Sklearn Model with GridSearch
 
     Train a sklearn classification/regression model by picking the best values from a parameter grid

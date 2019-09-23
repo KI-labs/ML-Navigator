@@ -22,7 +22,7 @@ from training.validator import parameters_validator
 from training.xgboost_train import xgboost_data_preparation, \
     training_xgboost_n_split, \
     training_xgboost_kfold, get_num_round, evaluate_xgboost_model
-from training.gridsearch_train import train_rf_grid_search
+from training.gridsearch_train import train_sklearn_grid_search
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -121,7 +121,7 @@ def train_with_n_split(test_split_ratios: list, stratify: bool,
         model, problem_to_solve, validation_list = training_xgboost_n_split(sub_datasets, hyperparameters, num_round)
 
     elif model_type.split(".")[0] == "sklearn":
-        model = train_rf_grid_search(x_train, y_train, model_type, hyperparameters)
+        model = train_sklearn_grid_search(x_train, y_train, model_type, hyperparameters)
         problem_to_solve = hyperparameters["objective"]
     else:
         logger.error("Model type is not recognized")
@@ -215,7 +215,7 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
         problem_to_solve = "regression"
         alpha = hyperparameters["alpha"]
         if alpha == "optimize":
-            alpha = get_best_alpha_kfold(kfold, train_array, target, n_fold)
+            alpha = get_best_alpha_kfold(kfold, train_array, target)
         linear_regression_model = linear_model.Ridge(alpha=alpha)
     elif model_type == "lightgbm":
         if hyperparameters["objective"] != "regression":
