@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 import pandas as pd
+import category_encoders as ce
 from sklearn.preprocessing import OneHotEncoder
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -91,3 +92,7 @@ def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_
         dataframes_dict_one_hot[key_i] = pd.concat([dataframe, one_hot_encoded_data], axis=1, sort=False)
 
     return dataframes_dict_one_hot
+
+def target_based_encoding():
+
+    pass
