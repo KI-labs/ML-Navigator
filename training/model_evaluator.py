@@ -67,7 +67,15 @@ def evaluate_model(model,
         y_pred = model.predict(x)
 
         for metric in metrics:
-            metrics_summary[f"{metric} {label}"] = metrics_map[metric](y, y_pred)
+            try:
+                value = metrics_map[metric](y, y_pred)
+            except Exception as e:
+                logger.error(f"Error during metric calculation: {e}")
+                print(f"Error during metric calculation: {e}\n"
+                      "metric value set to np.nan ")
+                value = np.nan
+
+            metrics_summary[f"{metric} {label}"] = value
 
     logger.info("Evaluate Model process is finished")
 

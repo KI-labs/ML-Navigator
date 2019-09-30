@@ -2,6 +2,8 @@ import logging
 import os
 import warnings
 
+warnings.filterwarnings('ignore')
+
 import lightgbm as lgb
 import pandas as pd
 import numpy as np
@@ -20,7 +22,6 @@ from training.xgboost_train import training_xgboost_n_split, \
     training_xgboost_kfold, get_num_round, xgboost_data_preparation_for_evaluation
 from training.gridsearch_train import train_sklearn_grid_search
 
-warnings.filterwarnings('ignore')
 logger = logging.getLogger(__name__)
 formatting = (
     "%(asctime)s: %(levelname)s: File:%(filename)s Function:%(funcName)s Line:%(lineno)d "
@@ -278,6 +279,7 @@ def train_with_kfold_cross_validation(split: dict, stratify: bool,
                                              metrics=required_metrics)
 
         metrics_summary_all[f"fold_{fold_nr}"] = metrics_summary
+        print(metrics_summary)
 
     metrics_summary_all = pd.DataFrame(metrics_summary_all)
     metrics_summary_all['mean'] = metrics_summary_all.mean(axis=1)
