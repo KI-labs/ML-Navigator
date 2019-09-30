@@ -263,27 +263,27 @@ class Flows:
                           ignore_columns: list, class_number_range=[3, 50], target_name: str = None):
         """ The encoder
 
-        This function encodes categorical features using the one-hot encoding method
+        This function encodes the categorical features using different encoding methods
         It assumes that the user encoded the categorical features with string values
         by replacing the those string values by integers
 
         :param str encoding_type: The type of the encoding method that will be applied. For example: one-hot, target \n
                     For more information please check the following reference:\n
                     https://contrib.scikit-learn.org/categorical-encoding/index.html
-        :param dict dataframe_dict: A dictionary that contains Pandas dataframes before one-hot encoding features e.g.
+        :param dict dataframe_dict: A dictionary that contains Pandas dataframes before the encoding features e.g.
                 dataframes_dict={"train": train_dataframe,
                 "test": test_dataframe}.
         :param str reference: It is the key ind the dataframes dictionary that points to the dataframe which its
                 inputs are taken as a reference to encode the data of other dataframes e.g. "train".
         :param list ignore_columns: It is a list of strings that contains the name of the columns which should be
-                ignored when applying the one-hot encoding.
+                ignored when applying the encoding method.
         :param list class_number_range: It is a list of two elements which define the minimum the and maximum number of
                 the classes (unique value) that a feature should contain in order to apply the one-hot encoding to
                 this feature.
         :param str target_name: The name of the column that contains the labels that should be predicted by the model.
                             If the encoding method doesn't require that target, it can be ignored.
         :return:
-                - dataframe_dict_encoded -  A dictionary that contains Pandas dataframes after one-hot encoding features e.g. dataframe_dict_encoded={"train": train_dataframe, "test": test_dataframe}.
+                - dataframe_dict_encoded -  A dictionary that contains Pandas dataframes after the encoding features e.g. dataframe_dict_encoded={"train": train_dataframe, "test": test_dataframe}.
                 - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
         """
 
