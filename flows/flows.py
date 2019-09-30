@@ -19,6 +19,7 @@ from blessings import Terminal
 
 from feature_engineering.feature_generator import encoding_features
 from flows.utils import unify_dataframes
+from flows.flow_instructions import FlowInstructions
 from prediction.model_predictor import model_prediction
 from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from preprocessing.data_explorer import explore_data
