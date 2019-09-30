@@ -47,7 +47,7 @@ def encoding_features(encoding_type: str,
                       categorical_features: list,
                       ignore_columns: list,
                       class_number_range: list = [0, 50],
-                      target_name: str = "Not defined") -> dict:
+                      target_name: str = None) -> dict:
     """ One-hot encoder
 
     The function applies one-hot encoding to the categorical features using the Scikit Learn framework implementation.
@@ -94,6 +94,9 @@ def encoding_features(encoding_type: str,
             np.array(dataframes_dict[reference][considered_features]))
 
     if encoding_type == "target":
+        if target_name is None:
+            raise ValueError("Please define the target_name. It is the label that should be predicted by the model")
+
         encoder = ce.target_encoder.TargetEncoder().fit(
             np.array(dataframes_dict[reference][considered_features]),
             dataframes_dict[reference][target_name])
