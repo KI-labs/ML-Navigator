@@ -42,7 +42,11 @@ def valid_features_detector(dataframe: dict, categorical_features: list,
     return valid_features
 
 
-def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_features: list,
+def one_hot_encoding_sklearn(encoding_type: str,
+                             dataframes_dict: dict,
+                             target_name: str,
+                             reference: str,
+                             categorical_features: list,
                              class_number_range: list,
                              ignore_columns: list) -> dict:
     """ One-hot encoder
@@ -60,13 +64,13 @@ def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_
     :param list ignore_columns: list of strings which are the columns names. One-hot encoding will not be applied to
             those columns.
     :return:
-            dataframes_dict_one_hot: A dictionary that contains the dataframes after applying one-hot encoding e.g.
-            dataframes_dict_one_hot={ 'train': train_dataframe, 'test': 'test_dataframe'}
+            dataframes_dict_encoded: A dictionary that contains the dataframes after applying one-hot encoding e.g.
+            dataframes_dict_encoded={ 'train': train_dataframe, 'test': 'test_dataframe'}
 
     :rtype: dict
     """
 
-    dataframes_dict_one_hot = {}
+    dataframes_dict_encoded = {}
 
     considered_features = valid_features_detector(dataframes_dict[reference],
                                                   categorical_features,
@@ -75,24 +79,27 @@ def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_
 
     logging.debug(f"considered_features = {considered_features}")
 
-    one_hot_encoder = OneHotEncoder(sparse=False, handle_unknown="ignore").fit(
-        np.array(dataframes_dict[reference][considered_features]))
+    encoder = None
+
+    if encoding_type == "one-hot":
+        encoder = OneHotEncoder(sparse=False, handle_unknown="ignore").fit(
+            np.array(dataframes_dict[reference][considered_features]))
+    if encoding_type == "target":
+        encoder = ce.target_encoder.TargetEncoder().fit(
+            np.array(dataframes_dict[reference][considered_features]),
+            dataframes_dict[reference][target_name])
 
     for key_i, dataframe in dataframes_dict.items():
-        one_hot_encoded_data = pd.DataFrame(one_hot_encoder.transform(np.array(dataframe[considered_features])))
-        columns = [f"col_one_hot_{x}" for x in range(one_hot_encoded_data.shape[1])]
+        encoded_data = pd.DataFrame(encoder.transform(np.array(dataframe[considered_features])))
+        columns = [f"col_one_hot_{x}" for x in range(encoded_data.shape[1])]
 
         logging.debug(f"the number of the one-hot encoded data columns is {len(columns)}")
 
-        one_hot_encoded_data.columns = columns
+        encoded_data.columns = columns
 
         # Encoded features will be dropped.
         dataframe = dataframe.drop(considered_features, axis=1)
 
-        dataframes_dict_one_hot[key_i] = pd.concat([dataframe, one_hot_encoded_data], axis=1, sort=False)
+        dataframes_dict_encoded[key_i] = pd.concat([dataframe, encoded_data], axis=1, sort=False)
 
-    return dataframes_dict_one_hot
-
-def target_based_encoding():
-
-    pass
+    return dataframes_dict_encoded

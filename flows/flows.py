@@ -261,7 +261,7 @@ class Flows:
 
         return dataframes_dict_scaled, self.columns_set
 
-    def one_hot_encoding(self, dataframe_dict: dict, reference: str,
+    def one_hot_encoding(self, encoding_type: str, dataframe_dict: dict, target_name: str, reference: str,
                          ignore_columns: list, class_number_range=[3, 50]):
         """ One-hot encoder
 
@@ -287,7 +287,8 @@ class Flows:
         function_id = "3"
 
         categorical_feature = self.columns_set[reference]["categorical_integer"]
-        dataframe_dict_one_hot = one_hot_encoding_sklearn(dataframe_dict, reference, categorical_feature,
+        dataframe_dict_one_hot = one_hot_encoding_sklearn(encoding_type, dataframe_dict, target_name,
+                                                          reference, categorical_feature,
                                                           class_number_range, ignore_columns)
 
         self.columns_set = detect_columns_types_summary(dataframe_dict_one_hot, threshold=self.categorical_threshold)
