@@ -117,13 +117,9 @@ class Flows:
         except Exception as exc:
             logger.error(f"Loading the json file failed. The error is {exc}")
 
-        # First thing first: tell the user how to read the data
-        print(term.bold(term.magenta("Please use the following function to read the data")))
-        print(term.green_on_black("dataframe_dict, columns_set = flow.load_data(path: str, files_list: list)"))
-        print(term.bold(term.magenta("For example: ") + term.green_on_black("path = './data'")))
-        print(term.bold(term.magenta("For example: ") + term.green_on_black("files_list = ['train.csv','test.csv']")))
-        print(term.bold(term.magenta("The output is a dictionary that contains dataframes e.g.  ")))
-        print(term.blue("dataframe_dict, columns_set = {'train': train_dataframe,'test': test_dataframe}"))
+        # First thing first: tell the user how to read the data and explore the features
+        FlowInstructions.read_data()
+        FlowInstructions.explore_data()
 
     def guidance(self, step_ext: object):
         """ YAML evaluator

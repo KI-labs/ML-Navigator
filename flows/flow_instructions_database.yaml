@@ -1,67 +1,39 @@
-
 ---
 0:
-  -
-    function: "Read data"
+  - function: "Read data"
     guide:
       - "FlowInstructions.read_data()"
 1:
-  -
-    function: "Encode categorical features"
+  - function: "Encode categorical features"
     guide:
       - "FlowInstructions.encode_categorical_features()"
 2:
-  -
-    function: "Scale numeric features"
+  - function: "Scale numeric features"
     guide:
       - "FlowInstructions.scale_numeric_features()"
 3:
-  -
-    function: "Train a model"
+  - function: "Train a model"
     guide:
+      - "FlowInstructions.explore_data()"
       - "FlowInstructions.train_a_model()"
 4:
-  -
-    function: "One-hot encoding"
+  - function: "One-hot encoding"
     guide:
-      - 'print(term.bold(term.magenta("You have categorical features. Apply one-hot encoding to the categorical features
-          by applying the following function:\n") + term.green_on_black("dataframe_dict, columns_set = flow.features_encoding(
-          "one-hot", dataframe_dict: dict, reference: str, ignore_columns: list, class_number_range=[3, 50]")))'
-      - 'print(term.bold(term.magenta("Since one-hot encoding can produce a lot of features, class_number_range will
-          limit the encoding process only for features which have between 3 and 49 unique values.")))'
-      - 'print(term.bold(term.magenta("If you are solving a classification problem, you should exclude the target from
-          the one-hot encoding process by defining the ingore_columns\n")+ term.green_on_black("ingore_columns = [<your
-          target/label>]\n") + term.magenta("You can add more columns to the ignore_columns list to ignore")))'
+      - 'FlowInstructions.one_hot_encoding()'
 5:
-  -
-    function: "Flatten JSON data"
+  - function: "Flatten JSON data"
     guide:
-      - 'print(term.bold(term.magenta(
-          "You have JSON nested data inside the dataframe columns. "
-          "Flatten the nested JSON data by applying the following function:\n") +
-          term.green_on_black(
-          "dataframe_dict, columns_set= flow.flatten_json_data(dataframe_dict)")))'
+      - 'FlowInstructions.flatten_JSON_data()'
 6:
-  -
-    function: "Drop high corrected columns but keep one"
+  - function: "Drop high corrected columns but keep one"
     guide:
-      - 'print(term.bold(term.magenta(
-          "If some features are highly correlated, they do not provide more information about the target prediction. "
-          "It is a good idea to drop such features but keep one:\n") +
-          term.green_on_black(
-          "coming soon!")))'
+      - 'FlowInstructions.drop_high_corrected_columns_but_keep_one()'
 7:
-  -
-    function: "Delete features with constant values"
+  - function: "Delete features with constant values"
     guide:
-      - 'print(term.bold(term.magenta(
-          "If some features have in all rows the same value, they have no influence on the target prediction. "
-          "It is a good idea to delete such features:\n") +
-          term.green_on_black(
-          "coming soon!")))'
+      - 'FlowInstructions.delete_features_with_constant_values()'
 
 1000:
-  -
-    function: "Finish"
+  - function: "Finish"
     guide:
       - 'print("This is the end of the flow")'
