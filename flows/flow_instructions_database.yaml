@@ -12,7 +12,7 @@
       - 'print(term.bold(term.magenta("For example: ") + term.green_on_black("files_list = [''train.csv'',''test
       .csv'']")))'
       - 'print(term.bold(term.magenta("The output is a dictionary that contains dataframes e.g.  ")))'
-      - 'print(term.blue("dataframe_dict = {''train'': train_dataframe,''test'': test_dataframe}"))'
+      - 'print(term.blue("dataframe_dict, columns_set = {''train'': train_dataframe,''test'': test_dataframe}"))'
 1:
   -
     function: "Encode categorical features"
@@ -68,13 +68,13 @@
     function: "One-hot encoding"
     guide:
       - 'print(term.bold(term.magenta("You have categorical features. Apply one-hot encoding to the categorical features
-          by applying the following function:\n") + term.green_on_black("dataframe_dict, columns_set = flow.one_hot_encoding
-          (dataframe_dict: dict, ignore_columns: list, class_number_range=[3, 50]")))'
+          by applying the following function:\n") + term.green_on_black("dataframe_dict, columns_set = flow.features_encoding(
+          "one-hot", dataframe_dict: dict, reference: str, ignore_columns: list, class_number_range=[3, 50]")))'
       - 'print(term.bold(term.magenta("Since one-hot encoding can produce a lot of features, class_number_range will
           limit the encoding process only for features which have between 3 and 49 unique values.")))'
       - 'print(term.bold(term.magenta("If you are solving a classification problem, you should exclude the target from
           the one-hot encoding process by defining the ingore_columns\n")+ term.green_on_black("ingore_columns = [<your
-          target/label>]\n") + term.magenta("You can add more columns to the ingore_columns list to ignore")))'
+          target/label>]\n") + term.magenta("You can add more columns to the ignore_columns list to ignore")))'
 5:
   -
     function: "Flatten JSON data"
@@ -86,7 +86,7 @@
           "dataframe_dict, columns_set= flow.flatten_json_data(dataframe_dict)")))'
 6:
   -
-    function: "Drop high correlcted columns but keep one"
+    function: "Drop high corrected columns but keep one"
     guide:
       - 'print(term.bold(term.magenta(
           "If some features are highly correlated, they do not provide more information about the target prediction. "

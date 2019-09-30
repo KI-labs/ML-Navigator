@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 import pandas as pd
+import category_encoders as ce
 from sklearn.preprocessing import OneHotEncoder
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
@@ -22,7 +23,7 @@ def valid_features_detector(dataframe: dict, categorical_features: list,
                             ignore_columns: list) -> list:
     """ Feature validator
 
-    The functions checks if the one-hot encoding should be applied to the given features.
+    The functions checks if the one-hot encoding method should be applied to the given features.
 
     :param dict dataframe: A pandas dataframe which contain the dataset
     :param list categorical_features: A list of string that contains the name of the columns or features that contain
@@ -31,24 +32,30 @@ def valid_features_detector(dataframe: dict, categorical_features: list,
     :param list ignore_columns: list of strings which are the columns names. One-hot encoding will not be applied to
             those columns.
     :return:
-            valid_features: A list of the features which one-hot encoding will be applied to.
+            valid_features: A list of the features which the encoding will be applied to.
     :rtype: list
     """
 
-    valid_features = [x for x in categorical_features if x not in ignore_columns]
-    valid_features = [x for x in valid_features if len(dataframe[x].value_counts()) in range(class_number_range[0],
-                                                                                             class_number_range[1])]
+    valid_features = [x for x in categorical_features if len(dataframe[x].value_counts()) in range(
+        class_number_range[0], class_number_range[1])]
     return valid_features
 
 
-def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_features: list,
-                             class_number_range: list,
-                             ignore_columns: list) -> dict:
+def encoding_features(encoding_type: str,
+                      dataframes_dict: dict,
+                      reference: str,
+                      categorical_features: list,
+                      ignore_columns: list,
+                      class_number_range: list = [0, 50],
+                      target_name: str = None) -> dict:
     """ One-hot encoder
 
     The function applies one-hot encoding to the categorical features using the Scikit Learn framework implementation.
 
-    :param dict dataframes_dict: A dictionary that contains the dataframes before applying one-hot encoding e.g.
+    :param str encoding_type: The type of the encoding method that will be applied. For example: one-hot, target \n
+            For more information please check the following reference:\n
+            https://contrib.scikit-learn.org/categorical-encoding/index.html
+    :param dict dataframes_dict: A dictionary that contains the dataframes before applying the encoding e.g.
             dataframes_dict={ 'train': train_dataframe, 'test': 'test_dataframe'}
     :param str reference: The name of the dataframe that will be considered when validating the type of the data
     :param list categorical_features: A list of string that contains the name of the columns or features that contain
@@ -56,38 +63,55 @@ def one_hot_encoding_sklearn(dataframes_dict: dict, reference: str, categorical_
     :param list class_number_range: A list that contains two integers which refer ot the range of the minimum and the
             maximum number of the labels/classes/ categories. If a number of the categories of the feature is not in
             that defined range, one-hot encoding will be not applied to that feature.
-    :param list ignore_columns: list of strings which are the columns names. One-hot encoding will not be applied to
+            It can be ignored if the encoding type is not one-hot.
+    :param list ignore_columns: list of strings which are the columns names. The encoding will not be applied to
             those columns.
+    :param str target_name: The name of the column that contains the labels that should be predicted by the model.
+                            If the encoding method doesn't require that target, it can be ignored.
+
     :return:
-            dataframes_dict_one_hot: A dictionary that contains the dataframes after applying one-hot encoding e.g.
-            dataframes_dict_one_hot={ 'train': train_dataframe, 'test': 'test_dataframe'}
+            dataframes_dict_encoded: A dictionary that contains the dataframes after applying feature encoding e.g.
+            dataframes_dict_encoded={ 'train': train_dataframe, 'test': 'test_dataframe'}
 
     :rtype: dict
     """
 
-    dataframes_dict_one_hot = {}
+    dataframes_dict_encoded = {}
 
-    considered_features = valid_features_detector(dataframes_dict[reference],
-                                                  categorical_features,
-                                                  class_number_range,
-                                                  ignore_columns)
+    considered_features = [x for x in categorical_features if x not in ignore_columns]
 
-    logging.debug(f"considered_features = {considered_features}")
+    encoder = None
 
-    one_hot_encoder = OneHotEncoder(sparse=False, handle_unknown="ignore").fit(
-        np.array(dataframes_dict[reference][considered_features]))
+    if encoding_type == "one-hot":
+        considered_features = valid_features_detector(dataframes_dict[reference],
+                                                      categorical_features,
+                                                      class_number_range,
+                                                      ignore_columns)
+
+        logging.debug(f"considered_features = {considered_features}")
+
+        encoder = OneHotEncoder(sparse=False, handle_unknown="ignore").fit(
+            np.array(dataframes_dict[reference][considered_features]))
+
+    if encoding_type == "target":
+        if target_name is None:
+            raise ValueError("Please define the target_name. It is the label that should be predicted by the model")
+
+        encoder = ce.target_encoder.TargetEncoder().fit(
+            np.array(dataframes_dict[reference][considered_features]),
+            dataframes_dict[reference][target_name])
 
     for key_i, dataframe in dataframes_dict.items():
-        one_hot_encoded_data = pd.DataFrame(one_hot_encoder.transform(np.array(dataframe[considered_features])))
-        columns = [f"col_one_hot_{x}" for x in range(one_hot_encoded_data.shape[1])]
+        encoded_data = pd.DataFrame(encoder.transform(np.array(dataframe[considered_features])))
+        columns = [f"col_{encoding_type}_encoding_{x}" for x in range(encoded_data.shape[1])]
 
-        logging.debug(f"the number of the one-hot encoded data columns is {len(columns)}")
+        logging.debug(f"the number of the {encoding_type} encoded data columns is {len(columns)}")
 
-        one_hot_encoded_data.columns = columns
+        encoded_data.columns = columns
 
         # Encoded features will be dropped.
         dataframe = dataframe.drop(considered_features, axis=1)
 
-        dataframes_dict_one_hot[key_i] = pd.concat([dataframe, one_hot_encoded_data], axis=1, sort=False)
+        dataframes_dict_encoded[key_i] = pd.concat([dataframe, encoded_data], axis=1, sort=False)
 
-    return dataframes_dict_one_hot
+    return dataframes_dict_encoded

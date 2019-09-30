@@ -17,7 +17,7 @@ from typing import Union
 import yaml
 from blessings import Terminal
 
-from feature_engineering.feature_generator import one_hot_encoding_sklearn
+from feature_engineering.feature_generator import encoding_features
 from flows.utils import unify_dataframes
 from prediction.model_predictor import model_prediction
 from preprocessing.data_clean import drop_corr_columns, drop_const_columns
@@ -41,8 +41,6 @@ logging.basicConfig(
     level=logging.DEBUG,
     format=formatting,
 )
-
-warnings.filterwarnings('ignore')
 
 # For colorful and beautiful formatted print()
 term = Terminal()
@@ -120,11 +118,11 @@ class Flows:
 
         # First thing first: tell the user how to read the data
         print(term.bold(term.magenta("Please use the following function to read the data")))
-        print(term.green_on_black("dataframe_dict = flow.load_data(path: str, files_list: list)"))
+        print(term.green_on_black("dataframe_dict, columns_set = flow.load_data(path: str, files_list: list)"))
         print(term.bold(term.magenta("For example: ") + term.green_on_black("path = './data'")))
         print(term.bold(term.magenta("For example: ") + term.green_on_black("files_list = ['train.csv','test.csv']")))
         print(term.bold(term.magenta("The output is a dictionary that contains dataframes e.g.  ")))
-        print(term.blue("dataframe_dict = {'train': train_dataframe,'test': test_dataframe}"))
+        print(term.blue("dataframe_dict, columns_set = {'train': train_dataframe,'test': test_dataframe}"))
 
     def guidance(self, step_ext: object):
         """ YAML evaluator
@@ -261,40 +259,50 @@ class Flows:
 
         return dataframes_dict_scaled, self.columns_set
 
-    def one_hot_encoding(self, dataframe_dict: dict, reference: str,
-                         ignore_columns: list, class_number_range=[3, 50]):
-        """ One-hot encoder
+    def features_encoding(self, encoding_type: str, dataframe_dict: dict, reference: str,
+                          ignore_columns: list, class_number_range=[3, 50], target_name: str = None):
+        """ The encoder
 
-        This function encodes categorical features using the one-hot encoding method
+        This function encodes the categorical features using different encoding methods
         It assumes that the user encoded the categorical features with string values
         by replacing the those string values by integers
 
-        :param dict dataframe_dict: A dictionary that contains Pandas dataframes before one-hot encoding features e.g.
+        :param str encoding_type: The type of the encoding method that will be applied. For example: one-hot, target \n
+                    For more information please check the following reference:\n
+                    https://contrib.scikit-learn.org/categorical-encoding/index.html
+        :param dict dataframe_dict: A dictionary that contains Pandas dataframes before the encoding features e.g.
                 dataframes_dict={"train": train_dataframe,
                 "test": test_dataframe}.
         :param str reference: It is the key ind the dataframes dictionary that points to the dataframe which its
                 inputs are taken as a reference to encode the data of other dataframes e.g. "train".
         :param list ignore_columns: It is a list of strings that contains the name of the columns which should be
-                ignored when applying the one-hot encoding.
+                ignored when applying the encoding method.
         :param list class_number_range: It is a list of two elements which define the minimum the and maximum number of
                 the classes (unique value) that a feature should contain in order to apply the one-hot encoding to
                 this feature.
+        :param str target_name: The name of the column that contains the labels that should be predicted by the model.
+                            If the encoding method doesn't require that target, it can be ignored.
         :return:
-                - dataframe_dict_one_hot -  A dictionary that contains Pandas dataframes after one-hot encoding features e.g. dataframe_dict_one_hot={"train": train_dataframe, "test": test_dataframe}.
+                - dataframe_dict_encoded -  A dictionary that contains Pandas dataframes after the encoding features e.g. dataframe_dict_encoded={"train": train_dataframe, "test": test_dataframe}.
                 - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
         """
 
         function_id = "3"
 
         categorical_feature = self.columns_set[reference]["categorical_integer"]
-        dataframe_dict_one_hot = one_hot_encoding_sklearn(dataframe_dict, reference, categorical_feature,
-                                                          class_number_range, ignore_columns)
+        dataframe_dict_encoded = encoding_features(encoding_type,
+                                                   dataframe_dict,
+                                                   reference,
+                                                   categorical_feature,
+                                                   ignore_columns,
+                                                   class_number_range,
+                                                   target_name)
 
-        self.columns_set = detect_columns_types_summary(dataframe_dict_one_hot, threshold=self.categorical_threshold)
+        self.columns_set = detect_columns_types_summary(dataframe_dict_encoded, threshold=self.categorical_threshold)
 
         self.guidance(self.flow_steps[function_id])
 
-        return dataframe_dict_one_hot, self.columns_set
+        return dataframe_dict_encoded, self.columns_set
 
     def training(self, parameters: dict):
         """ Ridge linear model
