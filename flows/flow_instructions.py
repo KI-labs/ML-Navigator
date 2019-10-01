@@ -66,7 +66,7 @@ class FlowInstructions():
                                      " unique values.")))
         print(term.bold(term.magenta("If you are solving a classification problem, you should exclude the target from "
                                      "the one - hot encoding process by defining the ignore_columns\n ")
-                        + term.green_on_black(" ingore_columns = [ < your target / label >]\n ")
+                        + term.green_on_black(" ignore_columns = [ < your target / label >]\n ")
                         + term.magenta("You can add more columns to the ignore_columns list to ignore")))
 
     @staticmethod
@@ -83,7 +83,7 @@ class FlowInstructions():
             "It is a good idea to drop such features but keep one:\n") + term.green_on_black(
             "dataframe_dict, columns_set = flow.drop_correlated_columns(dataframe_dict: dict, ignore_columns: list)") +
                         term.magenta("An example of the ignore_columns list: \n")
-                        + term.green_on_black(" ingore_columns = [target]\n ")))
+                        + term.green_on_black(" ignore_columns = [target]\n")))
 
     @staticmethod
     def delete_features_with_constant_values():
@@ -93,7 +93,7 @@ class FlowInstructions():
             "dataframe_dict, columns_set = flow.drop_columns_constant_values("
             "dataframe_dict: dict, ignore_columns: list)") +
                         term.magenta("An example of the ignore_columns list: \n")
-                        + term.green_on_black(" ingore_columns = [target]\n ")))
+                        + term.green_on_black(" ignore_columns = [target]\n")))
 
     @staticmethod
     def explore_data():
@@ -107,3 +107,11 @@ class FlowInstructions():
         print(term.bold(term.magenta("For example: ") + term.green_on_black(
             "flow.comparing_statistics(dataframe_dict)")))
         print("\n")
+
+    @staticmethod
+    def target_based_categorical_feature_encoding():
+        print(term.bold(term.magenta("Apply target-based encoding to the categorical features by applying the"
+                                     " following function:\n")))
+        print(term.bold(term.green_on_black(
+            'dataframe_dict, columns_set = flow.features_encoding("target", dataframe_dict: dict, reference: str,'
+            ' ignore_columns: list, target: str)')))

@@ -284,7 +284,7 @@ class Flows:
                 - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
         """
 
-        function_id = "3"
+        function_id = f"3-{encoding_type}"
 
         categorical_feature = self.columns_set[reference]["categorical_integer"]
         dataframe_dict_encoded = encoding_features(encoding_type,
