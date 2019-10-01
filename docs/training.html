@@ -318,7 +318,7 @@ model configurations and training configurations.</td>
 </div>
 <span class="target" id="module-training.training"></span><dl class="function">
 <dt id="training.training.train_with_n_split">
-<code class="descclassname">training.training.</code><code class="descname">train_with_n_split</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>test_split_ratios: list</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type: str</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_n_split" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.training.</code><code class="descname">train_with_n_split</code><span class="sig-paren">(</span><em>test_split_ratios: list</em>, <em>stratify: bool</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type: str</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_n_split" title="Permalink to this definition">¶</a></dt>
 <dd><p>n split training</p>
 <p>This function trains a model to fit the data using n split cross-validation e.g train, test or train, valid and test</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -326,11 +326,11 @@ model configurations and training configurations.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the model will be saved.</li>
 <li><strong>test_split_ratios</strong> (<em>list</em>) – A list that contains the test split ratio e.g. [0.2] for testing size/training size
 or [0.2, 0.2] for validation size/training size and testing size/(training size - validation size)</li>
+<li><strong>stratify</strong> (<em>bool</em>) – If set to True the ratios of the labels is kept the same in the splitted data sets.</li>
 <li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
-need to train the model.</li>
+needs to train the model.</li>
 <li><strong>train_array</strong> (<em>np.array</em>) – The values of the features that will be split to two sub-datasets based
 on the split value to multiple datasets.</li>
 <li><strong>target</strong> (<em>np.array</em>) – The values of the target that will be split to two sub-datasets based
@@ -339,6 +339,7 @@ on the split value to multiple datasets.</li>
 locally after training. In this case there is only one model.</li>
 <li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently there are two values:
 Ridge linear regression and lightgbm.</li>
+<li><strong>required_metrics</strong> (<em>list</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -355,7 +356,7 @@ Ridge linear regression and lightgbm.</li>
 
 <dl class="function">
 <dt id="training.training.train_with_kfold_cross_validation">
-<code class="descclassname">training.training.</code><code class="descname">train_with_kfold_cross_validation</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>split: dict</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_kfold_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.training.</code><code class="descname">train_with_kfold_cross_validation</code><span class="sig-paren">(</span><em>split: dict</em>, <em>stratify: bool</em>, <em>hyperparameters: dict</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>models_nr: list</em>, <em>model_type</em>, <em>required_metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.training.train_with_kfold_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-Fold cross-validation training</p>
 <p>This function trains a model to fit the data using K-Fold cross-validation.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -363,17 +364,17 @@ Ridge linear regression and lightgbm.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
 <li><strong>split</strong> (<em>dict</em>) – A dictionary that contains information about the K-Fold variables</li>
+<li><strong>stratify</strong> (<em>bool</em>) – If set to True the ratios of the labels is kept the same in the splitted data sets.</li>
 <li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
-need to train the model.</li>
+needs to train the model.</li>
 <li><strong>train_array</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model to
 predict the target</li>
 <li><strong>target</strong> (<em>np.array</em>) – The values of the target that will be split into K-Folds and used to train the model.</li>
 <li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
 locally after training. In this case there are n_fold models.</li>
-<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently there are two values:
-Ridge linear regression and lightgbm.</li>
+<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data.</li>
+<li><strong>required_metrics</strong> (<em>list</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -511,23 +512,6 @@ model configurations and training configurations. Check the example below.</p>
 <div class="toctree-wrapper compound">
 </div>
 <span class="target" id="module-training.optimizer"></span><dl class="function">
-<dt id="training.optimizer.int_2_float_alpha">
-<code class="descclassname">training.optimizer.</code><code class="descname">int_2_float_alpha</code><span class="sig-paren">(</span><em>alpha: int</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#training.optimizer.int_2_float_alpha" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alpha search step definer</p>
-<p>This function defines the searching step when optimizing alpha using a linear search.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alpha</strong> – A hyperparameter which used by the ridge linear regression to avoid over-fitting</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value of alpha after dividing it to a certain number e.g. 10 to define the searching step.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="training.optimizer.training_for_optimizing">
 <code class="descclassname">training.optimizer.</code><code class="descname">training_for_optimizing</code><span class="sig-paren">(</span><em>alpha_i: float</em>, <em>x_train: numpy.array</em>, <em>y_train: numpy.array</em>, <em>x_test: numpy.array</em>, <em>y_test: numpy.array</em>, <em>help_text: str</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#training.optimizer.training_for_optimizing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trainer</p>
@@ -550,37 +534,6 @@ coefficient of determination R2</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li>r2_linear - Coefficient of determination for a given alpha and testing dataset</li>
-</ul>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="training.optimizer.choosing_alpha">
-<code class="descclassname">training.optimizer.</code><code class="descname">choosing_alpha</code><span class="sig-paren">(</span><em>r2_linear: float</em>, <em>r2_linear_max: float</em>, <em>alpha_i: float</em>, <em>best_alpha: float</em><span class="sig-paren">)</span><a class="headerlink" href="#training.optimizer.choosing_alpha" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alpha evaluator</p>
-<p>This function check if the current value of alpha gives higher value of coefficient of determination than the
-current value. It updates the values of the best found alpha and r2 if needed.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>r2_linear</strong> (<em>float</em>) – </li>
-<li><strong>r2_linear_max</strong> (<em>float</em>) – The current maximum coefficient of determination assiosated with the current
-best_alpha value and testing dataset</li>
-<li><strong>alpha_i</strong> (<em>float</em>) – The current value of the hyperparameter which used by the ridge linear regression to avoid
-over-fitting.</li>
-<li><strong>best_alpha</strong> (<em>float</em>) – </li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li>r2_linear_max - The updated maximum coefficient of determination for a given best_alpha and testing dataset</li>
-<li>best_alpha - The updated alpha value that maximize the r2_linear_max for a given testing dataset</li>
 </ul>
 </p>
 </td>
@@ -618,7 +571,7 @@ coefficient of determination R2</li>
 
 <dl class="function">
 <dt id="training.optimizer.get_best_alpha_kfold">
-<code class="descclassname">training.optimizer.</code><code class="descname">get_best_alpha_kfold</code><span class="sig-paren">(</span><em>kfold</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em>, <em>n_fold: int</em><span class="sig-paren">)</span><a class="headerlink" href="#training.optimizer.get_best_alpha_kfold" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.optimizer.</code><code class="descname">get_best_alpha_kfold</code><span class="sig-paren">(</span><em>kfold</em>, <em>train_array: numpy.array</em>, <em>target: numpy.array</em><span class="sig-paren">)</span><a class="headerlink" href="#training.optimizer.get_best_alpha_kfold" title="Permalink to this definition">¶</a></dt>
 <dd><p>alpha optimizer for K-Fold cross validation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -628,7 +581,6 @@ coefficient of determination R2</li>
 <li><strong>kfold</strong> – </li>
 <li><strong>train_array</strong> – The values of the features which are used to train the model to predict the target target</li>
 <li><strong>target</strong> – The target values which are used to train the model.</li>
-<li><strong>n_fold</strong> – An integer that refers to the number of folds which will be used for cross-validation.</li>
 </ul>
 </td>
 </tr>
@@ -680,7 +632,7 @@ coefficient of determination R2</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>validation_list</strong> (<em>list</em>) – The list that contains the data the should be used to train and validate the model.</li>
 <li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
-need to train the model.</li>
+needs to train the model.</li>
 <li><strong>num_round</strong> (<em>int</em>) – The number of rounds for boosting</li>
 </ul>
 </td>
@@ -760,7 +712,7 @@ predict the target</li>
 <li><strong>train</strong> (<em>list</em>) – A list of integers that define the training dataset</li>
 <li><strong>test</strong> (<em>list</em>) – A list of integers that define the testing dataset</li>
 <li><strong>hyperparameters</strong> (<em>dict</em>) – A dictionary that contains the hyperparameters which the selected training method
-need to train the model.</li>
+needs to train the model.</li>
 <li><strong>num_round</strong> (<em>int</em>) – The number of rounds for boosting</li>
 </ul>
 </td>
@@ -787,7 +739,7 @@ need to train the model.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hyperparameters</strong> – A dictionary that contains the hyperparameters which the selected training method
-need to train the model.</td>
+needs to train the model.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
 <li>num_round: The number of rounds for boosting</li>
@@ -799,27 +751,17 @@ need to train the model.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="training.xgboost_train.evaluate_xgboost_model">
-<code class="descclassname">training.xgboost_train.</code><code class="descname">evaluate_xgboost_model</code><span class="sig-paren">(</span><em>data: dict</em>, <em>problem_to_solve: str</em>, <em>models_nr: list</em>, <em>save_models_dir: str</em>, <em>model_type: str</em>, <em>parameters: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.evaluate_xgboost_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>XGboost model validator</p>
-<p>The functions transforms the data to xgboost-compatible format and applies the model evaluation.</p>
+<dt id="training.xgboost_train.xgboost_data_preparation_for_evaluation">
+<code class="descclassname">training.xgboost_train.</code><code class="descname">xgboost_data_preparation_for_evaluation</code><span class="sig-paren">(</span><em>data: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#training.xgboost_train.xgboost_data_preparation_for_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Date preparation for evaluation</p>
+<p>Prepare the data in a form that could be used for model evaluation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
-<li><strong>problem_to_solve</strong> (<em>str</em>) – string that defines the problem to solve: regression or classification.</li>
-<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
-locally after training.</li>
-<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
-<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. In this function, it is xgboost</li>
-<li><strong>parameters</strong> (<em>dict</em>) – A dictionary that contains information about the datasets, model type, model configurations and training configurations.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -827,55 +769,19 @@ locally after training.</li>
 
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-training.classification_model_evaluator"></span><dl class="function">
-<dt id="training.classification_model_evaluator.classification_evaluate_model">
-<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_evaluate_model</code><span class="sig-paren">(</span><em>model, x_values: numpy.array, y_values: numpy.array, key_str: str, help_print: bool = True, required_metrics: list = ['accuracy_score', 'roc_auc_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_evaluate_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Model evaluator</p>
-<p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
+<span class="target" id="module-training.model_evaluator"></span><dl class="function">
+<dt id="training.model_evaluator.load_all_models">
+<code class="descclassname">training.model_evaluator.</code><code class="descname">load_all_models</code><span class="sig-paren">(</span><em>save_models_dir: str</em>, <em>model_type: str</em>, <em>model_i: int</em><span class="sig-paren">)</span><a class="headerlink" href="#training.model_evaluator.load_all_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model loader</p>
+<p>Load saved models from a given type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
-<li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
-<li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
-<li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
-<li><strong>key_str</strong> (<em>str</em>) – Help string that tells the user which dataset is used for the evaluation of the model
-performance</li>
-<li><strong>help_print</strong> (<em>bool</em>) – If True, information about the model’s performance is printed to the console.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><div class="line-block">
-<div class="line">y_prediction: The predicted target using the trained model</div>
-<div class="line">accuracy: Accuracy classification score.</div>
-<div class="line">roc_auc:Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores</div>
-</div>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="training.classification_model_evaluator.classification_model_evaluation">
-<code class="descclassname">training.classification_model_evaluator.</code><code class="descname">classification_model_evaluation</code><span class="sig-paren">(</span><em>data: dict, models_nr: list, save_models_dir: str, model_type: str, required_metrics: list = ['accuracy_score', 'roc_auc_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.classification_model_evaluator.classification_model_evaluation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Models set evaluator</p>
-<p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
-models by applying the function <cite>evaluate_model</cite></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>required_metrics</strong> – The list of the classification metrics that the user wants to check</li>
-<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
-<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
-locally after training.</li>
-<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
-<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data</li>
+<li><strong>save_models_dir</strong> (<em>str</em>) – directory where the model is saved</li>
+<li><strong>model_type</strong> (<em>str</em>) – <cite>regression</cite> or <cite>classification</cite></li>
+<li><strong>model_i</strong> (<em>int</em>) – index used to distinguish models of the same type trained on different datasets.</li>
 </ul>
 </td>
 </tr>
@@ -886,9 +792,9 @@ locally after training.</li>
 </table>
 </dd></dl>
 
-<span class="target" id="module-training.regression_model_evaluator"></span><dl class="function">
-<dt id="training.regression_model_evaluator.regression_evaluate_model">
-<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_evaluate_model</code><span class="sig-paren">(</span><em>model, x_values: numpy.array, y_values: numpy.array, key_str: str, help_print: bool = True, required_metrics: list = ['mean_squared_error', 'r2_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dl class="function">
+<dt id="training.model_evaluator.evaluate_model">
+<code class="descclassname">training.model_evaluator.</code><code class="descname">evaluate_model</code><span class="sig-paren">(</span><em>model</em>, <em>xs: list</em>, <em>ys: list</em>, <em>labels: list</em>, <em>metrics: list</em><span class="sig-paren">)</span><a class="headerlink" href="#training.model_evaluator.evaluate_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model evaluator</p>
 <p>This function shows the value of the matrices R2 and MSE for different datasets when evaluating the trained model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -896,50 +802,15 @@ locally after training.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
 <li><strong>model</strong> – An object created by the training package e.g. Scikit Learn.</li>
-<li><strong>x_values</strong> (<em>np.array</em>) – The values of the features which are used to predict the y_values .</li>
-<li><strong>y_values</strong> (<em>np.array</em>) – The target that should be predicted.</li>
-<li><strong>key_str</strong> (<em>str</em>) – Help string that tells the user which dataset is used for the evaluation of the model
-performance</li>
-<li><strong>help_print</strong> (<em>bool</em>) – If True, information about the model’s performance is printed to the console.</li>
+<li><strong>xs</strong> (<em>list</em>) – Every element is a np.array of the features that are used to predict the target variable.</li>
+<li><strong>ys</strong> (<em>list</em>) – Every element is a np.array of the target variable.</li>
+<li><strong>labels</strong> (<em>list</em>) – Every element is a string that is used to label every (x,y) pair and refers to their origin.</li>
+<li><strong>metrics</strong> (<em>list</em>) – list of metrics used to evaluate model.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><div class="line-block">
-<div class="line">y_prediction: The predicted target using the trained model</div>
-<div class="line">mse: Mean Squared Error value</div>
-<div class="line">r2: Coefficient of Determination value</div>
-</div>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="training.regression_model_evaluator.regression_model_evaluation">
-<code class="descclassname">training.regression_model_evaluator.</code><code class="descname">regression_model_evaluation</code><span class="sig-paren">(</span><em>data: dict, models_nr: list, save_models_dir: str, model_type: str, required_metrics: list = ['mean_squared_error', 'r2_score']</em><span class="sig-paren">)</span><a class="headerlink" href="#training.regression_model_evaluator.regression_model_evaluation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Models set evaluator</p>
-<p>The function shows the value of the matrices R2 and MSE for different datasets when evaluating a set of the trained
-models by applying the function <cite>evaluate_model</cite></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>required_metrics</strong> (<em>list</em>) – The list of the classification metrics that the user wants to check</li>
-<li><strong>data</strong> (<em>dict</em>) – A dictionary that contains pandas dataframes as datasets.</li>
-<li><strong>models_nr</strong> (<em>list</em>) – A list of indexes that will be used to point to the trained models which will be saved
-locally after training.</li>
-<li><strong>save_models_dir</strong> (<em>str</em>) – The path where the models will be saved.</li>
-<li><strong>model_type</strong> (<em>str</em>) – The type of model that will be used to fit the data. Currently, there are two values:
-Ridge linear regression and lightgbm.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">metrics_summary (dict): all metrics from <cite>metrics</cite> applied to all (y, y_pred=model(x)) paris.</p>
 </td>
 </tr>
 </tbody>
@@ -1030,7 +901,7 @@ model configurations and training configurations. Check the example below.</td>
 
 <dl class="function">
 <dt id="training.utils.split_dataset">
-<code class="descclassname">training.utils.</code><code class="descname">split_dataset</code><span class="sig-paren">(</span><em>features: numpy.array, target: numpy.array, tests_split_ratios: Union[list, set]</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#training.utils.split_dataset" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">training.utils.</code><code class="descname">split_dataset</code><span class="sig-paren">(</span><em>features: numpy.array, target: numpy.array, tests_split_ratios: Union[list, set], stratify: bool = False</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#training.utils.split_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dataset splitter</p>
 <p>This function split a dataset to multiple datasets such train, valid and test.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1043,6 +914,7 @@ model configurations and training configurations. Check the example below.</td>
 <li><strong>set</strong><strong>] </strong><strong>tests_split_ratios</strong> (<em>Union</em><em>[</em><em>list</em><em>,</em>) – A list or set of floats that represent the ratio of the size of the
 test dataset ot the train dataset. The values should be in the range ]0, 1[ e.g.
 tests_split_ratios = [0.2, 0.2]</li>
+<li><strong>stratify</strong> (<em>bool</em>) – If set to True the ratios of the labels is kept the same in the splitted data sets.</li>
 </ul>
 </td>
 </tr>

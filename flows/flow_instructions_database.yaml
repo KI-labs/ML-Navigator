@@ -32,6 +32,10 @@
   - function: "Delete features with constant values"
     guide:
       - 'FlowInstructions.delete_features_with_constant_values()'
+8:
+  - function: "Target-based categorical feature encoding"
+    guide:
+      - 'FlowInstructions.target_based_categorical_feature_encoding()'
 
 1000:
   - function: "Finish"

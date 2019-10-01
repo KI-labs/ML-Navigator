@@ -22,9 +22,7 @@ Training
    :maxdepth: 2
    :caption: Hyperparameters Optimizer:
 .. automodule:: training.optimizer
-.. autofunction:: int_2_float_alpha
 .. autofunction:: training_for_optimizing
-.. autofunction:: choosing_alpha
 .. autofunction:: get_best_alpha_split
 .. autofunction:: get_best_alpha_kfold
 
@@ -38,17 +36,15 @@ Training
 .. autofunction:: training_xgboost_n_split
 .. autofunction:: training_xgboost_kfold
 .. autofunction:: get_num_round
-.. autofunction:: evaluate_xgboost_model
+.. autofunction:: xgboost_data_preparation_for_evaluation
 
 .. toctree::
    :maxdepth: 2
    :caption: Model Evaluator:
-.. automodule:: training.classification_model_evaluator
-.. autofunction:: classification_evaluate_model
-.. autofunction:: classification_model_evaluation
-.. automodule:: training.regression_model_evaluator
-.. autofunction:: regression_evaluate_model
-.. autofunction:: regression_model_evaluation
+.. automodule:: training.model_evaluator
+.. autofunction:: load_all_models
+.. autofunction:: evaluate_model
+
 
 .. toctree::
    :maxdepth: 2

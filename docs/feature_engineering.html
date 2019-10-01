@@ -178,9 +178,9 @@
 </div>
 <span class="target" id="module-feature_engineering.feature_generator"></span><dl class="function">
 <dt id="feature_engineering.feature_generator.valid_features_detector">
-<code class="descclassname">feature_engineering.feature_generator.</code><code class="descname">valid_features_detector</code><span class="sig-paren">(</span><em>dataframe: dict</em>, <em>categorical_features: list</em>, <em>class_number_range: list</em>, <em>ignore_columns: list</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#feature_engineering.feature_generator.valid_features_detector" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">feature_engineering.feature_generator.</code><code class="descname">valid_features_detector</code><span class="sig-paren">(</span><em>dataframe: dict</em>, <em>categorical_features: list</em>, <em>class_number_range: list</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#feature_engineering.feature_generator.valid_features_detector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Feature validator</p>
-<p>The functions checks if the one-hot encoding should be applied to the given features.</p>
+<p>The functions checks if the one-hot encoding method should be applied to the given features.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -189,13 +189,15 @@
 <li><strong>dataframe</strong> (<em>dict</em>) – A pandas dataframe which contain the dataset</li>
 <li><strong>categorical_features</strong> (<em>list</em>) – A list of string that contains the name of the columns or features that contain
 categorical data type.</li>
-<li><strong>class_number_range</strong> (<em>list</em>) – </li>
-<li><strong>ignore_columns</strong> (<em>list</em>) – list of strings which are the columns names. One-hot encoding will not be applied to
-those columns.</li>
+<li><strong>class_number_range</strong> (<em>list</em>) – <p>It is a list of two elements which define the minimum the and maximum number of
+the classes (unique value) that a feature should contain in order to apply the one-hot encoding</p>
+<blockquote>
+<div>to this feature.</div></blockquote>
+</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">valid_features: A list of the features which one-hot encoding will be applied to.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">valid_features: A list of the features which the encoding will be applied to.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -206,8 +208,8 @@ those columns.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="feature_engineering.feature_generator.one_hot_encoding_sklearn">
-<code class="descclassname">feature_engineering.feature_generator.</code><code class="descname">one_hot_encoding_sklearn</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>reference: str</em>, <em>categorical_features: list</em>, <em>class_number_range: list</em>, <em>ignore_columns: list</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#feature_engineering.feature_generator.one_hot_encoding_sklearn" title="Permalink to this definition">¶</a></dt>
+<dt id="feature_engineering.feature_generator.encoding_features">
+<code class="descclassname">feature_engineering.feature_generator.</code><code class="descname">encoding_features</code><span class="sig-paren">(</span><em>encoding_type: str, dataframes_dict: dict, reference: str, categorical_features: list, ignore_columns: list, class_number_range: list = [0, 50], target_name: str = None</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#feature_engineering.feature_generator.encoding_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>One-hot encoder</p>
 <p>The function applies one-hot encoding to the categorical features using the Scikit Learn framework implementation.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -215,21 +217,28 @@ those columns.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains the dataframes before applying one-hot encoding e.g.
+<li><strong>encoding_type</strong> (<em>str</em>) – <p>The type of the encoding method that will be applied. For example: one-hot, target</p>
+<p>For more information please check the following reference:</p>
+<p><a class="reference external" href="https://contrib.scikit-learn.org/categorical-encoding/index.html">https://contrib.scikit-learn.org/categorical-encoding/index.html</a></p>
+</li>
+<li><strong>dataframes_dict</strong> (<em>dict</em>) – A dictionary that contains the dataframes before applying the encoding e.g.
 dataframes_dict={ ‘train’: train_dataframe, ‘test’: ‘test_dataframe’}</li>
 <li><strong>reference</strong> (<em>str</em>) – The name of the dataframe that will be considered when validating the type of the data</li>
 <li><strong>categorical_features</strong> (<em>list</em>) – A list of string that contains the name of the columns or features that contain
 categorical data type.</li>
 <li><strong>class_number_range</strong> (<em>list</em>) – A list that contains two integers which refer ot the range of the minimum and the
 maximum number of the labels/classes/ categories. If a number of the categories of the feature is not in
-that defined range, one-hot encoding will be not applied to that feature.</li>
-<li><strong>ignore_columns</strong> (<em>list</em>) – list of strings which are the columns names. One-hot encoding will not be applied to
+that defined range, one-hot encoding will be not applied to that feature.
+It can be ignored if the encoding type is not one-hot.</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – list of strings which are the columns names. The encoding will not be applied to
 those columns.</li>
+<li><strong>target_name</strong> (<em>str</em>) – The name of the column that contains the labels that should be predicted by the model.
+If the encoding method doesn’t require that target, it can be ignored.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dataframes_dict_one_hot: A dictionary that contains the dataframes after applying one-hot encoding e.g.
-dataframes_dict_one_hot={ ‘train’: train_dataframe, ‘test’: ‘test_dataframe’}</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dataframes_dict_encoded: A dictionary that contains the dataframes after applying feature encoding e.g.
+dataframes_dict_encoded={ ‘train’: train_dataframe, ‘test’: ‘test_dataframe’}</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>

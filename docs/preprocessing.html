@@ -341,35 +341,6 @@ encoding.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="preprocessing.data_type_detector.list_2_dict">
-<code class="descclassname">preprocessing.data_type_detector.</code><code class="descname">list_2_dict</code><span class="sig-paren">(</span><em>list_set: list</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_type_detector.list_2_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>List to dictionary convector</p>
-<p>The function returns a dictionary that contains the types of data inside the columns as keys and the list of the
-names of the columns for each data type as values.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list_set</strong> (<em>list</em>) – A list of lists of strings which are the names of the columns filtered based on the type of
-the data that those columns contain</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span>  <span class="p">{</span><span class="s1">&#39;categorical_string&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;string_col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;string_col_1&#39;</span><span class="p">,</span> <span class="s1">&#39;string_col_2&#39;</span><span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;categorical_integer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;int_col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;int_col_1&#39;</span><span class="p">,</span> <span class="s1">&#39;int_col_2&#39;</span><span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;continuous&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;cont_col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;cont_col_1&#39;</span><span class="p">,</span> <span class="s1">&#39;cont_col_2],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;json&#39;</span><span class="p">:</span> <span class="p">[],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="p">[]}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="preprocessing.data_type_detector.detect_columns_types_summary">
 <code class="descclassname">preprocessing.data_type_detector.</code><code class="descname">detect_columns_types_summary</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>threshold: int = 50</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#preprocessing.data_type_detector.detect_columns_types_summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Data type summarizer</p>
@@ -392,13 +363,6 @@ data that they contain.</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="class">
-<dt id="preprocessing.data_type_detector.Categories">
-<em class="property">class </em><code class="descclassname">preprocessing.data_type_detector.</code><code class="descname">Categories</code><a class="headerlink" href="#preprocessing.data_type_detector.Categories" title="Permalink to this definition">¶</a></dt>
-<dd><p>Data types keys provider</p>
-<p>This class maps the keys that will be used to filter columns based on their data type.</p>
 </dd></dl>
 
 <div class="toctree-wrapper compound">

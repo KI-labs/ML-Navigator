@@ -84,8 +84,7 @@ def encoding_features(encoding_type: str,
     if encoding_type == "one-hot":
         considered_features = valid_features_detector(dataframes_dict[reference],
                                                       categorical_features,
-                                                      class_number_range,
-                                                      ignore_columns)
+                                                      class_number_range)
 
         logging.debug(f"considered_features = {considered_features}")
 

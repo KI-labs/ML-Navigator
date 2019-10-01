@@ -366,6 +366,48 @@ train_dataframe, “test”: test_dataframe}</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="flows.flows.Flows.features_encoding">
+<code class="descname">features_encoding</code><span class="sig-paren">(</span><em>encoding_type: str, dataframe_dict: dict, reference: str, ignore_columns: list, class_number_range=[3, 50], target_name: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.features_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encoder</p>
+<p>This function encodes the categorical features using different encoding methods
+It assumes that the user encoded the categorical features with string values
+by replacing the those string values by integers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>encoding_type</strong> (<em>str</em>) – <p>The type of the encoding method that will be applied. For example: one-hot, target</p>
+<p>For more information please check the following reference:</p>
+<p><a class="reference external" href="https://contrib.scikit-learn.org/categorical-encoding/index.html">https://contrib.scikit-learn.org/categorical-encoding/index.html</a></p>
+</li>
+<li><strong>dataframe_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes before the encoding features e.g.
+dataframes_dict={“train”: train_dataframe,
+“test”: test_dataframe}.</li>
+<li><strong>reference</strong> (<em>str</em>) – It is the key ind the dataframes dictionary that points to the dataframe which its
+inputs are taken as a reference to encode the data of other dataframes e.g. “train”.</li>
+<li><strong>ignore_columns</strong> (<em>list</em>) – It is a list of strings that contains the name of the columns which should be
+ignored when applying the encoding method.</li>
+<li><strong>class_number_range</strong> (<em>list</em>) – It is a list of two elements which define the minimum the and maximum number of
+the classes (unique value) that a feature should contain in order to apply the one-hot encoding to
+this feature.</li>
+<li><strong>target_name</strong> (<em>str</em>) – The name of the column that contains the labels that should be predicted by the model.
+If the encoding method doesn’t require that target, it can be ignored.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li>dataframe_dict_encoded -  A dictionary that contains Pandas dataframes after the encoding features e.g. dataframe_dict_encoded={“train”: train_dataframe, “test”: test_dataframe}.</li>
+<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="flows.flows.Flows.flatten_json_data">
 <code class="descname">flatten_json_data</code><span class="sig-paren">(</span><em>dataframes_dict: dict</em>, <em>_reference: Union[bool</em>, <em>str] = False</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.flatten_json_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>JSON data normalizer</p>
@@ -455,42 +497,6 @@ names of the files</li>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataframes_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">train_dataframe</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">test_dataframe</span><span class="p">}</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="flows.flows.Flows.one_hot_encoding">
-<code class="descname">one_hot_encoding</code><span class="sig-paren">(</span><em>dataframe_dict: dict, reference: str, ignore_columns: list, class_number_range=[3, 50]</em><span class="sig-paren">)</span><a class="headerlink" href="#flows.flows.Flows.one_hot_encoding" title="Permalink to this definition">¶</a></dt>
-<dd><p>One-hot encoder</p>
-<p>This function encodes categorical features using the one-hot encoding method
-It assumes that the user encoded the categorical features with string values
-by replacing the those string values by integers</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dataframe_dict</strong> (<em>dict</em>) – A dictionary that contains Pandas dataframes before one-hot encoding features e.g.
-dataframes_dict={“train”: train_dataframe,
-“test”: test_dataframe}.</li>
-<li><strong>reference</strong> (<em>str</em>) – It is the key ind the dataframes dictionary that points to the dataframe which its
-inputs are taken as a reference to encode the data of other dataframes e.g. “train”.</li>
-<li><strong>ignore_columns</strong> (<em>list</em>) – It is a list of strings that contains the name of the columns which should be
-ignored when applying the one-hot encoding.</li>
-<li><strong>class_number_range</strong> (<em>list</em>) – It is a list of two elements which define the minimum the and maximum number of
-the classes (unique value) that a feature should contain in order to apply the one-hot encoding to
-this feature.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li>dataframe_dict_one_hot -  A dictionary that contains Pandas dataframes after one-hot encoding features e.g. dataframe_dict_one_hot={“train”: train_dataframe, “test”: test_dataframe}.</li>
-<li>columns_set - A dictionary that contains the features’ names sorted in multiple lists based on the type of the data for each given dataset.</li>
-</ul>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
