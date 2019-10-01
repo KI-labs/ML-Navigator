@@ -183,6 +183,7 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
         print_counter += 1
 
     if isinstance(print_results, int) and print_results > 0:
+        print("the value is considered integer")
 
         dfs = [v[[c for c in v.columns if c in columns_list]].nunique().to_frame(name=k)
                for k, v in dataframe_dict.items()]
@@ -201,8 +202,9 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
 
         print(f"Number of unique elements per string column")
 
-        if isinstance(print_results, int) and print_results > 0:
+        if print_results > 1:
             pd.set_option('display.max_rows', print_results)
-            display(result)
+        display(result)
+        pd.set_option('display.max_rows', None)
 
     return dataframe_dict
