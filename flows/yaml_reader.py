@@ -1,5 +1,6 @@
 import yaml
 from blessings import Terminal
+from flow_instructions import FlowInstructions
 
 term = Terminal()
 

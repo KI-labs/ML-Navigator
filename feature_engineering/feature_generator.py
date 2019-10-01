@@ -19,8 +19,7 @@ logging.basicConfig(
 
 
 def valid_features_detector(dataframe: dict, categorical_features: list,
-                            class_number_range: list,
-                            ignore_columns: list) -> list:
+                            class_number_range: list) -> list:
     """ Feature validator
 
     The functions checks if the one-hot encoding method should be applied to the given features.
@@ -28,9 +27,9 @@ def valid_features_detector(dataframe: dict, categorical_features: list,
     :param dict dataframe: A pandas dataframe which contain the dataset
     :param list categorical_features: A list of string that contains the name of the columns or features that contain
             categorical data type.
-    :param list class_number_range:
-    :param list ignore_columns: list of strings which are the columns names. One-hot encoding will not be applied to
-            those columns.
+    :param list class_number_range: It is a list of two elements which define the minimum the and maximum number of
+                        the classes (unique value) that a feature should contain in order to apply the one-hot encoding
+                         to this feature.
     :return:
             valid_features: A list of the features which the encoding will be applied to.
     :rtype: list
