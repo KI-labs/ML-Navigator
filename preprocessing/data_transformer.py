@@ -133,15 +133,15 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
             dataset_dict[dataset_key].fillna(hash_missing_value)
         )
 
-    labels_nr = len(list(label_encoder.classes_))
-    if isinstance(print_results, bool) and print_results:
-        print(f"encoding the feature in the dataset {dataset_key}")
-        print(f"the number of classes in {feature_name} feature is: {labels_nr}")
-
-    elif isinstance(print_results, int):
-        if print_counter < print_results:
+        labels_nr = len(list(label_encoder.classes_))
+        if isinstance(print_results, bool) and print_results:
             print(f"encoding the feature in the dataset {dataset_key}")
             print(f"the number of classes in {feature_name} feature is: {labels_nr}")
+
+        elif isinstance(print_results, int):
+            if print_counter < print_results:
+                print(f"encoding the feature in the dataset {dataset_key}")
+                print(f"the number of classes in {feature_name} feature is: {labels_nr}")
 
     logger.info(f"Encoding categorical feature {feature_name} process is finished!")
     return dataset_dict_encoded
@@ -182,7 +182,7 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
 
         print_counter += 1
 
-    if print_results is not False:
+    if isinstance(print_results, int) and print_results > 0:
 
         dfs = [v[[c for c in v.columns if c in columns_list]].nunique().to_frame(name=k)
                for k, v in dataframe_dict.items()]
@@ -200,6 +200,9 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
         result.index.name = 'string columns'
 
         print(f"Number of unique elements per string column")
-        display(result)
+
+        if isinstance(print_results, int) and print_results > 0:
+            pd.set_option('display.max_rows', print_results)
+            display(result)
 
     return dataframe_dict

@@ -8,9 +8,7 @@ Preprocessing
 .. autoclass:: ColumnDataFormat
    :members: __init__, find_date_columns, number_or_string, json_detector, categorical_or_numeric
 .. autofunction:: detect_column_types
-.. autofunction:: list_2_dict
 .. autofunction:: detect_columns_types_summary
-.. autoclass:: Categories
 
 .. toctree::
    :maxdepth: 2

@@ -25,7 +25,9 @@ metrics_map = {
 
 
 def load_all_models(save_models_dir: str, model_type: str, model_i: int):
-    """ Load saved models from a given type
+    """ Model loader
+
+    Load saved models from a given type.
 
     :param str save_models_dir: directory where the model is saved
     :param str model_type: `regression` or `classification`

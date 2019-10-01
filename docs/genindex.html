@@ -173,7 +173,6 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -214,24 +213,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.data_type_detector.ColumnDataFormat.categorical_or_numeric">categorical_or_numeric() (preprocessing.data_type_detector.ColumnDataFormat method)</a>
 </li>
-      <li><a href="preprocessing.html#preprocessing.data_type_detector.Categories">Categories (class in preprocessing.data_type_detector)</a>
-</li>
       <li><a href="visualization.html#visualization.visualization.CompareStatistics.check_feature_valid">check_feature_valid() (visualization.visualization.CompareStatistics method)</a>
-</li>
-      <li><a href="training.html#training.optimizer.choosing_alpha">choosing_alpha() (in module training.optimizer)</a>
-</li>
-      <li><a href="training.html#training.classification_model_evaluator.classification_evaluate_model">classification_evaluate_model() (in module training.classification_model_evaluator)</a>
-</li>
-      <li><a href="training.html#training.classification_model_evaluator.classification_model_evaluation">classification_model_evaluation() (in module training.classification_model_evaluator)</a>
 </li>
       <li><a href="preprocessing.html#preprocessing.json_preprocessor.column_validation">column_validation() (in module preprocessing.json_preprocessor)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.data_type_detector.ColumnDataFormat">ColumnDataFormat (class in preprocessing.data_type_detector)</a>
 </li>
       <li><a href="preprocessing.html#preprocessing.json_preprocessor.combine_columns">combine_columns() (in module preprocessing.json_preprocessor)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.json_preprocessor.combine_new_data_to_original">combine_new_data_to_original() (in module preprocessing.json_preprocessor)</a>
 </li>
       <li><a href="visualization.html#visualization.visualization.compare_statistics">compare_statistics() (in module visualization.visualization)</a>
@@ -278,12 +269,14 @@
 </li>
       <li><a href="preprocessing.html#preprocessing.data_transformer.encoding_categorical_feature">encoding_categorical_feature() (in module preprocessing.data_transformer)</a>
 </li>
-      <li><a href="training.html#training.xgboost_train.evaluate_xgboost_model">evaluate_xgboost_model() (in module training.xgboost_train)</a>
+      <li><a href="feature_engineering.html#feature_engineering.feature_generator.encoding_features">encoding_features() (in module feature_engineering.feature_generator)</a>
 </li>
-      <li><a href="preprocessing.html#preprocessing.data_explorer.explore_data">explore_data() (in module preprocessing.data_explorer)</a>
+      <li><a href="training.html#training.model_evaluator.evaluate_model">evaluate_model() (in module training.model_evaluator)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="preprocessing.html#preprocessing.data_explorer.explore_data">explore_data() (in module preprocessing.data_explorer)</a>
+</li>
       <li><a href="visualization.html#visualization.visualization.explore_missing_values">explore_missing_values() (in module visualization.visualization)</a>
 </li>
       <li><a href="preprocessing.html#preprocessing.data_explorer.ExploreData">ExploreData (class in preprocessing.data_explorer)</a>
@@ -303,6 +296,8 @@
       <li><a href="feature_engineering.html#module-feature_engineering.feature_generator">feature_engineering.feature_generator (module)</a>
 </li>
       <li><a href="preprocessing.html#preprocessing.json_preprocessor.feature_with_json_detector">feature_with_json_detector() (in module preprocessing.json_preprocessor)</a>
+</li>
+      <li><a href="flows.html#flows.flows.Flows.features_encoding">features_encoding() (flows.flows.Flows method)</a>
 </li>
       <li><a href="training.html#training.validator.StructureValidation.features_validator">features_validator() (training.validator.StructureValidation method)</a>
 </li>
@@ -353,10 +348,6 @@
       <li><a href="training.html#training.utils.input_parameters_extraction">input_parameters_extraction() (in module training.utils)</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="training.html#training.optimizer.int_2_float_alpha">int_2_float_alpha() (in module training.optimizer)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="J">J</h2>
@@ -370,7 +361,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="preprocessing.html#preprocessing.data_type_detector.list_2_dict">list_2_dict() (in module preprocessing.data_type_detector)</a>
+      <li><a href="training.html#training.model_evaluator.load_all_models">load_all_models() (in module training.model_evaluator)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -399,18 +390,6 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.data_type_detector.ColumnDataFormat.number_or_string">number_or_string() (preprocessing.data_type_detector.ColumnDataFormat method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="flows.html#flows.flows.Flows.one_hot_encoding">one_hot_encoding() (flows.flows.Flows method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="feature_engineering.html#feature_engineering.feature_generator.one_hot_encoding_sklearn">one_hot_encoding_sklearn() (in module feature_engineering.feature_generator)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -448,13 +427,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#preprocessing.utils.read_data">read_data() (in module preprocessing.utils)</a>
 </li>
-      <li><a href="training.html#training.utils.read_kfold_config">read_kfold_config() (in module training.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="training.html#training.regression_model_evaluator.regression_evaluate_model">regression_evaluate_model() (in module training.regression_model_evaluator)</a>
-</li>
-      <li><a href="training.html#training.regression_model_evaluator.regression_model_evaluation">regression_model_evaluation() (in module training.regression_model_evaluator)</a>
+      <li><a href="training.html#training.utils.read_kfold_config">read_kfold_config() (in module training.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -486,16 +461,14 @@
 </li>
       <li><a href="flows.html#flows.flows.Flows.training">training() (flows.flows.Flows method)</a>
 </li>
-      <li><a href="training.html#module-training.classification_model_evaluator">training.classification_model_evaluator (module)</a>
+      <li><a href="training.html#module-training.model_evaluator">training.model_evaluator (module)</a>
 </li>
       <li><a href="training.html#module-training.optimizer">training.optimizer (module)</a>
 </li>
-      <li><a href="training.html#module-training.regression_model_evaluator">training.regression_model_evaluator (module)</a>
+      <li><a href="training.html#module-training.training">training.training (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="training.html#module-training.training">training.training (module)</a>
-</li>
       <li><a href="training.html#module-training.utils">training.utils (module)</a>
 </li>
       <li><a href="training.html#module-training.validator">training.validator (module)</a>
@@ -551,6 +524,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="training.html#training.xgboost_train.xgboost_data_preparation">xgboost_data_preparation() (in module training.xgboost_train)</a>
+</li>
+      <li><a href="training.html#training.xgboost_train.xgboost_data_preparation_for_evaluation">xgboost_data_preparation_for_evaluation() (in module training.xgboost_train)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
