@@ -115,3 +115,19 @@ class FlowInstructions():
         print(term.bold(term.green_on_black(
             'dataframe_dict, columns_set = flow.features_encoding("target", dataframe_dict: dict, reference: str,'
             ' ignore_columns: list, target: str)')))
+        print(term.magenta("An example of the ignore_columns list: \n") +
+              term.green_on_black(" ignore_columns = ['id', 'target']\n"))
+        print(term.magenta("An example of the reference: \n") +
+              term.green_on_black(" reference = 'train'\n"))
+
+    @staticmethod
+    def frequency_based_categorical_feature_encoding():
+        print(term.bold(term.magenta("Apply target-based encoding to the categorical features by applying the"
+                                     " following function:\n")))
+        print(term.bold(term.green_on_black(
+            'dataframe_dict, columns_set = flow.features_encoding("frequency",'
+            ' dataframe_dict: dict, reference: str, drop_encoded_features = False)')))
+        print(term.magenta("An example of the ignore_columns list: \n") +
+              term.green_on_black(" ignore_columns = ['id', 'target']\n"))
+        print(term.magenta("An example of the reference: \n") +
+              term.green_on_black(" reference = 'train'\n"))

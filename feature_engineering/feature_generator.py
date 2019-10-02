@@ -19,6 +19,19 @@ logging.basicConfig(
 
 
 def decode_features_with_appearance_frequency(dataframe_dict: dict, reference: str, categorical_features: list) -> dict:
+    """ Frequency-based encoder
+
+    :param dict dataframe_dict: A dictionary that contains the dataframes before applying the encoding e.g.
+            dataframes_dict={ 'train': train_dataframe, 'test': 'test_dataframe'}
+    :param str reference: The name of the dataframe that will be considered when validating the type of the data
+    :param list categorical_features: A list of string that contains the name of the columns or features that contain
+            categorical data type.
+    :return:
+            dataframe_dict: A dictionary that contains the dataframes after applying feature encoding
+    :rtype: dict
+
+    """
+
     _reference_dataframe = dataframe_dict[reference]
 
     for column_i in categorical_features:
@@ -125,7 +138,7 @@ def encoding_features(encoding_type: str,
     if encoding_type == "frequency":
         dataframes_dict_encoded = decode_features_with_appearance_frequency(dataframes_dict,
                                                                             reference,
-                                                                            categorical_features)
+                                                                            considered_features)
 
     else:
 
