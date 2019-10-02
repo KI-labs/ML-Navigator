@@ -15,7 +15,7 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
