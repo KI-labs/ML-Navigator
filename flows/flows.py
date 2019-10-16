@@ -257,7 +257,8 @@ class Flows:
         return dataframes_dict_scaled, self.columns_set
 
     def features_encoding(self, encoding_type: str, dataframe_dict: dict, reference: str,
-                          ignore_columns: list, class_number_range=[3, 50], target_name: str = None):
+                          ignore_columns: list, class_number_range=[3, 50], target_name: str = None,
+                          drop_encoded_features: bool = True):
         """ The encoder
 
         This function encodes the categorical features using different encoding methods
@@ -279,6 +280,8 @@ class Flows:
                 this feature.
         :param str target_name: The name of the column that contains the labels that should be predicted by the model.
                             If the encoding method doesn't require that target, it can be ignored.
+        :param bool drop_encoded_features: If True, the encoded features will be dropped from the dataset
+
         :return:
                 - dataframe_dict_encoded -  A dictionary that contains Pandas dataframes after the encoding features e.g. dataframe_dict_encoded={"train": train_dataframe, "test": test_dataframe}.
                 - columns_set - A dictionary that contains the features' names sorted in multiple lists based on the type of the data for each given dataset.
@@ -293,7 +296,8 @@ class Flows:
                                                    categorical_feature,
                                                    ignore_columns,
                                                    class_number_range,
-                                                   target_name)
+                                                   target_name,
+                                                   drop_encoded_features)
 
         self.columns_set = detect_columns_types_summary(dataframe_dict_encoded, threshold=self.categorical_threshold)
 

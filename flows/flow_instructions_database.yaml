@@ -36,6 +36,10 @@
   - function: "Target-based categorical feature encoding"
     guide:
       - 'FlowInstructions.target_based_categorical_feature_encoding()'
+9:
+  - function: "Frequency-based categorical feature encoding"
+    guide:
+      - 'FlowInstructions.frequency_based_categorical_feature_encoding()'
 
 1000:
   - function: "Finish"
