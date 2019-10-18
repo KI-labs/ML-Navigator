@@ -137,9 +137,14 @@ class ColumnDataFormat:
         string_columns = []
 
         for column_i in columns_with_strings:
-            if feature_with_json_detector(self.dataframe[column_i]):
-                json_columns.append(column_i)
-            else:
+            try:
+                if feature_with_json_detector(self.dataframe[column_i]):
+                    json_columns.append(column_i)
+                else:
+                    string_columns.append(column_i)
+            except:
+                print("This column cannot be checked for json data type:", column_i)
+                print("it is considered as an object type")
                 string_columns.append(column_i)
 
         return string_columns, json_columns
