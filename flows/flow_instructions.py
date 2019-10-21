@@ -4,18 +4,20 @@ from blessings import Terminal
 term = Terminal()
 
 
-class FlowInstructions():
+class FlowInstructions:
 
     @staticmethod
-    def read_data():
+    def read_data(specific_flow: int = 0,
+                  specific_directory: str = "./data",
+                  specific_file_list: str = "'train.csv','test.csv'"):
         print(term.bold(term.magenta("Please use the following function to read the data")))
         print(term.green_on_black("dataframe_dict, columns_set = flow.load_data(path : str, files_list : list)"))
-        print(term.bold(term.magenta("For example: ") + term.green_on_black("path = './data'")))
+        print(term.bold(term.magenta("For example: ") + term.green_on_black(f"path = {specific_directory}")))
         print(term.bold(term.magenta(
-            "If your data is in a nested directory, it is better to os.path.join. For example: ") + term.green_on_black(
-            "path = os.path.join('data', 'flow_0')")))
-        print(term.bold(term.magenta("For example: ") + term.green_on_black("files_list = ['train.csv','test.csv']")))
-        print(term.bold(term.magenta("The output is a dictionary that contains dataframes e.g.  ")))
+            "If your data is in a nested directory, it is better to os.path.join. For example:\n") + term.green_on_black(
+            f"path = os.path.join('data', 'flow_{specific_flow}')")))
+        print(term.bold(term.magenta("For example: ") + term.green_on_black(f"files_list = [{specific_file_list}]")))
+        print(term.bold(term.magenta("The output is a dictionary that contains dataframes e.g.\n")))
         print(term.blue("dataframe_dict = {'train': train_dataframe,'test': test_dataframe}"))
 
     @staticmethod

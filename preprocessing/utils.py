@@ -39,9 +39,9 @@ def read_data(path: str, files_list: list, rows_amount: int = 0) -> dict:
     return dataframes_dictionary
 
 
-def check_if_target_columns_are_imballanced(dataframes_dict: dict,
-                                            possible_problems: dict,
-                                            kl_div_threshold: float = 0.05) -> dict:
+def check_if_target_columns_are_imbalanced(dataframes_dict: dict,
+                                           possible_problems: dict,
+                                           kl_div_threshold: float = 0.05) -> dict:
     """ Detect class imbalance for categorical target variables
 
     Check if target categorical columns are imbalanced (i.e the different target values do not
@@ -65,10 +65,15 @@ def check_if_target_columns_are_imballanced(dataframes_dict: dict,
         """
         return np.sum(np.where(p != 0, p * np.log(p / q), 0))
 
-    # at the moment we take into account only classification problems
-    possible_clf_problems = dict((k, v) for k, v in possible_problems.items() if 'classification' == v)
-
     target_summary = {}
+    # at the moment we take into account only classification problems
+    try:
+        possible_clf_problems = dict((k, v) for k, v in possible_problems.items() if 'classification' == v)
+    except Exception as e:
+        print("Not possible to check if the target is imbalanced")
+        print("Error is:\n", e)
+        return target_summary
+
     # for every target column calculate the counts of distict values
     for target in possible_clf_problems:
         value_counts = [df[target].value_counts().to_frame(name=f"{target} {key_i}")

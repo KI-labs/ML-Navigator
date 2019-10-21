@@ -1,6 +1,9 @@
 import logging
 import os
 import pickle
+
+import numpy as np
+
 from training.xgboost_train import xgboost_data_preparation_to_predict
 
 logger = logging.getLogger(__name__)
@@ -15,7 +18,7 @@ logging.basicConfig(
 )
 
 
-def predict_unseen_data(predict: dict, models_nr: list, save_models_dir: str, model_type: str):
+def predict_unseen_data(predict: dict, models_nr: list, save_models_dir: str, model_type: str) -> np.array:
     """ Target prediction
 
     This function predicts unseen data given in the dictionary `predict`
@@ -61,7 +64,7 @@ def predict_unseen_data(predict: dict, models_nr: list, save_models_dir: str, mo
     return y_prediction
 
 
-def model_prediction(predict: dict, models_nr: list, save_models_dir: str, model_type: str):
+def model_prediction(predict: dict, models_nr: list, save_models_dir: str, model_type: str) -> np.array:
     """Predictor
 
     This function applies the function `predict_unseen_data` to predict the target using the data in the `predict`.

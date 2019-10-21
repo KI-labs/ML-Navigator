@@ -11,15 +11,15 @@ in other package in this project.
 import json
 import logging
 import os
-import warnings
-from typing import Union
+from typing import Union, Tuple, List, Dict
 
+import numpy as np
 import yaml
 from blessings import Terminal
 
 from feature_engineering.feature_generator import encoding_features
-from flows.utils import unify_dataframes
 from flows.flow_instructions import FlowInstructions
+from flows.utils import unify_dataframes
 from prediction.model_predictor import model_prediction
 from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from preprocessing.data_explorer import explore_data
@@ -27,8 +27,8 @@ from preprocessing.data_science_help_functions import detect_id_target_problem
 from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features
 from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
+from preprocessing.utils import check_if_target_columns_are_imbalanced
 from preprocessing.utils import read_data
-from preprocessing.utils import check_if_target_columns_are_imballanced
 from training.training import model_training
 from visualization.visualization import compare_statistics
 
@@ -93,6 +93,7 @@ class Flows:
                                       considering it as continuous numeric feature.
 
         """
+
         self.columns_set = None
         self.flow_id = flow_id
         self.flow_steps = {}
@@ -138,7 +139,7 @@ class Flows:
             except Exception as e:
                 logger.error(f"Failed executing the command in the step {step_ext}. Error is: {e}")
 
-    def load_data(self, path: str, files_list: list, rows_amount: int = 0):
+    def load_data(self, path: str, files_list: list, rows_amount: int = 0) -> Tuple[Dict, List]:
         """ Data reader
 
         This function reads data from CSV files and returns a dictionary
@@ -179,14 +180,17 @@ class Flows:
 
         _, _, possible_problems = detect_id_target_problem(dataframes_dict)
 
-        _ = check_if_target_columns_are_imballanced(dataframes_dict, possible_problems, self.kl_div_threshold)
+        _ = check_if_target_columns_are_imbalanced(dataframes_dict, possible_problems, self.kl_div_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict, self.columns_set
 
     def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = False,
-                                   _reference: Union[bool, str] = False):
+                                   _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ Categorical features encoder
 
         This function encodes the categorical features by replacing
@@ -219,11 +223,15 @@ class Flows:
         # After encoding features, A new summary of the data will be presented
         self.columns_set = detect_columns_types_summary(dataframes_dict_encoded, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict_encoded, self.columns_set
 
-    def scale_data(self, dataframes_dict: dict, ignore_columns: list, _reference: Union[bool, str] = False):
+    def scale_data(self, dataframes_dict: dict, ignore_columns: list,
+                   _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ Feature scaling
 
         This function scales features that contains numeric continuous values.
@@ -252,12 +260,15 @@ class Flows:
         # Suggesting the next step
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict_scaled, self.columns_set
 
     def features_encoding(self, encoding_type: str, dataframe_dict: dict, reference: str,
-                          ignore_columns: list, class_number_range=[3, 50], target_name: str = None,
+                          ignore_columns: list, class_number_range: list = None, target_name: str = None,
                           drop_encoded_features: bool = True):
         """ The encoder
 
@@ -289,6 +300,9 @@ class Flows:
 
         function_id = f"3-{encoding_type}"
 
+        if class_number_range is None:
+            class_number_range = [3, 50]
+
         categorical_feature = self.columns_set[reference]["categorical_integer"]
         dataframe_dict_encoded = encoding_features(encoding_type,
                                                    dataframe_dict,
@@ -301,11 +315,14 @@ class Flows:
 
         self.columns_set = detect_columns_types_summary(dataframe_dict_encoded, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframe_dict_encoded, self.columns_set
 
-    def training(self, parameters: dict):
+    def training(self, parameters: dict) -> Union[Tuple[List, str], Tuple[List, str, np.array]]:
         """ Ridge linear model
 
         This function fits the data using the ridge linear model. The function uses the implementation from
@@ -350,7 +367,10 @@ class Flows:
             predict = parameters["predict"]
             y_predict = model_prediction(predict, model_index_list, save_models_dir, model_type)
 
-            self.guidance(self.flow_steps[function_id])
+            try:
+                self.guidance(self.flow_steps[function_id])
+            except Exception as e:
+                print(f"It seems that the next step is not defined. Error{e}")
 
             return model_index_list, save_models_dir, y_predict
         else:
@@ -385,7 +405,7 @@ class Flows:
 
         explore_data(dataframe_dict[key_i])
 
-    def flatten_json_data(self, dataframes_dict: dict, _reference: Union[bool, str] = False):
+    def flatten_json_data(self, dataframes_dict: dict, _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ JSON data normalizer
 
         This function normalizes the nested JSON data type inside the pandas dataframes' columns. The name of the new
@@ -412,13 +432,16 @@ class Flows:
             dataframes_dict = flat_json(dataframes_dict, self.columns_set[_reference]["json"])
             self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict, self.columns_set
 
     def drop_correlated_columns(self, dataframes_dict: dict, ignore_columns: list, drop_columns: bool = True,
                                 print_columns: bool = True, threshold: float = 0.98,
-                                _reference: Union[bool, str] = False):
+                                _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ Correlation eliminator
 
         The function drop correlated columns and keep only one of these columns.
@@ -450,12 +473,16 @@ class Flows:
         dataframes_dict = unify_dataframes(dataframes_dict, _reference, ignore_columns)
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict, self.columns_set
 
     def drop_columns_constant_values(self, dataframes_dict: dict, ignore_columns: list, drop_columns: bool = True,
-                                     print_columns: bool = True, _reference: Union[bool, str] = False):
+                                     print_columns: bool = True,
+                                     _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ Constant value features eliminator
 
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
@@ -482,11 +509,14 @@ class Flows:
 
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
 
-        self.guidance(self.flow_steps[function_id])
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
 
         return dataframes_dict, self.columns_set
 
-    def update_data_summary(self, dataframes_dict: dict) -> dict:
+    def update_data_summary(self, dataframes_dict: dict) -> list:
         """Data type updater
 
         This function update the list of the features in the columns types dictionary. This function should be used in
@@ -501,10 +531,57 @@ class Flows:
 
         function_id = "8"
 
-        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=50)
+        self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
         try:
             self.guidance(self.flow_steps[function_id])
         except Exception as e:
             print(f"It seems that the next step is not defined. Error{e}")
 
         return self.columns_set
+
+    def save_post_processed_data(self, dataframe_dict: dict,
+                                 path: str,
+                                 suffix: str = "",
+                                 directory_name: str = "post_processing"):
+        """ Data saver
+
+        The function saves data after applying the processing functions.
+
+        :param dict dataframe_dict: A dictionary that contains Pandas dataframes  e.g. dataframes_dict={"train":
+                train_dataframe, "test": test_dataframe}
+        :param str path: The path to the data.
+        :param str suffix: A string that can be added to the filename to get unique names.
+        :param str directory_name: The subdirectory where the post-processing data will be saved
+        :return:
+        """
+
+        function_id = "9"
+
+        path = os.path.join(path, directory_name)
+        print(f"Check if the directory {path} exists")
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        print(f"{suffix} will be added to the end of the filename")
+
+        filename_list_str = ""
+
+        for key_i, dataframe in dataframe_dict.items():
+            filename = key_i + "_" + suffix + ".csv"
+            path_i = os.path.join(path, filename)
+
+            if filename_list_str == "":
+                filename_list_str = filename
+            else:
+                filename_list_str = filename_list_str + ", " + filename
+
+            print(f"saving {key_i} dataset to {path_i} file")
+            dataframe.to_csv(path_i, index=False)
+
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
+            FlowInstructions.read_data(specific_directory=path, specific_file_list=f"{filename_list_str}")
+        pass

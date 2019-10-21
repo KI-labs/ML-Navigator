@@ -1,6 +1,6 @@
 import logging
 import os
-
+from typing import Tuple, List, Dict, Set, Union
 from collections import Counter
 
 logger = logging.getLogger(__name__)
@@ -10,12 +10,12 @@ formatting = (
 )
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs/logs.log"),
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=formatting,
 )
 
 
-def detect_id(dataframes_dictionary: dict) -> set:
+def detect_id(dataframes_dictionary: dict) -> Union[set, str]:
     """ ID candidates detector
 
     the following assumptions are considered:
@@ -45,12 +45,22 @@ def detect_id(dataframes_dictionary: dict) -> set:
 
                 id_candidates.append(column_i)
 
+    id_candidates = set(id_candidates)
+
+    # the number 5 in the if statement should be defined as variable later that can be added by the user
+    if len(id_candidates) > 5:
+        logger.info("Too many options for ids.")
+        return "Too many options for ids. Not possible to detect id"
+    elif len(id_candidates) == 0:
+        logger.info("No ids candidates were found")
+        return "No ids candidates were found"
+
     logger.info("Detecting the id is finished")
 
     return set(id_candidates)
 
 
-def detect_target(dataframes_dictionary: dict) -> list:
+def detect_target(dataframes_dictionary: dict) -> Union[list, str]:
     """ Target candidates detector
 
     The following assumptions are considered:
@@ -65,11 +75,12 @@ def detect_target(dataframes_dictionary: dict) -> list:
     'train': train_dataframe, 'test': test_dataframe}
 
     :return
-        target_candidates_2: A list of candidates as strings
+        target_candidates_2: A list of candidates as strings that satisfies the two mentioned assumptions above
 
     :rtype: list
 
     """
+
     target_candidates_1 = []
     target_candidates_2 = []
     columns = []
@@ -98,15 +109,20 @@ def detect_target(dataframes_dictionary: dict) -> list:
     logger.info("Checking the second assumption (missing values) for finding the target is done!")
 
     if len(target_candidates_2) == 0:
-        print("No target was detected")
         logger.info("No target was detected")
+        return "No target was detected"
+    elif len(target_candidates_2) > 5:
+        logger.info("Too many options for target")
+        return "Too many options for target. Not possible to detect target"
 
     logger.info("Detecting the target is finished")
 
     return target_candidates_2
 
 
-def detect_problem_type(dataframes_dictionary: dict, target_candidates: list, threshold: float = 0.1):
+def detect_problem_type(dataframes_dictionary: dict,
+                        target_candidates: list,
+                        threshold: float = 0.1) -> Union[dict, str]:
     """ Problem type detector
 
     This function tells what type of problem that should be solved: classification or regression
@@ -125,22 +141,27 @@ def detect_problem_type(dataframes_dictionary: dict, target_candidates: list, th
 
     problem_type = {}
 
-    for column_i in target_candidates:
-        for key_i, dataframe in dataframes_dictionary.items():
-            if column_i in dataframe.columns:
-                if len(dataframe[column_i].value_counts()) / dataframe.shape[0] < threshold:
-                    problem_type[column_i] = "classification"
-                    logger.debug(f"For the target {column_i}: classification")
-                else:
-                    problem_type[column_i] = "regression"
-                    logger.debug(f"For the target {column_i}: regression")
+    if isinstance(target_candidates, list) and len(target_candidates) > 0:
+        for column_i in target_candidates:
+            for key_i, dataframe in dataframes_dictionary.items():
+                if column_i in dataframe.columns:
+                    if len(dataframe[column_i].value_counts()) / dataframe.shape[0] < threshold:
+                        problem_type[column_i] = "classification"
+                        logger.debug(f"For the target {column_i}: classification")
+                    else:
+                        problem_type[column_i] = "regression"
+                        logger.debug(f"For the target {column_i}: regression")
+
+    else:
+        logger.info("No valid target candidates")
+        return "No problem type to detect"
 
     logger.info("Detecting the problem type is finished")
 
     return problem_type
 
 
-def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1):
+def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1) -> Tuple[Set, List, Dict]:
     """ ID Target Problem type detector
 
     This function tries to find which column is the ID and which one is the target and what type of the problem
@@ -164,7 +185,7 @@ def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1):
     logger.info("Running all the process to detect id, target and the problem type is finished")
 
     # Showing the info to the user
-    print(f"The possible ids are {possible_ids}")
-    print(f"The possible possible_target are {possible_target}")
-    print(f"The type of the problem that should be solved {possible_problems}")
+    print(f"The possible ids are:\n {possible_ids}")
+    print(f"The possible possible_target are:\n {possible_target}")
+    print(f"The type of the problem that should be solved:\n {possible_problems}")
     return possible_ids, possible_target, possible_problems

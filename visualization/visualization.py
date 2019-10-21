@@ -21,6 +21,16 @@ logging.basicConfig(
 )
 
 
+def get_features_set(dataframes_dict: dict):
+    features_list = []
+    for key_i, dataframe in dataframes_dict.items():
+        features_list += list(dataframe.columns)
+
+    features_set = set(features_list)
+
+    return features_set
+
+
 def histogram(data: pd.Series):
     """ Histogram plotter
 
@@ -118,13 +128,14 @@ class CompareStatistics:
         """
 
         self.dataframes_dict = dataframes_dict
+        self.features_set = get_features_set(dataframes_dict)
 
-    def check_feature_valid(self, feature_nr: int) -> bool:
+    def check_feature_valid(self, feature: str) -> bool:
         """ Feature's value validator
 
         The function validate if it is possible to derive the statistical properties of a given feature.
 
-        :param int feature_nr: The index of the column where the feature is.
+        :param int feature: The index of the column where the feature is.
 
         :return:
                 True if it is possible to calculate the statistical properties of the given feature. Otherwise false.
@@ -132,16 +143,15 @@ class CompareStatistics:
 
         for key_i, dataframe in self.dataframes_dict.items():
             try:
-                feature = dataframe.columns[feature_nr]
+                if (dataframe[feature].dropna().dtype == object) or \
+                        (dataframe[feature].dropna().dtype == '<M8[ns]') or \
+                        (dataframe[feature].dropna().dtype == '>M8[ns]'):
+                    print(
+                        f"{feature}: You need to encode the feature's values before plotting statistics"
+                    )
+                    return False
             except Exception as e:
                 print(f"This feature can't be found in all dataframes: {e}")
-                return False
-            if (dataframe[feature].dropna().dtype == object) or \
-                    (dataframe[feature].dropna().dtype == '<M8[ns]') or \
-                    (dataframe[feature].dropna().dtype == '>M8[ns]'):
-                print(
-                    f"{feature}: You need to encode the feature's values before plotting statistics"
-                )
                 return False
         return True
 
@@ -154,7 +164,8 @@ class CompareStatistics:
 
         """
 
-        if CompareStatistics.check_feature_valid(self, feature_nr):
+        feature = list(self.features_set)[feature_nr]
+        if CompareStatistics.check_feature_valid(self, feature):
 
             fig, ax = plt.subplots()
             counter = 0
@@ -165,11 +176,10 @@ class CompareStatistics:
 
             for key_i, dataframe in self.dataframes_dict.items():
                 try:
-                    feature = dataframe.columns[feature_nr]
                     dataframe_statistic = dataframe.describe().loc[
                                           ['mean', 'std', 'min', '25%', '50%', '75%', 'max'], :]
                     if counter == 0:
-                        print(f"{dataframe.columns[feature_nr]}: Comparing the statistical properties")
+                        print(f"{feature}: Comparing the statistical properties")
                         ind = np.arange(len(dataframe_statistic[feature]))  # the x locations for the groups
                     _ = ax.bar(ind - (number_of_dataframes - 1) * width / 2 + counter * width,
                                dataframe_statistic[feature], width,
@@ -180,8 +190,6 @@ class CompareStatistics:
 
             ax.set_xticklabels(('count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max'))
             ax.legend()
-
-            pass
 
 
 def compare_statistics(dataframes_dict: dict):
@@ -196,10 +204,8 @@ def compare_statistics(dataframes_dict: dict):
     """
 
     compare_statistics_object = CompareStatistics(dataframes_dict)
-    maximum_number_features = 0
-    for key_i, dataframe in dataframes_dict.items():
-        maximum_number_features = len(dataframe.columns)
-        break
+
+    maximum_number_features = len(get_features_set(dataframes_dict))
 
     interact(compare_statistics_object.compare_statistics_function,
              feature_nr=widgets.IntSlider(min=0, max=maximum_number_features - 1, step=1, value=0))
