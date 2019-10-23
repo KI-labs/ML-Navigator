@@ -73,6 +73,7 @@ def standard_scale_numeric_features(
         except Exception as e:
             print(f"It is not possible to scale the feature {columns_to_normalize} in the dataset {key_i}")
             print(f"The Error is\n {e}")
+            scaled_dataframe_dict[key_i] = dataframe
 
     logger.info("Scaling data is finished")
     return scaled_dataframe_dict
