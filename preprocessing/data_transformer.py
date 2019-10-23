@@ -60,15 +60,19 @@ def standard_scale_numeric_features(
 
     # Scaling data
     for key_i, dataframe in dataframe_dict.items():
-        scaled = scaler.transform(dataframe[columns_to_normalize])
+        try:
+            scaled = scaler.transform(dataframe[columns_to_normalize])
 
-        # After scaling, the mean values will be 0. Therefore, the missing values will be replaced by the mean value
-        if handle_missing_values:
-            logger.info("Missing values will be handled")
-            scaled[np.isnan(scaled)] = 0
+            # After scaling, the mean values will be 0. Therefore, the missing values will be replaced by the mean value
+            if handle_missing_values:
+                logger.info("Missing values will be handled")
+                scaled[np.isnan(scaled)] = 0
 
-        dataframe[columns_to_normalize] = scaled
-        scaled_dataframe_dict[key_i] = dataframe
+            dataframe[columns_to_normalize] = scaled
+            scaled_dataframe_dict[key_i] = dataframe
+        except Exception as e:
+            print(f"It is not possible to scale the feature {columns_to_normalize} in the dataset {key_i}")
+            print(f"The Error is\n {e}")
 
     logger.info("Scaling data is finished")
     return scaled_dataframe_dict

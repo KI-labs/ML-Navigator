@@ -189,7 +189,8 @@ class Flows:
 
         return dataframes_dict, self.columns_set
 
-    def encode_categorical_feature(self, dataframes_dict: dict, print_results: Union[bool, int] = False,
+    def encode_categorical_feature(self, dataframes_dict: dict, ignore_columns: list = None,
+                                   print_results: Union[bool, int] = False,
                                    _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
         """ Categorical features encoder
 
@@ -197,6 +198,8 @@ class Flows:
         the strings with integers
 
         :param Union[bool, int] print_results: If False, no data is printed to the console. If True, all data is printed to the console. If an integer n, only the data for n features is printed to the console.
+        :param list ignore_columns: It contains the columns that should be
+                ignored when apply scaling e.g. the id and the target.
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
                 before encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
         :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
@@ -211,10 +214,14 @@ class Flows:
 
         if not _reference:
             _reference = list(dataframes_dict.keys())[0]
+
         print(f"The reference dataframe is: {_reference}")
 
         string_columns = self.columns_set[_reference]["categorical_string"] + self.columns_set[_reference][
             "categorical_integer"]
+
+        if ignore_columns is not None:
+            string_columns = [col_i for col_i in string_columns if col_i not in ignore_columns]
 
         dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns, print_results)
 
