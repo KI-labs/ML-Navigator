@@ -213,7 +213,7 @@ class Flows:
         function_id = "1"
 
         if not _reference:
-            _reference = list(dataframes_dict.keys())[0]
+            _reference = next(iter(dataframes_dict.keys()))
 
         print(f"The reference dataframe is: {_reference}")
 
@@ -258,7 +258,7 @@ class Flows:
         function_id = "2"
 
         if not _reference:
-            _reference = list(dataframes_dict.keys())[0]
+            _reference = next(iter(dataframes_dict.keys()))
 
         numerical = [x for x in self.columns_set[_reference]["continuous"] if x not in ignore_columns]
 
@@ -433,7 +433,7 @@ class Flows:
         function_id = "5"
 
         if not _reference:
-            _reference = list(dataframes_dict.keys())[0]
+            _reference = next(iter(dataframes_dict.keys()))
 
         while len(self.columns_set[_reference]["json"]) > 0:
             dataframes_dict = flat_json(dataframes_dict, self.columns_set[_reference]["json"])
@@ -472,7 +472,7 @@ class Flows:
         function_id = "6"
 
         if not _reference:
-            _reference = list(dataframes_dict.keys())[0]
+            _reference = next(iter(dataframes_dict.keys()))
         dataframes_dict[_reference] = drop_corr_columns(dataframes_dict[_reference],
                                                         drop_columns,
                                                         print_columns,
@@ -507,7 +507,7 @@ class Flows:
         function_id = "7"
 
         if not _reference:
-            _reference = list(dataframes_dict.keys())[0]
+            _reference = next(iter(dataframes_dict.keys()))
         dataframes_dict[_reference] = drop_const_columns(dataframes_dict[_reference],
                                                          drop_columns,
                                                          print_columns)

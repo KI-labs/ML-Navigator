@@ -16,7 +16,7 @@ def create_data():
 
 class EncodingTest(unittest.TestCase):
 
-    def frequency_decoding(self):
+    def test_frequency_decoding(self):
         # test 1
         dataframe_dict = {"train": create_data()}
         reference = 'train'
