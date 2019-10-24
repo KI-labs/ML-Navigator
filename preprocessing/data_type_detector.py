@@ -1,11 +1,11 @@
 import logging
 import os
-from enum import Enum
 
 from IPython.display import display
 import pandas as pd
 
 from preprocessing.json_preprocessor import feature_with_json_detector
+from preprocessing.data_explorer import outliers_detector
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -279,5 +279,18 @@ def detect_columns_types_summary(dataframes_dict: dict, threshold: int = 50) -> 
         "\033[1mNOTE: You can modify the threshold value if you want to consider more or less numeric categorical "
         "features as numeric continuous features.\033[0;0m"
     )
+    print("Applying Robust Random Cut Forest Algorithm for outliers detection")
+    print("Only 'continuous' and 'categorical_integer' are considered for outliers detection")
+    for key_i, dataframe in dataframes_dict.items():
+        data_points = dataframe[columns_types_dict[key_i]["continuous"] +
+                                columns_types_dict[key_i]["categorical_integer"]]
+
+        data_points = data_points.fillna(data_points.mean()).to_numpy()
+
+        _, is_outlier = outliers_detector(data_points)
+        if sum(is_outlier) > 0:
+            print(
+                f"\033[1mNOTE: The dataset {key_i} may have {sum(is_outlier)} outliers.\033[0;0m"
+            )
 
     return columns_types_dict

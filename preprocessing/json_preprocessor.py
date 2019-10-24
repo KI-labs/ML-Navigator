@@ -67,7 +67,7 @@ def extract_json_objects(raw_string_data: str, start_json_object: list,
     current_position = 0
 
     for start_i in start_json_object:
-        if start_i > current_position:
+        if start_i >= current_position:
             for end_i in end_json_object:
                 try:
                     valid_json_object = json.loads(raw_string_data[start_i:end_i + 1])

@@ -14,6 +14,7 @@ import os
 from typing import Union, Tuple, List, Dict
 
 import numpy as np
+import pandas as pd
 import yaml
 from blessings import Terminal
 
@@ -29,6 +30,7 @@ from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
 from preprocessing.utils import check_if_target_columns_are_imbalanced
 from preprocessing.utils import read_data
+from preprocessing.data_explorer import outliers_detector
 from training.training import model_training
 from visualization.visualization import compare_statistics
 
@@ -177,6 +179,11 @@ class Flows:
         dataframes_dict = read_data(path, files_list, rows_amount)
 
         self.columns_set = detect_columns_types_summary(dataframes_dict, threshold=self.categorical_threshold)
+
+        print(term.bold(term.magenta("If you are interested in extracting the outliers,"
+                                     " you can run the following commands:")))
+        print(term.green_on_black("average_score, is_outlier = flow.outliers_extractor"
+                                  "(dataframe_dict: dict, key_i: str)"))
 
         _, _, possible_problems = detect_id_target_problem(dataframes_dict)
 
@@ -599,3 +606,31 @@ class Flows:
             print(f"It seems that the next step is not defined. Error{e}")
             FlowInstructions.read_data(specific_directory=path, specific_file_list=f"{filename_list_str}")
         pass
+
+    def outliers_extractor(self, dataframe_dict: dict, key_i: str) -> Tuple[pd.Series, List]:
+        """ Outliers extractor
+
+        This functions detect if there is outliers in the given dataset. It uses the Robust Random Cut Forest Algorithm.
+        For more information about this method please check the following link\n
+        https://klabum.github.io/rrcf/random-cut-tree.html
+
+        :param dict dataframe_dict: A dictionary that contains Pandas dataframes  e.g. dataframes_dict={"train":
+                train_dataframe, "test": test_dataframe}
+        :param str key_i: It points to the dataset which the user wants to explore e.g. "train".
+        :return:
+                - pd.series avg_codisp: The averege score of each data point calculated from all the constructed trees
+                - list outliers_index: bool type list. If the value is true, then the data point is an outlier.
+        """
+
+        function_id = "10"
+        data_points = dataframe_dict[key_i][self.columns_set[key_i]["continuous"] +
+                                            self.columns_set[key_i]["categorical_integer"]]
+        data_points = data_points.fillna(data_points.mean()).to_numpy()
+        average_score, is_outlier = outliers_detector(data_points)
+
+        try:
+            self.guidance(self.flow_steps[function_id])
+        except Exception as e:
+            print(f"It seems that the next step is not defined. Error{e}")
+
+        return average_score, is_outlier

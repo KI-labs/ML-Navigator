@@ -1,3 +1,6 @@
+import warnings
+
+warnings.filterwarnings('ignore')
 import unittest
 from datetime import datetime, timedelta
 
@@ -8,14 +11,14 @@ from preprocessing.data_transformer import encode_categorical_features, clean_ca
 from preprocessing.data_type_detector import detect_columns_types_summary
 
 # create dataframe for testing the preprocessing functions:
-integer_array = np.random.randint(2, size=(100, 2))
+integer_array = np.random.randint(2, size=(10000, 2))
 for catagories_numbers in range(5, 50, 10):
     integer_array = np.append(
-        integer_array, np.random.randint(catagories_numbers, size=(100, 2)), axis=1
+        integer_array, np.random.randint(catagories_numbers, size=(10000, 2)), axis=1
     )
 integer_columns = [f"int_col_{x}" for x in range(integer_array.shape[1])]
 
-continuous_array = np.random.randn(100, 10)
+continuous_array = np.random.randn(10000, 10)
 continuous_columns = [f"cont_col_{x}" for x in range(continuous_array.shape[1])]
 
 string_array = [
@@ -33,15 +36,15 @@ string_array = [
     "82008",
     "mailbox",
 ]
-string_arrays = np.random.choice(string_array, (100, 10))
+string_arrays = np.random.choice(string_array, (10000, 10))
 string_columns = [f"string_col_{x}" for x in range(string_arrays.shape[1])]
 
 integer_dataframe = pd.DataFrame(integer_array, columns=integer_columns)
 continuous_dataframe = pd.DataFrame(continuous_array, columns=continuous_columns)
 string_dataframe = pd.DataFrame(string_arrays, columns=string_columns)
 
-date_array = np.array([datetime.now() - timedelta(days=x) for x in range(100)]).reshape(
-    100, 1
+date_array = np.array([datetime.now() - timedelta(days=x) for x in range(10000)]).reshape(
+    10000, 1
 )
 date_dataframe = pd.DataFrame(date_array, columns=["date_col"])
 # print(date_dataframe.dtypes)
