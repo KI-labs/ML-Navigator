@@ -252,16 +252,20 @@ def feature_with_json_detector(dataseries: pd.Series):
     """
 
     # Check which row contains start and end JSON syntax in case of string values inside the rows
-    start_json = dataseries.fillna('').str.contains('{')
-    end_json = dataseries.fillna('').str.contains('}')
-    if start_json[start_json].size and end_json[end_json].size:
-        for row_i in range(start_json.size):
-            if start_json[row_i] and end_json[row_i]:
-                raw_string_data = dataseries[row_i]
+    start_json = dataseries.fillna('').str.contains('{').fillna("")
+    end_json = dataseries.fillna('').str.contains('}').fillna("")
+    try:
+        if start_json[start_json].size and end_json[end_json].size:
+            for row_i in range(start_json.size):
+                if start_json[row_i] and end_json[row_i]:
+                    raw_string_data = dataseries[row_i]
 
-                # if the JSON is converted to a dataframe successfully, it is valid JSON
-                if normalize_feature(raw_string_data, 0).shape[0]:
-                    return True
+                    # if the JSON is converted to a dataframe successfully, it is valid JSON
+                    if normalize_feature(raw_string_data, 0).shape[0]:
+                        return True
+    except:
+        print("start_json:\n ", start_json)
+        print("End_json:\n", end_json)
 
     # Some of the rows can be valid lists that contain valid JSON format
     if start_json[start_json.isnull()].size and end_json[end_json.isnull()].size:

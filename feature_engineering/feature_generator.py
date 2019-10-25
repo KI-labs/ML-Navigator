@@ -79,7 +79,7 @@ def encoding_features(encoding_type: str,
                       reference: str,
                       categorical_features: list,
                       ignore_columns: list,
-                      class_number_range: list = [0, 50],
+                      class_number_range: list = None,
                       target_name: str = None,
                       drop_encoded_features: bool = True) -> dict:
     """ One-hot encoder
@@ -113,6 +113,9 @@ def encoding_features(encoding_type: str,
 
     dataframes_dict_encoded = {}
 
+    if class_number_range is None:
+        class_number_range = [0, 50]
+
     considered_features = [x for x in categorical_features if x not in ignore_columns]
 
     encoder = None
@@ -131,9 +134,8 @@ def encoding_features(encoding_type: str,
         if target_name is None:
             raise ValueError("Please define the target_name. It is the label that should be predicted by the model")
 
-        encoder = ce.target_encoder.TargetEncoder().fit(
-            np.array(dataframes_dict[reference][considered_features]),
-            dataframes_dict[reference][target_name])
+        encoder = ce.target_encoder.TargetEncoder(cols=considered_features).fit(dataframes_dict[reference][considered_features],
+                                                                                dataframes_dict[reference][target_name])
 
     if encoding_type == "frequency":
         dataframes_dict_encoded = decode_features_with_appearance_frequency(dataframes_dict,
@@ -143,7 +145,13 @@ def encoding_features(encoding_type: str,
     else:
 
         for key_i, dataframe in dataframes_dict.items():
-            encoded_data = pd.DataFrame(encoder.transform(np.array(dataframe[considered_features])))
+            encoded_data = pd.DataFrame()
+
+            if encoding_type == "one-hot":
+                encoded_data = pd.DataFrame(encoder.transform(np.array(dataframe[considered_features])))
+            elif encoding_type == "target":
+                encoded_data = encoder.transform(dataframe[considered_features])
+
             columns = [f"col_{encoding_type}_encoding_{x}" for x in range(encoded_data.shape[1])]
 
             logging.debug(f"the number of the {encoding_type} encoded data columns is {len(columns)}")
@@ -151,8 +159,11 @@ def encoding_features(encoding_type: str,
             encoded_data.columns = columns
 
             # Encoded features will be dropped.
-            if drop_encoded_features:
-                dataframe = dataframe.drop(considered_features, axis=1)
+            try:
+                if drop_encoded_features:
+                    dataframe = dataframe.drop(considered_features, axis=1)
+            except Exception as e:
+                print(f"The feature/s {considered_features} cannot be dropped. The error is:\n {e}")
 
             dataframes_dict_encoded[key_i] = pd.concat([dataframe, encoded_data], axis=1, sort=False)
 
