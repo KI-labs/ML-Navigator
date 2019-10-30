@@ -118,7 +118,7 @@ To install the ML-Navigator Package from the Github repo:
 
     `$ pip install virtualenv`<br>
     `$ virtualenv venv`<br>
-    `$ source /venv/bin/activate`
+    `$ source venv/bin/activate`
     
 4. After setting up the virtual environment, you can install the package using pip command as follows:
 

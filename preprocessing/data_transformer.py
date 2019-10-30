@@ -1,13 +1,13 @@
+import itertools
 import logging
 import os
-import itertools
 import random
 from typing import Union
 
 import numpy as np
 import pandas as pd
-from sklearn import preprocessing
 from IPython.display import display
+from sklearn import preprocessing
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -26,8 +26,7 @@ def standard_scale_numeric_features(
         dataframe_dict: dict,
         reference_dataframe_key: str,
         columns_to_normalize: list,
-        handle_missing_values: bool = True,
-) -> dict:
+        handle_missing_values: bool = True) -> dict:
     """ Feature standardizer
 
     This function standardizes the datesets passed as pandas dataframes by a dictionary. The reference dataframe will be
@@ -79,7 +78,8 @@ def standard_scale_numeric_features(
     return scaled_dataframe_dict
 
 
-def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
+def encoding_categorical_feature(dataset_dict: dict,
+                                 feature_name: str,
                                  print_results: Union[bool, int] = True,
                                  print_counter: int = 0) -> dict:
     """ Single categorical feature string encoder
@@ -103,23 +103,20 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
     hash_missing_value = hex(random.getrandbits(128))
     logger.debug(f"The hash for the missing values is {hash_missing_value}")
 
-    # Concatenate datasets if needed
-
+    # check printing
     if isinstance(print_results, bool) and print_results:
         print(f"there are {len(dataset_dict)} datasets provided")
     elif isinstance(print_results, int):
         if print_counter < print_results:
             print(f"there are {len(dataset_dict)} datasets provided")
 
-    # the check here is not a good idea because it check each column alone which is not efficient
+    # Concatenate datasets
     valid_dataset_list = []
     valid_dataset_keys = []
-
     for key_i, dataseries in dataset_dict.items():
         if dataseries.shape[0] > 0:
             valid_dataset_list.append(dataseries)  # get the dataframes
             valid_dataset_keys.append(key_i)  # get the keys
-
     if len(valid_dataset_list) > 1:
         x_original = pd.concat(valid_dataset_list, axis=0)
     elif len(valid_dataset_list) == 1:
@@ -133,6 +130,7 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
 
     dataset_dict_encoded = {}
 
+    # encoding loop
     for dataset_key in valid_dataset_keys:
         dataset_dict_encoded[dataset_key] = label_encoder.transform(
             dataset_dict[dataset_key].fillna(hash_missing_value)
@@ -152,7 +150,8 @@ def encoding_categorical_feature(dataset_dict: dict, feature_name: str,
     return dataset_dict_encoded
 
 
-def encode_categorical_features(dataframe_dict: dict, columns_list: list,
+def encode_categorical_features(dataframe_dict: dict,
+                                columns_list: list,
                                 print_results: Union[bool, int] = True) -> dict:
     """ Categorical features string encoder
 
@@ -211,5 +210,84 @@ def encode_categorical_features(dataframe_dict: dict, columns_list: list,
             pd.set_option('display.max_rows', print_results)
         display(result)
         pd.set_option('display.max_rows', None)
+
+    return dataframe_dict
+
+
+def filter_category(value: str,
+                    to_remove: set) -> str:
+    """ Category filter
+
+    This function resets the value to NAN it it's in corresponding set
+
+    :param str value: a value to be checked.
+    :param set to_remove: a set of values to be reset.
+
+    :return:
+            value: an original value or the NAN-value.
+    """
+
+    if value in to_remove:
+        return np.nan
+    return value
+
+
+def clean_categorical_features(dataframe_dict: object,
+                               columns_list: object,
+                               inform_only: object = True,
+                               print_results: object = True) -> object:
+    """ Categorical features cleaner
+
+    This function resets the value of a categorical feature to NAN is case it's not exists in both (training and test) datasets.
+    Currently only supports `len(dataframe_dict)=2`: train and test
+
+    :param dict dataframe_dict: a dictionary of Pandas dataframes.
+    :param list columns_list: The list of categorical features to be cleared.
+    :param bool inform_only: If True (default), no data is replaced -  just informing.
+    :param bool print_results: If False, no data is printed to the console. If True, all data is printed to the console.
+
+    :return:
+            dataframe_dict: a dictionary of Pandas dataframes after encoding.
+    """
+
+    # Check if it only one dataframe provided
+    if len(dataframe_dict) != 2:
+        # do nothing and return the original data
+        logger.info("Clean function can't be applied because count of dataframes is not equal to 2")
+        return dataframe_dict
+
+    # if 2 dataframe than it will be considered as `train` and `test`
+    else:
+        train = dataframe_dict[list(dataframe_dict.keys())[0]]
+        test = dataframe_dict[list(dataframe_dict.keys())[1]]
+
+    # TODO implement support of > 2 dataframes (validation, etc) Here validation set (if any) will be merged to a training data.
+
+    # Checking cycle
+    if print_results:
+        print('*' * 10)
+        print(f"Checking the difference in categorical columns in {dataframe_dict.keys()[0]} and {dataframe_dict.keys()[1]} datasets: ")
+
+    for column in columns_list:
+        if set(train[column].unique()) != set(test[column].unique()):
+            set_train = set(train[column].unique())
+            set_test = set(test[column].unique())
+            remove_train = set_train - set_test
+            remove_test = set_test - set_train
+            remove = remove_train.union(remove_test)
+
+            # reset values to NAN
+            train[column] = train[column].apply(lambda x: filter_category(x, remove), 1)
+            test[column] = test[column].apply(lambda x: filter_category(x, remove), 1)
+            if print_results:
+                print(f"For column {column} there are {len(remove)} values difference")
+
+    # replace dataframes
+    if not inform_only:
+        dataframe_dict[list(dataframe_dict.keys())[0]] = train
+        dataframe_dict[list(dataframe_dict.keys())[1]] = test
+        print(f"The difference in categories was cleaned")
+    else:
+        print(f"The difference in categories was not cleaned")
 
     return dataframe_dict
