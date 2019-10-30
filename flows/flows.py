@@ -24,7 +24,7 @@ from prediction.model_predictor import model_prediction
 from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from preprocessing.data_explorer import explore_data
 from preprocessing.data_science_help_functions import detect_id_target_problem
-from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features
+from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features, clean_categorical_features
 from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
 from preprocessing.utils import check_if_target_columns_are_imbalanced
@@ -191,7 +191,8 @@ class Flows:
 
     def encode_categorical_feature(self, dataframes_dict: dict, ignore_columns: list = None,
                                    print_results: Union[bool, int] = False,
-                                   _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
+                                   _reference: Union[bool, str] = False,
+                                   clean_categorical_values: bool = True) -> Tuple[Dict, List]:
         """ Categorical features encoder
 
         This function encodes the categorical features by replacing
@@ -203,6 +204,7 @@ class Flows:
         :param dict dataframes_dict: A dictionary that contains Pandas dataframes
                 before encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
         :param Union[bool, str] _reference: The reference dataframe which is used when applying functions to other dataframes. The default value is the first dataframe inside the dataframes_dict dictionary. Usually it is the train dataframe
+        :param bool clean_categorical_values: If True (default), non-common cathegorical values will be filtered out (set to NAN) before encoding.
 
         :return:
                 - dataframes_dict_encoded - A dictionary that contains Pandas dataframes after encoding the features e.g. dataframes_dict={"train": train_dataframe, "test": test_dataframe}
@@ -223,6 +225,11 @@ class Flows:
         if ignore_columns is not None:
             string_columns = [col_i for col_i in string_columns if col_i not in ignore_columns]
 
+        # clean_categorical_values in dataframes
+        if clean_categorical_values:
+            dataframes_dict = clean_categorical_features(dataframes_dict, string_columns, False)
+
+        # Feature encoding
         dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns, print_results)
 
         print(term.red("*" * 30))

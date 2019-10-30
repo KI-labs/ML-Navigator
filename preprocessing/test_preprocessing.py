@@ -1,10 +1,11 @@
 import unittest
-import numpy as np
-import pandas as pd
 from datetime import datetime, timedelta
 
+import numpy as np
+import pandas as pd
+
+from preprocessing.data_transformer import encode_categorical_features, clean_categorical_features
 from preprocessing.data_type_detector import detect_columns_types_summary
-from preprocessing.data_transformer import encode_categorical_features
 
 # create dataframe for testing the preprocessing functions:
 integer_array = np.random.randint(2, size=(100, 2))
@@ -55,6 +56,8 @@ dataframe_dict = {
 }
 columns_set = detect_columns_types_summary(dataframe_dict)
 dataframe_dict_encoded = encode_categorical_features(dataframe_dict, string_columns)
+dataframe_dict_not_cleaned = clean_categorical_features(dataframe_dict, string_columns, True)
+dataframe_dict_cleaned = clean_categorical_features(dataframe_dict, string_columns, False)
 
 
 class MyTestCase(unittest.TestCase):
@@ -82,6 +85,19 @@ class MyTestCase(unittest.TestCase):
                 len(dataframe_dict_encoded["train"][column_i].value_counts()),
                 len(string_array),
             )
+
+    def test_clean_categorical_features(self):
+        for column_i in string_columns:
+            self.assertEqual(
+                len(dataframe_dict_not_cleaned["train"][column_i].value_counts()),
+                len(string_array),
+            )
+
+    # TODO currently in tests train=test so checking cleaning is not possible - need to change all previous tests
+    def test_clean_categorical_features_cleaned(self):
+        self.assertEqual(
+            dataframe_dict_cleaned["train"][string_columns].isna().sum().sum(),
+            0)
 
 
 if __name__ == "__main__":

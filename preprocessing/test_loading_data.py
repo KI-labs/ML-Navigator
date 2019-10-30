@@ -6,7 +6,7 @@ files_list = ["train.csv", "test.csv"]
 test_local = False
 
 
-# This test has to be applied locally becasuse data is not pushed to Github.
+# This test has to be applied locally because data is not pushed to Github.
 def test_something():
     if test_local:
         dataframe_dict = read_data(path, files_list)
