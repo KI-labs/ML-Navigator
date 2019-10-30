@@ -226,6 +226,7 @@ def filter_category(value: str,
     :return:
             value: an original value or the NAN-value.
     """
+
     if value in to_remove:
         return np.nan
     return value
@@ -252,6 +253,7 @@ def clean_categorical_features(dataframe_dict: object,
     # Check if it only one dataframe provided
     if len(dataframe_dict) != 2:
         # do nothing and return the original data
+        logger.info("Clean function can't be applied because count of dataframes is not equal to 2")
         return dataframe_dict
 
     # if 2 dataframe than it will be considered as `train` and `test`
@@ -264,7 +266,7 @@ def clean_categorical_features(dataframe_dict: object,
     # Checking cycle
     if print_results:
         print('*' * 10)
-        print(f"Checking the difference in categorical columns in train and test data: ")
+        print(f"Checking the difference in categorical columns in {dataframe_dict.keys()[0]} and {dataframe_dict.keys()[1]} datasets: ")
 
     for column in columns_list:
         if set(train[column].unique()) != set(test[column].unique()):
