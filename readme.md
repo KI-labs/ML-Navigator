@@ -124,6 +124,11 @@ To install the ML-Navigator Package from the Github repo:
 
    `$ pip install .`<br>
     
+<strong>IMPORTANT!!!!!</strong><br>
+On macOS you may have a [problem](https://github.com/KI-labs/ML-Navigator/issues/28) with loading lightgbm library, than please install with brew:
+
+` brew install lightgbm`
+
 ## File Structure
 The structure of the directories looks like the following
 
