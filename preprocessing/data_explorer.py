@@ -195,7 +195,7 @@ class OutliersDetection:
             forest.extend(trees)
         return forest
 
-    def codisp_average(self, forest) -> pd.Series:
+    def codisp_average(self, forest: list) -> pd.Series:
         """ Average score
 
         It calculates the score for each data point in all the trees and then calculates the average value of the score.
