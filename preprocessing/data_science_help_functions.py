@@ -1,7 +1,14 @@
 import logging
+import operator
 import os
-from typing import Tuple, List, Dict, Set, Union
 from collections import Counter
+from typing import Tuple, List, Dict, Set, Union
+
+import numpy as np
+import pandas as pd
+import xgboost as xgb
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import StratifiedKFold
 
 logger = logging.getLogger(__name__)
 formatting = (
@@ -189,3 +196,140 @@ def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1) -> T
     print(f"The possible possible_target are:\n {possible_target}")
     print(f"The type of the problem that should be solved:\n {possible_problems}")
     return possible_ids, possible_target, possible_problems
+
+
+def adversarial_validation(dataframe_dict: dict,
+                           ignore_columns: list,
+                           max_dataframe_length: int = 100000,
+                           threshold: float = 0.7) -> float:
+    """ Training a probabilistic classifier to distinguish train/test examples.
+    See more info here: http://fastml.com/adversarial-validation-part-one/
+
+    This function tries to check whether test and train data coming from the same data distribution.
+
+    :param dict dataframes_dict: A dictionary that contains pandas dataframes e.g. dataframes_dictionary ={
+                'train': train_dataframe, 'test': test_dataframe}
+    :param int max_dataframe_length: Max length of dataframe to be considered - make adversarial validation faster
+    :param list ignore_columns: List of column to ignore (ID, target, etc...)
+    :param float threshold: A value larger than 0 and less than 1. If the result of calculation is greater than threshold - there is sugnificant difference between train and test data
+
+    :return:
+            | adversarial_validation_result: Adversarial validation score.
+    """
+
+    # Check if it only one dataframe provided
+    if len(dataframe_dict) != 2:
+        # do nothing and return the original data
+        logger.info("Can't apply adversarial_validation because count of dataframes is not equal to 2")
+        return None
+
+    # if 2 dataframe than it will be considered as `train` and `test`
+    train = dataframe_dict[list(dataframe_dict.keys())[0]]
+    test = dataframe_dict[list(dataframe_dict.keys())[1]]
+
+    if len(ignore_columns) > 0:
+        columns_to_use = [x for x in list(test.columns) if x not in ignore_columns]
+        train = train[columns_to_use]
+        test = test[columns_to_use]
+
+    # add identifier and combine
+    train['istrain'] = 1
+    test['istrain'] = 0
+
+    # max_dataframe_length
+    for df in [train, test]:
+        if len(df) > max_dataframe_length:
+            df = df.head(max_dataframe_length)
+
+    # add identifier and combine
+    train['istrain'] = 1
+    test['istrain'] = 0
+    df_joined = pd.concat([train, test], axis=0)
+
+    # convert non-numerical columns to integers
+    df_numeric = df_joined.select_dtypes(exclude=['object'])
+    df_obj = df_joined.select_dtypes(include=['object']).copy()
+
+    for c in df_obj:
+        df_obj[c] = pd.factorize(df_obj[c])[0]
+
+    df_joined = pd.concat([df_numeric, df_obj], axis=1)
+
+    # a new target
+    y = df_joined['istrain']
+    df_joined.drop('istrain', axis=1, inplace=True)
+
+    # train classifier
+    adversarial_validation_result, clf = get_adv_validation_score(df_joined, y)
+
+    # Process result:
+    if adversarial_validation_result > threshold:
+        print(
+            f"WARNING! There is significant difference between {list(dataframe_dict.keys())[0]} and {list(dataframe_dict.keys())[0]}\n"
+            f"datasets in terms of feature distribution. Validation score: {adversarial_validation_result}, threshold: {threshold}")
+        print(f"Top features are: {xgb_important_features(clf)}")
+    else:
+        print(
+            f"There is no significant difference between {list(dataframe_dict.keys())[0]} and {list(dataframe_dict.keys())[0]}\n"
+            f"datasets in terms of feature distribution. Validation score: {adversarial_validation_result}, threshold: {threshold}")
+    return None
+
+
+def get_adv_validation_score(df_joined: pd.DataFrame,
+                             y: pd.Series) -> Tuple[float, xgb.sklearn.XGBClassifier]:
+    """ Calculate advisarial validation score based on dataframes and XGBClassifier
+
+    :param DataFrame df_joined: Feature dataframe
+    :param Series y: Target series
+
+    :return:
+            | clf: Trained model
+            | mean of KFold validation results (ROC-AUC scores)
+    """
+
+    skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=44)
+    xgb_params = {
+        'learning_rate': 0.1, 'max_depth': 4, 'subsample': 0.9,
+        'colsample_bytree': 0.9, 'objective': 'binary:logistic',
+        'silent': 1, 'n_estimators': 10, 'gamma': 1,
+        'min_child_weight': 4
+    }
+    clf = xgb.XGBClassifier(**xgb_params, seed=10)
+    results = []
+    logger.info('Adversarial validation checking:')
+    for fold, (train_index, test_index) in enumerate(skf.split(df_joined, y)):
+        fold_xtrain, fold_xval = df_joined.iloc[train_index], df_joined.iloc[test_index]
+        fold_ytrain, fold_yval = y.iloc[train_index], y.iloc[test_index]
+        clf.fit(fold_xtrain, fold_ytrain, eval_set=[(fold_xval, fold_yval)],
+                eval_metric='logloss', verbose=False, early_stopping_rounds=10)
+        fold_ypred = clf.predict_proba(fold_xval)[:, 1]
+        fold_score = roc_auc_score(fold_yval, fold_ypred)
+        results.append(fold_score)
+        logger.info(f"Fold: {fold + 1} shape: {fold_xtrain.shape} score: {fold_score}")
+
+    return round(np.mean(results), 2), clf
+
+
+def xgb_important_features(xgb: xgb.sklearn.XGBClassifier,
+                           top_features: int = 5) -> str:
+    """ Get top of the most important features from a trained model
+
+    :param XGBClassifier xgb: A trained model
+    :param int top_features: Max length of features to send back
+
+    :return:
+            | A string with a list of the most important features plus their importance
+    """
+
+    # get features
+    feat_imp = xgb.get_booster().get_score(importance_type='gain')
+
+    # round importances
+    for dict_key in feat_imp:
+        feat_imp[dict_key] = round(feat_imp[dict_key])
+
+    # sort by importances
+    sorted_x = sorted(feat_imp.items(), key=operator.itemgetter(1))
+    sorted_x.reverse()
+
+    return str(list(sorted_x[:top_features]))

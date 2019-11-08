@@ -266,7 +266,7 @@ def clean_categorical_features(dataframe_dict: object,
     # Checking cycle
     if print_results:
         print('*' * 10)
-        print(f"Checking the difference in categorical columns in {dataframe_dict.keys()[0]} and {dataframe_dict.keys()[1]} datasets: ")
+        print(f"Checking the difference in categorical columns in {list(dataframe_dict.keys())[0]} and {list(dataframe_dict.keys())[1]} datasets: ")
 
     for column in columns_list:
         if set(train[column].unique()) != set(test[column].unique()):
