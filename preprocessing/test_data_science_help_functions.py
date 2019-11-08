@@ -1,9 +1,11 @@
 import unittest
-import numpy as np
-import pandas as pd
 from datetime import datetime, timedelta
 
-from preprocessing.data_science_help_functions import detect_id, detect_target, detect_problem_type
+import numpy as np
+import pandas as pd
+
+from preprocessing.data_science_help_functions import detect_id, detect_target, detect_problem_type, \
+    adversarial_validation
 
 # create dataframe for testing the preprocessing functions:
 integer_array = np.random.randint(2, size=(100, 2))
@@ -83,6 +85,20 @@ class OneDataFrame(unittest.TestCase):
         self.assertEqual(target_set_2, "Too many options for target. Not possible to detect target")
         self.assertEqual(problem_type_dict_2, "No problem type to detect")
 
+
+# TODO add random state to dataframe generator
+two_train_dataframes_dict = {
+    "train": train_dataframe,
+    "test": train_dataframe.copy()
+}
+adversarial_validation_score = adversarial_validation(two_train_dataframes_dict)
+print(adversarial_validation_score)
+
+
+class SameDataFrame(unittest.TestCase):
+    def test_adversarial_validation(self):
+        # 0.25 is good value for this test data
+        self.assertTrue(adversarial_validation_score < 0.25)
 
 
 if __name__ == "__main__":

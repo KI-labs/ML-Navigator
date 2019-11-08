@@ -199,7 +199,7 @@ def detect_id_target_problem(dataframes_dict: dict, threshold: float = 0.1) -> T
 
 
 def adversarial_validation(dataframe_dict: dict,
-                           ignore_columns: list,
+                           ignore_columns: list = [],
                            max_dataframe_length: int = 100000,
                            threshold: float = 0.7) -> float:
     """ Training a probabilistic classifier to distinguish train/test examples.
@@ -221,7 +221,7 @@ def adversarial_validation(dataframe_dict: dict,
     if len(dataframe_dict) != 2:
         # do nothing and return the original data
         logger.info("Can't apply adversarial_validation because count of dataframes is not equal to 2")
-        return None
+        return
 
     # if 2 dataframe than it will be considered as `train` and `test`
     train = dataframe_dict[list(dataframe_dict.keys())[0]]
@@ -247,8 +247,8 @@ def adversarial_validation(dataframe_dict: dict,
     df_joined = pd.concat([train, test], axis=0)
 
     # convert non-numerical columns to integers
-    df_numeric = df_joined.select_dtypes(exclude=['object'])
-    df_obj = df_joined.select_dtypes(include=['object']).copy()
+    df_numeric = df_joined.select_dtypes(exclude=['object', 'datetime'])
+    df_obj = df_joined.select_dtypes(include=['object', 'datetime']).copy()
 
     for c in df_obj:
         df_obj[c] = pd.factorize(df_obj[c])[0]
@@ -272,7 +272,7 @@ def adversarial_validation(dataframe_dict: dict,
         print(
             f"There is no significant difference between {list(dataframe_dict.keys())[0]} and {list(dataframe_dict.keys())[0]}\n"
             f"datasets in terms of feature distribution. Validation score: {adversarial_validation_result}, threshold: {threshold}")
-    return None
+    return adversarial_validation_result
 
 
 def get_adv_validation_score(df_joined: pd.DataFrame,
@@ -291,7 +291,7 @@ def get_adv_validation_score(df_joined: pd.DataFrame,
     xgb_params = {
         'learning_rate': 0.1, 'max_depth': 4, 'subsample': 0.9,
         'colsample_bytree': 0.9, 'objective': 'binary:logistic',
-        'silent': 1, 'n_estimators': 10, 'gamma': 1,
+        'silent': 1, 'n_estimators': 100, 'gamma': 1,
         'min_child_weight': 4
     }
     clf = xgb.XGBClassifier(**xgb_params, seed=10)
