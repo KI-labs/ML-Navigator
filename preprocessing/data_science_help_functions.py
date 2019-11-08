@@ -291,7 +291,7 @@ def get_adv_validation_score(df_joined: pd.DataFrame,
     xgb_params = {
         'learning_rate': 0.1, 'max_depth': 4, 'subsample': 0.9,
         'colsample_bytree': 0.9, 'objective': 'binary:logistic',
-        'silent': 1, 'n_estimators': 100, 'gamma': 1,
+        'silent': 1, 'n_estimators': 50, 'gamma': 1,
         'min_child_weight': 4
     }
     clf = xgb.XGBClassifier(**xgb_params, seed=10)
