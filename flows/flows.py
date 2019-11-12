@@ -239,7 +239,7 @@ class Flows:
 
         # clean_categorical_values in dataframes
         if clean_categorical_values:
-            dataframes_dict = clean_categorical_features(dataframes_dict, string_columns, False)
+            dataframes_dict = clean_categorical_features(dataframes_dict, string_columns, True)
 
         # Feature encoding
         dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns, print_results)
