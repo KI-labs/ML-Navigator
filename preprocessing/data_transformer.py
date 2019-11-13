@@ -257,7 +257,7 @@ def clean_categorical_features(dataframe_dict: object,
         return dataframe_dict
 
     # if 2 dataframe than it will be considered as `train` and `test`
-    # TODO: replace to take_first_n from https://docs.python.org/3.8/library/itertools.html#itertools-recipes
+    # TODO: replace to take_first_n ISSUE 45 from https://docs.python.org/3.8/library/itertools.html#itertools-recipes
     label_iter = iter(dataframe_dict.keys())
     train_label = next(label_iter)
     test_label = next(label_iter)
@@ -265,7 +265,7 @@ def clean_categorical_features(dataframe_dict: object,
     train = dataframe_dict[train_label]
     test = dataframe_dict[test_label]
 
-    # TODO implement support of > 2 dataframes (validation, etc) Here validation set (if any) will be merged to a training data.
+    # TODO: support > 2 dataframes ISSUE#44
 
     # Checking cycle
     if print_results:
