@@ -230,7 +230,7 @@ D, target, etc...)
     :return:
             - adversarial_validation_result: Adversarial validation score.
     """
-
+    print('Applying adversarial validation technique to check whether test and train data are coming from the same data distribution...')
     # Check if it only one dataframe provided
     if len(dataframe_dict) != 2:
         # do nothing and return the original data
