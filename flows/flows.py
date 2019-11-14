@@ -24,13 +24,14 @@ from flows.utils import unify_dataframes
 from prediction.model_predictor import model_prediction
 from preprocessing.data_clean import drop_corr_columns, drop_const_columns
 from preprocessing.data_explorer import explore_data
-from preprocessing.data_science_help_functions import detect_id_target_problem
-from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features, clean_categorical_features
+from preprocessing.data_explorer import outliers_detector
+from preprocessing.data_science_help_functions import detect_id_target_problem, adversarial_validation
+from preprocessing.data_transformer import encode_categorical_features, standard_scale_numeric_features, \
+    clean_categorical_features
 from preprocessing.data_type_detector import detect_columns_types_summary
 from preprocessing.json_preprocessor import flat_json
 from preprocessing.utils import check_if_target_columns_are_imbalanced
 from preprocessing.utils import read_data
-from preprocessing.data_explorer import outliers_detector
 from training.training import model_training
 from visualization.visualization import compare_statistics
 
@@ -185,9 +186,13 @@ class Flows:
         print(term.green_on_black("average_score, is_outlier = flow.outliers_extractor"
                                   "(dataframe_dict: dict, key_i: str)"))
 
-        _, _, possible_problems = detect_id_target_problem(dataframes_dict)
+        possible_ids, possible_target, possible_problems = detect_id_target_problem(dataframes_dict)
 
         _ = check_if_target_columns_are_imbalanced(dataframes_dict, possible_problems, self.kl_div_threshold)
+
+        # Check adversarial validation
+        ignore_columns = list(set(possible_ids).union(set(possible_target)))
+        _ = adversarial_validation(dataframes_dict, ignore_columns)
 
         try:
             self.guidance(self.flow_steps[function_id])
@@ -234,7 +239,7 @@ class Flows:
 
         # clean_categorical_values in dataframes
         if clean_categorical_values:
-            dataframes_dict = clean_categorical_features(dataframes_dict, string_columns, False)
+            dataframes_dict = clean_categorical_features(dataframes_dict, string_columns, True)
 
         # Feature encoding
         dataframes_dict_encoded = encode_categorical_features(dataframes_dict, string_columns, print_results)
@@ -251,8 +256,10 @@ class Flows:
 
         return dataframes_dict_encoded, self.columns_set
 
-    def scale_data(self, dataframes_dict: dict, ignore_columns: list,
-                   _reference: Union[bool, str] = False) -> Tuple[Dict, List]:
+    def scale_data(self, dataframes_dict: dict,
+                   ignore_columns: list,
+                   _reference: Union[bool, str] = False,
+                   ) -> Tuple[Dict, List]:
         """ Feature scaling
 
         This function scales features that contains numeric continuous values.

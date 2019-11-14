@@ -257,16 +257,20 @@ def clean_categorical_features(dataframe_dict: object,
         return dataframe_dict
 
     # if 2 dataframe than it will be considered as `train` and `test`
-    else:
-        train = dataframe_dict[list(dataframe_dict.keys())[0]]
-        test = dataframe_dict[list(dataframe_dict.keys())[1]]
+    # TODO: replace to take_first_n ISSUE 45 from https://docs.python.org/3.8/library/itertools.html#itertools-recipes
+    label_iter = iter(dataframe_dict.keys())
+    train_label = next(label_iter)
+    test_label = next(label_iter)
 
-    # TODO implement support of > 2 dataframes (validation, etc) Here validation set (if any) will be merged to a training data.
+    train = dataframe_dict[train_label]
+    test = dataframe_dict[test_label]
+
+    # TODO: support > 2 dataframes ISSUE#44
 
     # Checking cycle
     if print_results:
         print('*' * 10)
-        print(f"Checking the difference in categorical columns in {dataframe_dict.keys()[0]} and {dataframe_dict.keys()[1]} datasets: ")
+        print(f"Checking the difference in categorical columns in {train_label} and {test_label} datasets: ")
 
     for column in columns_list:
         if set(train[column].unique()) != set(test[column].unique()):
@@ -284,8 +288,8 @@ def clean_categorical_features(dataframe_dict: object,
 
     # replace dataframes
     if not inform_only:
-        dataframe_dict[list(dataframe_dict.keys())[0]] = train
-        dataframe_dict[list(dataframe_dict.keys())[1]] = test
+        dataframe_dict[train_label] = train
+        dataframe_dict[test_label] = test
         print(f"The difference in categories was cleaned")
     else:
         print(f"The difference in categories was not cleaned")
